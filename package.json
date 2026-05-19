@@ -1,0 +1,28 @@
+{
+  "name": "leafflow",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "backend",
+    "frontend",
+    "e2e"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "lint": "eslint .",
+    "test": "npm run test --workspaces",
+    "test:backend": "npm run test --workspace backend",
+    "test:frontend": "npm run test --workspace frontend",
+    "test:e2e": "npm run test --workspace e2e"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^25.9.1",
+    "eslint": "^10.4.0",
+    "globals": "^17.6.0",
+    "jiti": "^2.7.0",
+    "prettier": "^3.8.3",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.59.4"
+  }
+}
