@@ -55,7 +55,7 @@ jobs:
       - name: Upload coverage to Repoort
         uses: codecov/codecov-action@v4
         with:
-          name: ${{ matrix.workspace }}
-          path: ${{ matrix.workspace }}/coverage
+          name: coverage-${{ matrix.workspace }}
+          path: ${{ matrix.workspace }}/coverage/
           retention-days: 14
           if-no-files-found: error
