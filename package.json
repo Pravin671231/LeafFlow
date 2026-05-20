@@ -2,10 +2,12 @@
   "name": "leafflow",
   "private": true,
   "version": "0.1.0",
+  "engines": {
+    "node": ">=24.15.0"
+  },
   "workspaces": [
-    "backend",
-    "frontend",
-    "e2e"
+    "Backend",
+    "Frontend"
   ],
   "scripts": {
     "build": "npm run build --workspaces",
@@ -13,12 +15,15 @@
     "test": "npm run test --workspaces",
     "test:backend": "npm run test --workspace backend",
     "test:frontend": "npm run test --workspace frontend",
-    "test:e2e": "npm run test --workspace e2e"
+    "test:coverage:backend": "npm run test:coverage --workspace backend",
+    "test:coverage:frontend": "npm run test:coverage --workspace frontend"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/node": "^25.9.1",
     "eslint": "^10.4.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.6.0",
     "jiti": "^2.7.0",
     "prettier": "^3.8.3",

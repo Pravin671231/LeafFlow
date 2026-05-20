@@ -1,5 +1,7 @@
 import js from "@eslint/js";
 import globals from "globals";
+import reactHooks from "eslint-plugin-react-hooks";
+import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 
 export default [
@@ -27,6 +29,25 @@ export default [
           varsIgnorePattern: "^_"
         }
       ]
+    }
+  },
+
+  {
+    files: ["Frontend/**/*.{ts,tsx}"],
+    ...reactHooks.configs.flat.recommended,
+    languageOptions: {
+      globals: globals.browser
+    }
+  },
+  {
+    files: ["Frontend/**/*.{ts,tsx}"],
+    ...reactRefresh.configs.vite
+  },
+
+  {
+    files: ["Backend/src/index.ts"],
+    rules: {
+      "no-console": "off"
     }
   }
 ];
