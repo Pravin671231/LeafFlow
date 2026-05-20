@@ -14,7 +14,9 @@
     "lint": "eslint .",
     "test": "npm run test --workspaces",
     "test:backend": "npm run test --workspace backend",
-    "test:frontend": "npm run test --workspace frontend"
+    "test:frontend": "npm run test --workspace frontend",
+    "test:coverage:backend": "npm run test:coverage --workspace backend",
+    "test:coverage:frontend": "npm run test:coverage --workspace frontend"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
