@@ -7,6 +7,7 @@
   },
   "workspaces": [
     "Backend",
+    "buyer-app",
     "admin-app"
   ],
   "scripts": {
@@ -14,8 +15,10 @@
     "lint": "eslint .",
     "test": "npm run test --workspaces",
     "test:backend": "npm run test --workspace backend",
+    "test:buyer-app": "npm run test --workspace buyer-app",
     "test:admin-app": "npm run test --workspace admin-app",
     "test:coverage:backend": "npm run test:coverage --workspace backend",
+    "test:coverage:buyer-app": "npm run test:coverage --workspace buyer-app",
     "test:coverage:admin-app": "npm run test:coverage --workspace admin-app"
   },
   "devDependencies": {

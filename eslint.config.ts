@@ -6,7 +6,12 @@ import tseslint from "typescript-eslint";
 
 export default [
   {
-    ignores: ["**/dist/**", "**/node_modules/**", "**/coverage/**"]
+    ignores: [
+      "**/dist/**",
+      "**/.next/**",
+      "**/node_modules/**",
+      "**/coverage/**"
+    ]
   },
 
   js.configs.recommended,
@@ -33,7 +38,7 @@ export default [
   },
 
   {
-    files: ["admin-app/**/*.{ts,tsx}"],
+    files: ["admin-app/**/*.{ts,tsx}", "buyer-app/**/*.{ts,tsx}"],
     ...reactHooks.configs.flat.recommended,
     languageOptions: {
       globals: globals.browser
