@@ -33,14 +33,14 @@ export default [
   },
 
   {
-    files: ["Frontend/**/*.{ts,tsx}"],
+    files: ["admin-app/**/*.{ts,tsx}"],
     ...reactHooks.configs.flat.recommended,
     languageOptions: {
       globals: globals.browser
     }
   },
   {
-    files: ["Frontend/**/*.{ts,tsx}"],
+    files: ["admin-app/**/*.{ts,tsx}"],
     ...reactRefresh.configs.vite
   },
 
