@@ -38,6 +38,8 @@ jobs:
         include:
           - workspace: backend
             coverage_dir: Backend
+          - workspace: buyer-app
+            coverage_dir: buyer-app
           - workspace: admin-app
             coverage_dir: admin-app
     steps:
