@@ -7,7 +7,7 @@
 | Version | 1.0.0 |
 | Date | May 19, 2026 |
 | Repo | `leafFlow` (monorepo) |
-| Apps | `backend` · `frontend` · `e2e` |
+| Apps | `backend` · `buyer-app` · `admin-app` · `e2e` |
 
 Each milestone below is written as a self-contained GitHub Issue. Copy the body directly into a GitHub Issue, assign it to the matching milestone, and use the task checklist to track progress.
 
@@ -32,13 +32,13 @@ Each milestone below is written as a self-contained GitHub Issue. Copy the body 
 
 ### Context
 
-This is the foundation all other milestones depend on. No feature work begins until every app boots, lints, and has at least one passing test in each layer. The monorepo uses a shared root `package.json` with workspaces pointing to `backend/`, `frontend/`, and `e2e/`.
+This is the foundation all other milestones depend on. No feature work begins until every app boots, lints, and has at least one passing test in each layer. The monorepo uses a shared root `package.json` with workspaces pointing to `backend/`, `buyer-app/`, `admin-app/`, and `e2e/`.
 
 ### Tasks
 
 **Monorepo root**
-- [ ] Initialise root `package.json` with npm workspaces for `backend`,  `frontend/`, `e2e`
-- [ ] Add root-level scripts: `test`, `test:backend`, `test:frontend`, `test:e2e`, `lint`, `build`
+- [ ] Initialise root `package.json` with npm workspaces for `backend`, `buyer-app/`, `admin-app/`, `e2e`
+- [ ] Add root-level scripts: `test`, `test:backend`, `test:admin-app`, `test:e2e`, `lint`, `build`
 - [ ] Add `.nvmrc` / `.node-version` pinned to Node.js v24
 - [ ] Configure root ESLint (`eslint.config.ts`) with TypeScript rules shared across all apps
 - [ ] Configure root Prettier (`.prettierrc`) with a single style baseline
@@ -54,7 +54,7 @@ This is the foundation all other milestones depend on. No feature work begins un
 - [ ] Configure Vitest (`vitest.config.ts`) with `environment: 'node'`, coverage via `@vitest/coverage-v8`
 - [ ] Write one passing smoke test: `GET /health` returns `{ status: 'ok' }` using Supertest
 
-**Frontend (`frontend/`)**
+**Admin App (`admin-app/`)**
 - [ ] Scaffold Vite + React 19 + TypeScript project
 - [ ] Install all frontend dependencies (see SRS §7.3)
 - [ ] Configure Tailwind v4 + DaisyUI v5
@@ -75,7 +75,7 @@ This is the foundation all other milestones depend on. No feature work begins un
 - [ ] `npm run build` succeeds in all three apps with zero TypeScript errors
 - [ ] `npm run lint` passes across all apps with zero errors
 - [ ] `npm run test:backend` runs and reports ≥ 1 passing test
-- [ ] `npm run test:frontend` runs and reports ≥ 1 passing test
+- [ ] `npm run test:admin-app` runs and reports ≥ 1 passing test
 - [ ] `npm run test:e2e` runs and reports ≥ 1 passing test
 - [ ] `npm test` from the root triggers all of the above sequentially
 - [ ] Coverage reports are generated in each app's `coverage/` folder
@@ -103,10 +103,10 @@ CI is set up before any real features are built so that every subsequent milesto
 - [ ] Run `npm ci` at workspace root
 - [ ] Job: `lint` — run `npm run lint` across all apps
 - [ ] Job: `test-backend` — run `npm run test:backend` with coverage
-- [ ] Job: `test-frontend` — run `npm run test:frontend` with coverage
+- [ ] Job: `test-admin-app` — run `npm run test:admin-app` with coverage
 
 - [ ] Upload coverage reports as workflow artifacts (retain 14 days)
-- [ ] Jobs `test-backend`, `test-frontend` run in parallel; `lint` runs independently
+- [ ] Jobs `test-backend`, `test-admin-app` run in parallel; `lint` runs independently
 
 **E2E Workflow (`.github/workflows/e2e.yml`)**
 - [ ] Trigger on: `pull_request` targeting `main` only

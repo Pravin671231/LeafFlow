@@ -7,16 +7,16 @@
   },
   "workspaces": [
     "Backend",
-    "Frontend"
+    "admin-app"
   ],
   "scripts": {
     "build": "npm run build --workspaces",
     "lint": "eslint .",
     "test": "npm run test --workspaces",
     "test:backend": "npm run test --workspace backend",
-    "test:frontend": "npm run test --workspace frontend",
+    "test:admin-app": "npm run test --workspace admin-app",
     "test:coverage:backend": "npm run test:coverage --workspace backend",
-    "test:coverage:frontend": "npm run test:coverage --workspace frontend"
+    "test:coverage:admin-app": "npm run test:coverage --workspace admin-app"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

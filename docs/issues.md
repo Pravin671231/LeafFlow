@@ -62,7 +62,8 @@ This is the foundation all other milestones depend on. No feature work begins un
 The monorepo uses a shared root `package.json` with workspaces pointing to:
 
 - `backend/`
-- `frontend/`
+- `buyer-app/`
+- `admin-app/`
 - `e2e/`
 
 ---
@@ -71,11 +72,11 @@ The monorepo uses a shared root `package.json` with workspaces pointing to:
 
 #### Monorepo root
 
-- [ ] Initialise root `package.json` with npm workspaces for `backend`, `frontend`, `e2e`
+- [ ] Initialise root `package.json` with npm workspaces for `backend`, `buyer-app`, `admin-app`, `e2e`
 - [ ] Add root-level scripts:
   - `test`
   - `test:backend`
-  - `test:frontend`
+  - `test:admin-app`
   - `test:e2e`
   - `lint`
   - `build`
@@ -123,10 +124,10 @@ The monorepo uses a shared root `package.json` with workspaces pointing to:
 
 ---
 
-#### Frontend (`frontend/`)
+#### Admin App (`admin-app/`)
 
 - [ ] Scaffold Vite + React 19 + TypeScript project
-- [ ] Install all frontend dependencies
+- [ ] Install all admin-app dependencies
 - [ ] Configure Tailwind v4 + DaisyUI v5
 - [ ] Configure `vitest.config.ts`
   - `environment: 'happy-dom'`
@@ -166,7 +167,7 @@ The monorepo uses a shared root `package.json` with workspaces pointing to:
 - [ ] `npm run build` succeeds in all three apps with zero TypeScript errors
 - [ ] `npm run lint` passes across all apps with zero errors
 - [ ] `npm run test:backend` reports ≥ 1 passing test
-- [ ] `npm run test:frontend` reports ≥ 1 passing test
+- [ ] `npm run test:admin-app` reports ≥ 1 passing test
 - [ ] `npm run test:e2e` reports ≥ 1 passing test
 - [ ] `npm test` from root runs all test suites sequentially
 - [ ] Coverage reports generated in each app’s `coverage/` folder
@@ -206,13 +207,13 @@ The monorepo uses a shared root `package.json` with workspaces pointing to:
 - [ ] `test-backend`
   - run `npm run test:backend`
   - generate coverage
-- [ ] `test-frontend`
-  - run `npm run test:frontend`
+- [ ] `test-admin-app`
+  - run `npm run test:admin-app`
   - generate coverage
 
 - [ ] Upload coverage reports as workflow artifacts
 - [ ] Retention: 14 days
-- [ ] `test-backend` and `test-frontend` run in parallel
+- [ ] `test-backend` and `test-admin-app` run in parallel
 
 ---
 
