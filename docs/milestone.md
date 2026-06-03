@@ -1,338 +1,246 @@
-# Product Development Milestones
+# LeafFlow — Development Milestones
 
-## Ornamental plants sales — MERN Stack
-
-| Field | Detail |
-|---|---|
-| Version | 1.0.0 |
-| Date | May 19, 2026 |
-| Repo | `leafFlow` (monorepo) |
-| Apps | `backend` · `buyer-app` · `admin-app` · `e2e` |
-
-Each milestone below is written as a self-contained GitHub Issue. Copy the body directly into a GitHub Issue, assign it to the matching milestone, and use the task checklist to track progress.
+This document is the delivery roadmap for LeafFlow. Each milestone groups one or more GitHub issues into a shippable increment. Detailed acceptance criteria live in [issues.md](issues.md); SRS requirements live in [SRS.md](SRS.md).
 
 ---
 
-## Milestone Index
+## Branch Strategy
 
-| # | Title | Type | Depends On |
+```
+feature/<scope>  →  develop  →  master
+```
+
+- **`feature/*`** branches cut from `develop`; one branch per issue.
+- **`develop`** is the integration branch. Every merge requires a passing `ci-feature` run.
+- **`master`** is production-ready. Every merge from `develop` requires a passing `ci-release` run (includes E2E from M9 onward).
+- Rebase `feature/*` onto `develop` before opening a PR. Squash-merge `develop → master`.
+
+---
+
+## CI Gates
+
+| PR direction | Workflow | Jobs |
+|---|---|---|
+| `feature/*` → `develop` | `ci-feature.yml` | lint · unit · integration (all workspaces) |
+| `develop` → `master` | `ci-release.yml` | lint · unit · integration · E2E (placeholder until M9) |
+| push to `master` | `deploy-render.yml` | trigger Render deploy hooks |
+
+---
+
+## Milestone Overview
+
+| Milestone | Goal | Issues | Outcome |
 |---|---|---|---|
-| [M0](#m0-monorepo-scaffold--test-suite-setup) | Monorepo Scaffold + Test Suite Setup | Infrastructure | — |
-| [M1](#m1-ci-pipeline--github-actions) | CI Pipeline — GitHub Actions | Infrastructure | M0 |
-| [M2](#m2-docker--local-compose) | Docker + Local Compose | Infrastructure | M0 |
-| [M3](#m3-cloudclusters-vps-deployment) | CloudClusters VPS Deployment | Infrastructure | M2 |
-| [M4](#m4-domain-mapping--ssl-staging) | Domain Mapping + SSL — Staging | Infrastructure | M3 |
+| **M0** | Base scaffold | — (done) | Monorepo with Backend, buyer-app, admin-app; Vitest suites green; health endpoint live |
+| **M1** | CI pipelines | [#1](issues.md#issue-1--branch-setup--protection-rules) [#2](issues.md#issue-2--ci-featureyml-workflow) [#3](issues.md#issue-3--ci-releaseyml-workflow) [#4](issues.md#issue-4--ci-cleanup--environment-template) | Branch protection enforced; automated test gates on every PR; `.env.example` corrected |
+| **M2** | Docker | [#5](issues.md#issue-5--backend-dockerfile) [#6](issues.md#issue-6--buyer-app-dockerfile) [#7](issues.md#issue-7--admin-app-dockerfile) [#8](issues.md#issue-8--docker-composeyml-local-dev--makefile) [#9](issues.md#issue-9--docker-composeprodyml--ci-integration) | One-command local stack; production images for CI |
+| **M3** | Render deploy | [#10](issues.md#issue-10--renderyaml-iac) [#11](issues.md#issue-11--deploy-workflow) [#12](issues.md#issue-12--admin-account-seed-script) [#13](issues.md#issue-13--cors-configuration--staging-smoke-test) | Staging auto-deploys on every `master` merge; CORS configured |
+| **M4** | Authentication | [#14](issues.md#issue-14--database-connection--core-auth-models) [#15](issues.md#issue-15--admin-auth-backend) [#16](issues.md#issue-16--admin-auth-frontend) [#17](issues.md#issue-17--buyer-auth-backend) [#18](issues.md#issue-18--buyer-auth-frontend) | Admin 2FA (password + OTP) and buyer passwordless (OTP / Google OAuth) |
+| **M5** | Catalog | [#19](issues.md#issue-19--catalog-data-models) [#20](issues.md#issue-20--admin-catalog-api) [#21](issues.md#issue-21--r2-upload--buyer-catalog-api) [#22](issues.md#issue-22--catalog-admin-ui) [#23](issues.md#issue-23--catalog-buyer-ui) | Products and categories manageable by admin; browsable and searchable by buyers |
+| **M6** | Commerce | [#24](issues.md#issue-24--cart-backend) [#25](issues.md#issue-25--cart-frontend) [#26](issues.md#issue-26--order-backend) [#27](issues.md#issue-27--razorpay-webhook-backend) [#28](issues.md#issue-28--checkout-frontend) | Persistent cart; Razorpay checkout; webhook-confirmed orders |
+| **M7** | Order management | [#29](issues.md#issue-29--admin-orders-api) [#30](issues.md#issue-30--admin-customers-inventory--dashboard-api) [#31](issues.md#issue-31--admin-orders--customers-ui) [#32](issues.md#issue-32--admin-inventory--dashboard-ui) | Admin can fulfil, cancel, refund orders; inventory tracked; dashboard live |
+| **M8** | Polish | [#33](issues.md#issue-33--static-pages) [#34](issues.md#issue-34--error-pages--accessibility) [#35](issues.md#issue-35--admin-settings) [#36](issues.md#issue-36--security-headers--rate-limiting) [#37](issues.md#issue-37--structured-logging) | Static pages; security headers; rate limiting; structured logging; a11y audit |
+| **M9** | E2E tests | [#38](issues.md#issue-38--playwright-workspace-setup) [#39](issues.md#issue-39--admin-auth-e2e-specs) [#40](issues.md#issue-40--buyer-auth-e2e-specs) [#41](issues.md#issue-41--purchase-flow--product-publish-e2e-specs) [#42](issues.md#issue-42--e2e-ci-gate-activation) | 6 Playwright scenarios passing across 3 browsers; CI E2E gate activated |
 
 ---
 
-## M0: Monorepo Scaffold + Test Suite Setup
+## Detailed Milestones
 
-**Type:** Infrastructure
-**Goal:** Every app in the monorepo is initialised, TypeScript compiles cleanly, and the full test suite (unit, integration, and e2e) can be run from the root with a single command.
+### M0 — Base Scaffold *(complete)*
 
-### Context
+**Branch:** `master` (current state)
 
-This is the foundation all other milestones depend on. No feature work begins until every app boots, lints, and has at least one passing test in each layer. The monorepo uses a shared root `package.json` with workspaces pointing to `backend/`, `buyer-app/`, `admin-app/`, and `e2e/`.
+**Outcome:** Working monorepo with all three workspaces scaffolded, Vitest test suites passing, and `GET /health` returning `{ "status": "ok" }`.
 
-### Tasks
-
-**Monorepo root**
-- [ ] Initialise root `package.json` with npm workspaces for `backend`, `buyer-app/`, `admin-app/`, `e2e`
-- [ ] Add root-level scripts: `test`, `test:backend`, `test:admin-app`, `test:e2e`, `lint`, `build`
-- [ ] Add `.nvmrc` / `.node-version` pinned to Node.js v24
-- [ ] Configure root ESLint (`eslint.config.ts`) with TypeScript rules shared across all apps
-- [ ] Configure root Prettier (`.prettierrc`) with a single style baseline
-- [ ] Add `.gitignore` covering `node_modules`, `dist`, `.env`, coverage reports, Playwright reports
-
-**Backend (`backend/`)**
-- [ ] Initialise `package.json` with all backend dependencies (see SRS §7.2)
-- [ ] Configure `tsconfig.json` targeting Node 24 with strict mode
-- [ ] Scaffold folder structure: `src/config`, `src/controllers`, `src/middleware`, `src/models`, `src/routes`, `src/services`, `src/schemas`, `src/utils`
-- [ ] Create `src/app.ts` (Express app, no routes yet — just health check `GET /health`)
-- [ ] Create `src/index.ts` (server entry point — binds port, calls `connectDB()`)
-- [ ] Add `.env.example` with all required keys documented (see SRS §16)
-- [ ] Configure Vitest (`vitest.config.ts`) with `environment: 'node'`, coverage via `@vitest/coverage-v8`
-- [ ] Write one passing smoke test: `GET /health` returns `{ status: 'ok' }` using Supertest
-
-**Admin App (`admin-app/`)**
-- [ ] Scaffold Vite + React 19 + TypeScript project
-- [ ] Install all frontend dependencies (see SRS §7.3)
-- [ ] Configure Tailwind v4 + DaisyUI v5
-- [ ] Configure `vitest.config.ts` with `environment: 'happy-dom'` and coverage
-- [ ] Set up MSW: create `src/mocks/handlers.ts` and `src/mocks/server.ts`
-- [ ] Write one passing smoke test: renders `<App />` without crashing
-- [ ] Add `.env.example` documenting `VITE_API_URL`, `VITE_GOOGLE_CLIENT_ID`, `VITE_RAZORPAY_KEY`
-
-
-**E2E (`e2e/`)**
-- [ ] Initialise `package.json` with `@playwright/test`
-- [ ] Configure `playwright.config.ts`: Chromium + Firefox + Safari (WebKit), base URL from env
-- [ ] Create folder structure: `e2e/buyer/`, `e2e/admin/`
-- [ ] Write one passing smoke test: navigate to `VITE_APP_URL`, assert page title is not empty
-
-### Acceptance Criteria
-
-- [ ] `npm run build` succeeds in all three apps with zero TypeScript errors
-- [ ] `npm run lint` passes across all apps with zero errors
-- [ ] `npm run test:backend` runs and reports ≥ 1 passing test
-- [ ] `npm run test:admin-app` runs and reports ≥ 1 passing test
-- [ ] `npm run test:e2e` runs and reports ≥ 1 passing test
-- [ ] `npm test` from the root triggers all of the above sequentially
-- [ ] Coverage reports are generated in each app's `coverage/` folder
-- [ ] No hardcoded secrets — all config via `.env.example` files
-
-**Dependencies:** None — this is the root milestone.
+**What's in place:**
+- Backend: Express 5 + TypeScript + Mongoose (mocked `connectDB`) + Vitest + Supertest
+- buyer-app: Next.js 16 App Router + React 19 + TanStack Query + Zustand + Vitest + RTL + MSW
+- admin-app: Vite 8 + React 19 + RTK Query + Redux + react-router-dom 7 + Vitest + RTL + MSW
+- Root ESLint flat config + Prettier + TypeScript base config
+- GitHub Actions `ci.yml` running on all pushes
 
 ---
 
-## M1: CI Pipeline — GitHub Actions
+### M1 — CI Pipelines & Branch Protection
 
-**Type:** Infrastructure
-**Goal:** Every push and every pull request targeting `main` automatically runs linting and the full test suite. A failing test or lint error blocks the merge.
+**Issues:** [#1](issues.md#issue-1--branch-setup--protection-rules) · [#2](issues.md#issue-2--ci-featureyml-workflow) · [#3](issues.md#issue-3--ci-releaseyml-workflow) · [#4](issues.md#issue-4--ci-cleanup--environment-template)
+**Branches:** `feature/ci-branch-setup` · `feature/ci-feature-workflow` · `feature/ci-release-workflow` · `feature/ci-env-cleanup`
 
-### Context
+**Outcome:** Two targeted CI workflows replace the generic `ci.yml`. Branch protection on `develop` and `master` prevents direct pushes. The E2E job exists as a placeholder to hold the required status check slot from day one.
 
-CI is set up before any real features are built so that every subsequent milestone is covered automatically. This milestone creates two workflow files: a fast **lint + unit/integration** check that runs on every push, and a heavier **e2e** check that runs on PRs to `main`.
+**Key deliverables:**
+- `develop` branch + GitHub branch protection on `master` and `develop` (#1)
+- `.github/workflows/ci-feature.yml` — lint + test matrix on PR → `develop` (#2)
+- `.github/workflows/ci-release.yml` — lint + test + E2E placeholder on PR → `master` (#3)
+- `ci.yml` retired; `.nvmrc` added; `deploy-render.yml` stub; `Backend/.env.example` corrected (PostgreSQL → MongoDB + full SRS §16.4 vars) (#4)
 
-### Tasks
-
-**Lint + Unit/Integration Workflow (`.github/workflows/ci.yml`)**
-- [ ] Trigger on: `push` to all branches, `pull_request` targeting `main`
-- [ ] Use `actions/checkout@v4` and `actions/setup-node@v4` with `node-version-file: '.nvmrc'`
-- [ ] Cache `node_modules` using `actions/cache` keyed on `package-lock.json` hash
-- [ ] Run `npm ci` at workspace root
-- [ ] Job: `lint` — run `npm run lint` across all apps
-- [ ] Job: `test-backend` — run `npm run test:backend` with coverage
-- [ ] Job: `test-admin-app` — run `npm run test:admin-app` with coverage
-
-- [ ] Upload coverage reports as workflow artifacts (retain 14 days)
-- [ ] Jobs `test-backend`, `test-admin-app` run in parallel; `lint` runs independently
-
-**E2E Workflow (`.github/workflows/e2e.yml`)**
-- [ ] Trigger on: `pull_request` targeting `main` only
-- [ ] Spin up a MongoDB service container (`mongo:8`) for the duration of the job
-- [ ] Build all three apps and start backend + both frontends using the test `.env` values stored as GitHub Secrets
-- [ ] Install Playwright browsers via `npx playwright install --with-deps`
-- [ ] Run `npm run test:e2e`
-- [ ] Upload Playwright HTML report as a workflow artifact on failure
-
-**GitHub Repository Settings**
-- [ ] Set `main` as the protected branch
-- [ ] Require all CI jobs to pass before merge is allowed
-- [ ] Add CI status badge to root `README.md`
-
-### Acceptance Criteria
-
-- [ ] A passing commit on any branch shows green checks for lint, test-backend, test-buyer, test-admin
-- [ ] A PR to `main` additionally runs the e2e workflow
-- [ ] A deliberately broken test (introduce a `expect(1).toBe(2)`) causes the pipeline to fail and blocks merge
-- [ ] Coverage artifacts are downloadable from the Actions run summary
-- [ ] The status badge in `README.md` reflects the current `main` build state
-
-**Dependencies:** M0
+**Definition of done:** A test PR from `feature/smoke` → `develop` triggers only `ci-feature.yml` and passes. Direct push to `master` is rejected by GitHub.
 
 ---
 
-## M2: Docker + Local Compose
+### M2 — Docker & Local Dev Parity
 
-**Type:** Infrastructure
-**Goal:** The entire application stack (backend, buyer-app, admin-app, MongoDB) runs locally via `docker compose up` with a single command and is accessible in the browser.
+**Issues:** [#5](issues.md#issue-5--backend-dockerfile) · [#6](issues.md#issue-6--buyer-app-dockerfile) · [#7](issues.md#issue-7--admin-app-dockerfile) · [#8](issues.md#issue-8--docker-composeyml-local-dev--makefile) · [#9](issues.md#issue-9--docker-composeprodyml--ci-integration)
+**Branches:** `feature/docker-backend` · `feature/docker-buyer-app` · `feature/docker-admin-app` · `feature/docker-compose-dev` · `feature/docker-compose-prod`
+**Depends on:** M1
 
-### Context
+**Outcome:** `make dev` brings up the full stack in a single command. Production images are built for CI.
 
-Docker images built here are reused verbatim for the VPS deployment in M3. The local compose environment uses a `.env.docker` file that mirrors the production `.env` structure so there are no surprises when deploying.
+**Key deliverables:**
+- `Backend/Dockerfile` — multi-stage, non-root runner (#5)
+- `buyer-app/Dockerfile` — Next.js standalone output (#6)
+- `admin-app/Dockerfile` — nginx with SPA routing (#7)
+- `docker-compose.yml` + `Makefile` — local dev stack (#8)
+- `docker-compose.prod.yml` + `ci-release.yml` e2e job updated (#9)
 
-### Tasks
-
-**Backend Dockerfile (`backend/Dockerfile`)**
-- [ ] Use multi-stage build: `node:24-alpine` as builder, final image from `node:24-alpine`
-- [ ] Stage 1 (`builder`): copy `package*.json`, run `npm ci`, copy source, run `npm run build` (outputs to `dist/`)
-- [ ] Stage 2 (`runner`): copy only `node_modules` (production) and `dist/` from builder
-- [ ] Expose port `5000`
-- [ ] `CMD ["node", "dist/index.js"]`
-- [ ] Add `.dockerignore` excluding `node_modules`, `__tests__`, `.env`, `coverage`
-
-**Frontend Dockerfile (`frontend/Dockerfile`)**
-- [ ] Stage 1 (`builder`): `node:24-alpine`, `npm ci`, `npm run build` (outputs to `dist/`)
-- [ ] Stage 2 (`runner`): `nginx:alpine`, copy `dist/` to `/usr/share/nginx/html`
-- [ ] Copy `nginx.conf` that rewrites all paths to `index.html` (SPA fallback)
-- [ ] Expose port `80`
-
-**Docker Compose (`docker-compose.yml` at repo root)**
-- [ ] Service `mongo`: `mongo:8`, named volume `mongo-data`, no exposed ports externally
-- [ ] Service `backend`: build from `./backend`, env from `.env.docker`, depends on `mongo`, port `5000:5000`
-- [ ] Service `frontend`: build from `./frontend`, port `3000:80`, depends on `backend`
-
-- [ ] All services on a shared `app-network` bridge network
-
-**Configuration**
-- [ ] Create `.env.docker.example` at root with all required environment variables documented
-- [ ] Add `docker-compose.override.yml` for development (mounts source for hot-reload via `nodemon`)
-- [ ] Document `docker compose up --build` flow in `README.md`
-
-### Acceptance Criteria
-
-- [ ] `docker compose up --build` completes without errors on a clean machine
-- [ ] `GET http://localhost:5000/health` returns `{ "status": "ok" }`
-- [ ] `http://localhost:3000` loads the frontend home page
-- [ ] `docker compose down -v` cleanly removes all containers and volumes
-- [ ] No environment secrets are baked into any Docker image layer (verified via `docker history`)
-
-**Dependencies:** M0
+**Definition of done:** `make dev` → all four containers healthy → `GET http://localhost:3000/health` returns `{ "status": "ok" }` within 30 seconds.
 
 ---
 
-## M3: CloudClusters VPS Deployment
+### M3 — Render Deployment (Staging)
 
-**Type:** Infrastructure
-**Goal:** Docker images from M2 are deployed and running on the CloudClusters VPS. All three apps are accessible over HTTP on the VPS public IP address.
+**Issues:** [#10](issues.md#issue-10--renderyaml-iac) · [#11](issues.md#issue-11--deploy-workflow) · [#12](issues.md#issue-12--admin-account-seed-script) · [#13](issues.md#issue-13--cors-configuration--staging-smoke-test)
+**Branches:** `feature/render-yaml` · `feature/render-deploy-workflow` · `feature/render-seed` · `feature/render-cors-staging`
+**Depends on:** M2
 
-### Context
+**Outcome:** Every merge to `master` automatically deploys all three services to Render. CORS is configured. Staging environment is verified end-to-end.
 
-CloudClusters provides a managed VPS. The deployment uses the same `docker-compose.yml` from M2 with a production-specific `.env` file. This milestone establishes the staging server; HTTPS and a real domain come in M4.
+**Key deliverables:**
+- `render.yaml` IaC — all three services declared (#10)
+- `deploy-render.yml` — curls Render deploy hooks on push to `master` (#11)
+- `Backend/src/scripts/seed.ts` — idempotent admin account seeder (#12)
+- CORS allowlist middleware + staging smoke test (#13)
 
-### Tasks
-
-**VPS Initial Setup**
-- [ ] SSH into the CloudClusters VPS and confirm root/sudo access
-- [ ] Update system packages: `apt update && apt upgrade -y`
-- [ ] Install Docker Engine (official Docker repo, not `apt` default)
-- [ ] Install Docker Compose plugin (`docker compose` v2)
-- [ ] Create a non-root deploy user (`deploy`) and add to `docker` group
-- [ ] Set up SSH key authentication for the `deploy` user; disable password SSH login
-
-**Repository & Configuration on VPS**
-- [ ] Clone the repository into `/home/deploy/LeafFlow` on the VPS
-- [ ] Create `/home/deploy/LeafFlow/.env.production` with all production secrets (never commit this file)
-- [ ] Set file permissions: `chmod 600 .env.production`
-
-**Deployment**
-- [ ] On VPS: `docker compose -f docker-compose.yml --env-file .env.production up -d --build`
-- [ ] Confirm all four containers (`mongo`, `backend`, `frontend`,) are running via `docker compose ps`
-- [ ] Configure UFW firewall: allow SSH (22), HTTP (80), ports 3000, 3001, 5000; deny everything else
-
-**CI/CD Deployment Job (`.github/workflows/deploy.yml`)**
-- [ ] Trigger on: push to `main` only (after CI passes)
-- [ ] Use GitHub Secrets: `VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY`
-- [ ] Job: SSH into VPS via `appleboy/ssh-action`, run `git pull && docker compose up -d --build`
-- [ ] Add a smoke-test step: `curl --fail http://<VPS_IP>:5000/health` after deploy
-
-### Acceptance Criteria
-
-- [ ] `curl http://<VPS_IP>:5000/health` returns `{ "status": "ok" }` from an external machine
-- [ ] `http://<VPS_IP>:3000` loads the frontend home page in a browser
-- [ ] Pushing a commit to `main` triggers the deploy workflow and the VPS is updated automatically
-- [ ] `docker compose logs backend` shows no fatal errors
-- [ ] No production secrets are stored in the repository or in any Docker image
-
-**Dependencies:** M2
+**Definition of done:** Merge to `master` → `deploy-render.yml` runs → `GET <staging-backend>/health` returns `200` within 10 minutes. buyer-app and admin-app staging URLs load without CORS errors.
 
 ---
 
-## M4: Domain Mapping + SSL — Staging
+### M4 — Authentication
 
-**Type:** Infrastructure
-**Goal:** The staging server is accessible via a real domain over HTTPS. HTTP traffic is automatically redirected to HTTPS. SSL certificate auto-renews.
+**Issues:** [#14](issues.md#issue-14--database-connection--core-auth-models) · [#15](issues.md#issue-15--admin-auth-backend) · [#16](issues.md#issue-16--admin-auth-frontend) · [#17](issues.md#issue-17--buyer-auth-backend) · [#18](issues.md#issue-18--buyer-auth-frontend)
+**Branches:** `feature/db-connect-models` → `feature/auth-admin-backend` ∥ `feature/auth-buyer-backend` → respective frontend branches
+**Depends on:** M3
 
-### Context
+**Outcome:** Admin dashboard secured behind password + OTP 2FA. Buyers log in via email OTP, Google OAuth, or Google One Tap. Both flows use RS256 JWTs with httpOnly cookie refresh tokens.
 
-Uses Nginx as a reverse proxy (or Caddy as an alternative — choose one) running inside Docker alongside the app containers. Let's Encrypt issues the SSL certificate via Certbot (Nginx) or the Caddy ACME client. Staging subdomains are used so production DNS can be set up independently later.
+**Key deliverables:**
+- Real `connectDB()` + `Admin`, `OtpSession`, `RefreshToken` models + Nodemailer SMTP (#14)
+- Admin auth backend routes + rate limiting + account lockout (#15)
+- admin-app RTK Query + Redux + route guard + login/OTP/forgot-password pages (#16)
+- `User` model + buyer auth routes (email OTP, Google OAuth, One Tap, account linking) (#17)
+- buyer-app TanStack Query + Zustand + login page (3 methods) + profile page (#18)
 
-Suggested subdomains:
-- `api.staging.yourdomain.com` → backend (port 5000)
-- `staging.yourdomain.com` → buyer-app (port 3000)
-
-### Tasks
-
-**DNS**
-- [ ] Log into domain registrar and create three A records pointing to the VPS IP:
-  - `staging.yourdomain.com`
-  - `api.staging.yourdomain.com`
-- [ ] Verify DNS propagation: `nslookup staging.yourdomain.com` resolves to VPS IP
-
-**Nginx + Certbot (inside Docker)**
-- [ ] Add `nginx` service to `docker-compose.yml`: `nginx:alpine`, ports `80:80` and `443:443`
-- [ ] Add `certbot` service: `certbot/certbot`, mounts shared volumes for certs and webroot
-- [ ] Write `nginx/conf.d/staging.conf`:
-  - HTTP server block on port 80 serving `/.well-known/acme-challenge/` for Certbot, redirect all other traffic to HTTPS
-  - HTTPS server block on port 443 with SSL cert paths, proxy pass to `buyer-app:80`
-  <!-- - Repeat for `api.staging` → `backend:5000` and `admin.staging` → `admin-app:80` -->
-- [ ] Remove direct port exposure for `backend`,  `frontend`,  (traffic only via Nginx)
-- [ ] Update UFW: close ports 3000, 5000 externally; keep 80 and 443 open
-
-**Certificate Issuance**
-- [ ] Run initial Certbot challenge: `docker compose run certbot certonly --webroot ...` for all three subdomains
-- [ ] Confirm certs are issued and stored in the shared volume
-- [ ] Reload Nginx to pick up certs: `docker compose exec nginx nginx -s reload`
-- [ ] Add cron job on VPS: `0 3 * * * docker compose run certbot renew && docker compose exec nginx nginx -s reload`
-
-**Update App Configuration**
-- [ ] Update `VITE_API_URL` in buyer-app and admin-app production `.env` to use `https://api.staging.yourdomain.com`
-- [ ] Rebuild and redeploy: `docker compose up -d --build`
-
-### Acceptance Criteria
-
-- [ ] `https://staging.yourdomain.com` loads the buyer-app with a valid SSL certificate (no browser warning)
-- [ ] `https://api.staging.yourdomain.com/health` returns `{ "status": "ok" }` over HTTPS
-- [ ] `http://staging.yourdomain.com` (HTTP) automatically redirects to `https://staging.yourdomain.com`
-- [ ] SSL Labs test scores A or better for all three subdomains
-- [ ] Certificate expiry is ≥ 60 days from issuance date
-- [ ] Certbot renewal cron is confirmed via `crontab -l` on the VPS
-
-**Dependencies:** M3
+**Definition of done:** Full admin login flow (email → password → OTP → dashboard) and buyer OTP login flow work against staging.
 
 ---
 
+### M5 — Catalog
+
+**Issues:** [#19](issues.md#issue-19--catalog-data-models) · [#20](issues.md#issue-20--admin-catalog-api) · [#21](issues.md#issue-21--r2-upload--buyer-catalog-api) · [#22](issues.md#issue-22--catalog-admin-ui) · [#23](issues.md#issue-23--catalog-buyer-ui)
+**Branches:** `feature/catalog-models` → `feature/catalog-admin-api` → `feature/catalog-upload-buyer-api` → `feature/catalog-admin-ui` ∥ `feature/catalog-buyer-ui`
+**Depends on:** M4
+
+**Outcome:** Admin can manage products and categories with R2 image uploads. Buyers can browse, search, and filter the catalog.
+
+**Key deliverables:**
+- `Category` + `Product` Mongoose models with plant attributes + text index (#19)
+- Admin CRUD routes for categories + products (#20)
+- R2 presign endpoint + buyer browse/search/filter routes (#21)
+- admin-app catalog UI: categories page, products list, product form with drag-and-drop image uploader (#22)
+- buyer-app `/shop` page + `/shop/[slug]` product detail (#23)
+
+**Definition of done:** Admin creates a product with an image → product appears on buyer storefront at `/shop` and `/shop/[slug]` with all attributes visible.
 
 ---
 
-## Appendix: Environment Variables Reference
+### M6 — Commerce (Cart & Checkout)
 
-| Variable | Used By | Description |
-|---|---|---|
-| `NODE_ENV` | Backend | `development` / `production` |
-| `PORT` | Backend | HTTP port (default `5000`) |
-| `MONGODB_URI` | Backend | MongoDB Atlas connection string |
-| `JWT_PRIVATE_KEY` | Backend | RS256 private key (PEM) for signing access tokens |
-| `JWT_PUBLIC_KEY` | Backend | RS256 public key (PEM) for verifying access tokens |
-| `REFRESH_TOKEN_SECRET` | Backend | HMAC secret for hashing refresh tokens |
-| `GOOGLE_CLIENT_ID` | Backend | Google OAuth client ID |
-| `RAZORPAY_KEY_ID` | Backend | Razorpay API key |
-| `RAZORPAY_KEY_SECRET` | Backend | Razorpay API secret |
-| `RAZORPAY_WEBHOOK_SECRET` | Backend | HMAC secret for verifying Razorpay webhooks |
-| `R2_ACCOUNT_ID` | Backend | Cloudflare account ID |
-| `R2_ACCESS_KEY_ID` | Backend | Cloudflare R2 access key |
-| `R2_SECRET_ACCESS_KEY` | Backend | Cloudflare R2 secret key |
-| `R2_PUBLIC_BUCKET` | Backend | R2 bucket name for public assets (covers) |
-| `R2_PRIVATE_BUCKET` | Backend | R2 bucket name for private assets (PDFs) |
-| `R2_PUBLIC_URL` | Backend | CDN base URL for public bucket |
-| `SMTP_HOST` | Backend | SMTP server hostname |
-| `SMTP_PORT` | Backend | SMTP port (587 for TLS) |
-| `SMTP_USER` | Backend | SMTP username |
-| `SMTP_PASS` | Backend | SMTP password |
-| `ADMIN_EMAIL` | Backend | Default admin account email (seeding) |
-| `ADMIN_PASSWORD` | Backend | Default admin account password (seeding) |
-| `CORS_ORIGIN` | Backend | Comma-separated allowed origins |
-| `VITE_API_URL` | frontend | Backend base URL |
-| `VITE_GOOGLE_CLIENT_ID` | frontend | Google OAuth client ID |
-| `VITE_RAZORPAY_KEY` | frontend | Razorpay public key (safe to expose) |
+**Issues:** [#24](issues.md#issue-24--cart-backend) · [#25](issues.md#issue-25--cart-frontend) · [#26](issues.md#issue-26--order-backend) · [#27](issues.md#issue-27--razorpay-webhook-backend) · [#28](issues.md#issue-28--checkout-frontend)
+**Branches:** `feature/cart-backend` → `feature/cart-frontend` → `feature/order-backend` → `feature/webhook-backend` → `feature/checkout-frontend`
+**Depends on:** M5
+
+**Outcome:** Buyers maintain a persistent cart and complete purchases via Razorpay. Payment confirmed via webhook HMAC verification — backend is the source of truth, not the client.
+
+**Key deliverables:**
+- `Cart` model + `GET`/`PUT /api/buyer/cart` + stock validation (#24)
+- buyer-app Zustand `cartStore` + cart drawer + header badge (#25)
+- `Order` + `Payment` models + `POST /api/buyer/orders` (price snapshot, stock decrement, Razorpay order) (#26)
+- `POST /api/webhooks/razorpay` — HMAC verify, idempotent processing, stock restore on failure (#27)
+- buyer-app 3-step checkout + Razorpay popup + order confirmation (polling) + order history (#28)
+
+**Definition of done:** Full purchase flow works end-to-end in staging: browse → cart → checkout → Razorpay test payment → order confirmed with `paymentStatus: paid`.
 
 ---
 
-## Appendix: Test Coverage Targets
+### M7 — Admin Order & Inventory Management
 
-| App | Scope | Target |
-|---|---|---|
-| Backend | Route handlers | ≥ 70% |
-| Backend | Services (payment, storage, email) | ≥ 80% |
-| Backend | Auth middleware | ≥ 90% |
-| frontend | Components | ≥ 60% |
-| frontend | Redux slices | ≥ 85% |
+**Issues:** [#29](issues.md#issue-29--admin-orders-api) · [#30](issues.md#issue-30--admin-customers-inventory--dashboard-api) · [#31](issues.md#issue-31--admin-orders--customers-ui) · [#32](issues.md#issue-32--admin-inventory--dashboard-ui)
+**Branches:** `feature/admin-orders-api` · `feature/admin-customers-inventory-api` · `feature/admin-orders-ui` · `feature/admin-inventory-dashboard-ui`
+**Depends on:** M6
 
+**Outcome:** Admin views all orders, advances status, cancels with Razorpay refund, adjusts inventory, and monitors store health via dashboard.
+
+**Key deliverables:**
+- Admin order list + status update (transition validation) + cancel/refund routes (#29)
+- Admin customer list/history + stock update + dashboard aggregation (#30)
+- admin-app orders list + order detail drawer + cancel modal + customers page (#31)
+- admin-app inventory page (inline stock edit, low-stock highlight) + dashboard page (#32)
+
+**Definition of done:** Admin places an order as a buyer in staging, views it in admin-app, advances status to `packed`, then cancels — Razorpay refund fires and stock is restored.
 
 ---
 
-## Appendix: Critical E2E Scenarios (Playwright)
+### M8 — Static Pages & Polish
 
-These scenarios must be green before any milestone is considered deployable to staging:
+**Issues:** [#33](issues.md#issue-33--static-pages) · [#34](issues.md#issue-34--error-pages--accessibility) · [#35](issues.md#issue-35--admin-settings) · [#36](issues.md#issue-36--security-headers--rate-limiting) · [#37](issues.md#issue-37--structured-logging)
+**Branches:** `feature/static-pages` · `feature/error-a11y` · `feature/admin-settings` · `feature/security-headers` · `feature/logging`
+**Depends on:** M7
 
+**Outcome:** All legally required pages live. Security posture meets SRS §12. Structured logging active. WCAG 2.1 AA passed on storefront.
+
+**Key deliverables:**
+- buyer-app `/about`, `/shipping`, `/returns`, `/contact` + footer nav (#33)
+- buyer-app custom 404/500 + loading skeletons + WCAG 2.1 AA a11y audit (#34)
+- admin-app `/settings` page + `Settings` model + `PATCH /api/admin/settings` (#35)
+- Backend `helmet` + `cors` allowlist + `express-rate-limit` (#36)
+- Backend `pino` + `pino-http` structured JSON logging (#37)
+
+**Definition of done:** Lighthouse a11y score on `/shop` ≥ 90. OTP endpoints return `429` on 4th request in 15 minutes. All four static pages in footer nav.
+
+---
+
+### M9 — E2E Test Suite
+
+**Issues:** [#38](issues.md#issue-38--playwright-workspace-setup) · [#39](issues.md#issue-39--admin-auth-e2e-specs) · [#40](issues.md#issue-40--buyer-auth-e2e-specs) · [#41](issues.md#issue-41--purchase-flow--product-publish-e2e-specs) · [#42](issues.md#issue-42--e2e-ci-gate-activation)
+**Branches:** `feature/e2e-setup` → `feature/e2e-admin-auth` ∥ `feature/e2e-buyer-auth` ∥ `feature/e2e-purchase-flow` → `feature/e2e-ci-gate`
+**Depends on:** M8 (all features complete)
+
+**Outcome:** 6 Playwright scenarios cover critical user journeys across 3 browsers. CI E2E gate activated — `develop → master` PRs with failing E2E are blocked.
+
+**Key deliverables:**
+- `e2e/` workspace: Playwright 1.60, 3-browser config, global setup/teardown, auth fixtures (#38)
+- Admin auth specs: login (happy path, wrong password, invalid OTP) + forgot-password (#39)
+- Buyer auth specs: email OTP (new + returning) + Google OAuth (new + account linking) (#40)
+- Purchase flow spec + admin product-publish spec (#41)
+- Replace `exit 0` placeholder with real Playwright run; artifact upload on failure (#42)
+
+**Definition of done:** All 6 spec files pass in Chromium, Firefox, and WebKit on a clean CI run. A PR with a deliberately broken E2E test is blocked from merging.
+
+---
+
+## Dependency Graph
+
+```
+M0 (scaffold)
+ └─ M1 (CI: #1 → #2 → #3 → #4)
+     └─ M2 (Docker: #5 → #6 → #7 → #8 → #9)
+         └─ M3 (Render: #10 → #11 → #12 → #13)
+             └─ M4 (Auth: #14 → #15 ∥ #17 → #16 ∥ #18)
+                 └─ M5 (Catalog: #19 → #20 → #21 → #22 ∥ #23)
+                     └─ M6 (Commerce: #24 → #25 → #26 → #27 → #28)
+                         └─ M7 (Orders: #29 ∥ #30 → #31 ∥ #32)
+                             └─ M8 (Polish: #33 ∥ #34 ∥ #35 ∥ #36 ∥ #37)
+                                 └─ M9 (E2E: #38 → #39 ∥ #40 ∥ #41 → #42)
+```
+
+Parallel branches within a milestone (`∥`) can be developed simultaneously after the listed prerequisite merges to `develop`.
