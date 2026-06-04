@@ -11,4 +11,5 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Render deploy — activated in Issue #31"
+      - run: |
+          echo "Render deploy — activated in Issue #31"
