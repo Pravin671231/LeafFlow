@@ -55,5 +55,24 @@ jobs:
     needs: [test]
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo "E2E placeholder — activated in Issue #62"
+      - uses: actions/checkout@v4
+      - name: Start production stack
+        run: docker compose -f docker-compose.prod.yml up -d --build
+      - name: Wait for backend health
+        run: |
+          for i in $(seq 1 12); do
+            if curl -sf http://localhost:3000/health; then
+              echo "Backend is healthy"
+              exit 0
+            fi
+            echo "Attempt $i/12 — retrying in 5s..."
+            sleep 5
+          done
+          echo "Backend did not become healthy within 60 s" >&2
+          exit 1
+      - name: E2E placeholder
+        run: |
+          echo "E2E placeholder — activated in Issue 62"
+      - name: Teardown stack
+        if: always()
+        run: docker compose -f docker-compose.prod.yml down -v
