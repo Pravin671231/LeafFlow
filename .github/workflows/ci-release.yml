@@ -55,4 +55,5 @@ jobs:
     needs: [test]
     runs-on: ubuntu-latest
     steps:
-      - run: echo "E2E placeholder — activated in Issue #62"
+      - run: |
+          echo "E2E placeholder — activated in Issue #62"
