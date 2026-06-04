@@ -1,3 +1,20 @@
+# ── Stage 0: dev ──────────────────────────────────────────────────────────────
+FROM node:24-alpine AS dev
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+COPY Backend/package.json ./Backend/
+COPY buyer-app/package.json ./buyer-app/
+COPY admin-app/package.json ./admin-app/
+
+RUN npm ci
+
+WORKDIR /app/Backend
+
+EXPOSE 3000
+# No CMD — docker-compose provides: npx tsx watch src/index.ts
+
 # ── Stage 1: builder ─────────────────────────────────────────────────────────
 FROM node:24-alpine AS builder
 

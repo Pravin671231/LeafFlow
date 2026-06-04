@@ -1,3 +1,20 @@
+# ── Stage 0: dev ──────────────────────────────────────────────────────────────
+FROM node:24-alpine AS dev
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+COPY Backend/package.json ./Backend/
+COPY buyer-app/package.json ./buyer-app/
+COPY admin-app/package.json ./admin-app/
+
+RUN npm ci
+
+WORKDIR /app/admin-app
+
+EXPOSE 5173
+# No CMD — docker-compose provides: npx vite --host
+
 # ── Stage 1: builder ─────────────────────────────────────────────────────────
 FROM node:24-alpine AS builder
 

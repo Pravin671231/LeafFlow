@@ -1,0 +1,70 @@
+name: leafflow
+
+services:
+  mongo:
+    image: mongo:8.0
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - leafflow-net
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      start_period: 15s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: Backend/Dockerfile
+      target: dev
+    volumes:
+      - ./Backend/src:/app/Backend/src
+    command: npx tsx watch src/index.ts
+    env_file: ./Backend/.env
+    environment:
+      PORT: "3000"
+      MONGODB_URI: mongodb://mongo:27017/leafflow
+      CHOKIDAR_USEPOLLING: "1"
+    ports:
+      - "3000:3000"
+    networks:
+      - leafflow-net
+    depends_on:
+      mongo:
+        condition: service_healthy
+
+  buyer-app:
+    build:
+      context: .
+      dockerfile: buyer-app/Dockerfile
+      target: dev
+    volumes:
+      - ./buyer-app/src:/app/buyer-app/src
+      - ./buyer-app/app:/app/buyer-app/app
+    command: npx next dev -H 0.0.0.0
+    ports:
+      - "3001:3000"
+    networks:
+      - leafflow-net
+
+  admin-app:
+    build:
+      context: .
+      dockerfile: admin-app/Dockerfile
+      target: dev
+    volumes:
+      - ./admin-app/src:/app/admin-app/src
+    command: npx vite --host
+    ports:
+      - "5173:5173"
+    networks:
+      - leafflow-net
+
+volumes:
+  mongo_data:
+
+networks:
+  leafflow-net:
+    driver: bridge
