@@ -1,0 +1,25 @@
+# Dependencies
+node_modules
+*/node_modules
+
+# Compiled output
+dist
+
+# Secrets — inject at runtime via environment variables, never bake in
+.env
+.env.*
+*.env
+
+# Test artifacts
+coverage
+__tests__
+*.test.ts
+*.spec.ts
+
+# VCS & editor
+.git
+.gitignore
+.vscode
+
+# Docs
+*.md
