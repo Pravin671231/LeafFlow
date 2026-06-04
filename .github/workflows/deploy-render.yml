@@ -1,0 +1,14 @@
+name: Deploy to Render
+
+on:
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Render deploy — activated in Issue #31"
