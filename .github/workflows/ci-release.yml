@@ -71,7 +71,8 @@ jobs:
           echo "Backend did not become healthy within 60 s" >&2
           exit 1
       - name: E2E placeholder
-        run: echo "E2E placeholder — activated in Issue #62"
+        run: |
+          echo "E2E placeholder — activated in Issue #62"
       - name: Teardown stack
         if: always()
         run: docker compose -f docker-compose.prod.yml down -v
