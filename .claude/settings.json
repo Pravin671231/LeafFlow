@@ -6,7 +6,24 @@
       "Bash(git commit -m 'fix\\(ci\\): use block scalar in deploy-render.yml echo step *)",
       "Bash(git merge *)",
       "Bash(docker build *)",
-      "Bash(docker info *)"
+      "Bash(docker info *)",
+      "Bash(git fetch *)",
+      "Bash(docker run *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5173/)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5173/products)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5173/nonexistent)",
+      "Bash(sleep 4 && cat /tmp/admin-app-dev.log)",
+      "Read(//tmp/**)",
+      "PowerShell(Stop-Process -Id 14504 -Force)",
+      "PowerShell(Get-Process -Id 14504 -ErrorAction SilentlyContinue)",
+      "Bash(docker compose *)",
+      "Bash(curl -s http://localhost:3000/health)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3001)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5173)",
+      "Bash(npx --workspace buyer-app next build)",
+      "Bash(curl -s \"http://localhost:3001/_next/static/chunks/buyer-app_app_globals_07v0b42.css\")",
+      "Bash(curl -s http://localhost:3001)",
+      "Bash(git commit -m ' *)"
     ]
   }
 }
