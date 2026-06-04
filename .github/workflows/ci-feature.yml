@@ -1,0 +1,51 @@
+name: CI Feature
+
+on:
+  pull_request:
+    branches: [develop]
+
+concurrency:
+  group: ci-feature-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+
+  test:
+    name: Test (${{ matrix.workspace }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - workspace: backend
+            coverage_dir: Backend
+          - workspace: buyer-app
+            coverage_dir: buyer-app
+          - workspace: admin-app
+            coverage_dir: admin-app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run test:coverage --workspace=${{ matrix.workspace }}
+      - uses: codecov/codecov-action@v4
+        with:
+          name: coverage-${{ matrix.workspace }}
+          directory: ${{ matrix.coverage_dir }}/coverage/
+          if-no-files-found: error
