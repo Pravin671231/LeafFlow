@@ -1,3 +1,20 @@
+# ── Stage 0: dev ──────────────────────────────────────────────────────────────
+FROM node:24-alpine AS dev
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+COPY Backend/package.json ./Backend/
+COPY buyer-app/package.json ./buyer-app/
+COPY admin-app/package.json ./admin-app/
+
+RUN npm ci
+
+WORKDIR /app/buyer-app
+
+EXPOSE 3000
+# No CMD — docker-compose provides: npx next dev -H 0.0.0.0
+
 # ── Stage 1: deps ─────────────────────────────────────────────────────────────
 FROM node:24-alpine AS deps
 
