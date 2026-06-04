@@ -1,0 +1,25 @@
+# Dependencies
+node_modules
+*/node_modules
+
+# Build output — builder generates a fresh dist
+dist
+
+# Test artifacts
+coverage
+__tests__
+*.test.ts
+*.spec.ts
+
+# Secrets — API URL must come via --build-arg, not baked .env files
+.env
+.env.*
+*.env
+
+# VCS & editor
+.git
+.gitignore
+.vscode
+
+# Docs
+*.md
