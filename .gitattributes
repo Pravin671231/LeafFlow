@@ -1,0 +1,8 @@
+# Normalize all text files to LF in the repository
+* text=auto eol=lf
+
+# Explicitly force LF for files that must be LF on the runner
+*.yml    text eol=lf
+*.yaml   text eol=lf
+*.sh     text eol=lf
+Makefile text eol=lf
