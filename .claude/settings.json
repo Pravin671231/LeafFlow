@@ -4,7 +4,9 @@
       "Bash(gh run *)",
       "Bash(git commit -m 'fix\\(ci\\): use block scalar for e2e echo to prevent YAML comment truncation *)",
       "Bash(git commit -m 'fix\\(ci\\): use block scalar in deploy-render.yml echo step *)",
-      "Bash(git merge *)"
+      "Bash(git merge *)",
+      "Bash(docker build *)",
+      "Bash(docker info *)"
     ]
   }
 }
