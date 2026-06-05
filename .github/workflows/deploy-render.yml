@@ -10,6 +10,13 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
     steps:
-      - run: |
-          echo "Render deploy — activated in Issue #31"
+      - name: Deploy Backend
+        run: curl --fail -X POST "${{ secrets.RENDER_DEPLOY_BACKEND }}"
+
+      - name: Deploy Buyer App
+        run: curl --fail -X POST "${{ secrets.RENDER_DEPLOY_BUYER }}"
+
+      - name: Deploy Admin App
+        run: curl --fail -X POST "${{ secrets.RENDER_DEPLOY_ADMIN }}"
