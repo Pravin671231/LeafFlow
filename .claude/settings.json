@@ -23,7 +23,13 @@
       "Bash(npx --workspace buyer-app next build)",
       "Bash(curl -s \"http://localhost:3001/_next/static/chunks/buyer-app_app_globals_07v0b42.css\")",
       "Bash(curl -s http://localhost:3001)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash(gh secret *)",
+      "Bash(npm install *)",
+      "Bash(npm run *)"
+    ],
+    "deny": [
+      "Read(**/.env)"
     ]
   }
 }
