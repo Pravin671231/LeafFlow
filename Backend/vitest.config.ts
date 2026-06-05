@@ -1,10 +1,17 @@
 import { defineConfig } from "vitest/config";
+import { config } from "dotenv";
+import { resolve } from "path";
+
+config({ path: resolve(__dirname, ".env") });
 
 export default defineConfig({
   test: {
     environment: "node",
+    env: {
+      CORS_ORIGIN: process.env.CORS_ORIGIN ?? "http://localhost:3001,http://localhost:5173",
+    },
     coverage: {
-      provider: "v8"
-    }
-  }
+      provider: "v8",
+    },
+  },
 });
