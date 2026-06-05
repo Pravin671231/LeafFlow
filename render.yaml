@@ -5,6 +5,7 @@ services:
     dockerfilePath: ./Backend/Dockerfile
     dockerContext: .
     healthCheckPath: /health
+    startCommand: node dist/scripts/seed.js && node dist/index.js
     envVarGroups:
       - leafflow-backend
 
