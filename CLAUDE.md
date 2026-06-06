@@ -153,3 +153,47 @@ Three GitHub Actions workflows:
 - **`deploy-render.yml`** — triggers Render deploy hooks on push to `master`
 
 Coverage uploads to Codecov from each workspace's `test:coverage` job.
+
+## Development Workflow
+
+### Branch Naming Convention
+
+All feature branches follow:
+```
+feature/<issue-number>-<scope>
+```
+
+Where `<scope>` is a 2–4 word kebab-case description from the issue title. Examples:
+- `feature/62-e2e-ci-gate-activation`
+- `feature/14-mongoose-real-connection`
+- `feature/33-cors-middleware`
+
+Always cut from `develop`. Use `gh issue develop <N> --base develop --name feature/<N>-<scope> --checkout` — this registers the branch with the GitHub issue's Development sidebar automatically (works even on closed issues).
+
+### Pre-Merge Checklist
+
+Before merging any feature branch to `develop`, all of the following must pass locally:
+
+1. **Tests** — `npm run test` (all workspaces, zero failures)
+2. **Build** — `npm run build` (all workspaces, no TypeScript errors)
+3. **Backend start** — build backend, start with `npm run start --workspace backend`, confirm `GET /health` returns HTTP 200
+
+CI (`ci-feature.yml`) also enforces lint + test on every PR. Do not merge if CI is red.
+
+### Commit Message Format
+
+```
+<type>(<scope>): <description> (Issue #<N>)
+```
+
+Types: `feat`, `fix`, `test`, `chore`, `docs`, `refactor`
+Scopes: `backend`, `buyer-app`, `admin-app`, `ci`, `infra`, `e2e`
+
+Example: `feat(backend): implement OTP session model and expiry (Issue #14)`
+
+### Issue-to-PR Skill
+
+Use `/dev-workflow <issue-number>` to run the full workflow end-to-end:
+**read issue → plan → implement → commit → PR → merge → cleanup**
+
+The skill enforces a plan approval gate — no code is written until the plan is explicitly approved.
