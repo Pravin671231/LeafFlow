@@ -28,7 +28,11 @@
       "Bash(npm install *)",
       "Bash(npm run *)",
       "Bash(git tag *)",
-      "Bash(gh release create v0.3.0 --title 'v0.3.0 — M3 Render Deployment / Staging' --notes ' *)"
+      "Bash(gh release create v0.3.0 --title 'v0.3.0 — M3 Render Deployment / Staging' --notes ' *)",
+      "Bash(Get-ChildItem Backend/src -Recurse -File)",
+      "Bash(Select-Object FullName)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/health)",
+      "Bash(kill %1)"
     ],
     "deny": [
       "Read(**/.env)"
