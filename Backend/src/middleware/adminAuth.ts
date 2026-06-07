@@ -7,6 +7,7 @@ export interface AdminPayload {
   role: "admin";
 }
 
+/* eslint-disable @typescript-eslint/no-namespace */
 declare global {
   namespace Express {
     interface Request {
@@ -14,6 +15,7 @@ declare global {
     }
   }
 }
+/* eslint-enable @typescript-eslint/no-namespace */
 
 export function adminAuth(req: Request, res: Response, next: NextFunction): void {
   const authHeader = req.headers.authorization;

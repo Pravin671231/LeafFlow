@@ -32,10 +32,18 @@ jobs:
         include:
           - workspace: backend
             coverage_dir: Backend
+            needs_mongo: true
           - workspace: buyer-app
             coverage_dir: buyer-app
+            needs_mongo: false
           - workspace: admin-app
             coverage_dir: admin-app
+            needs_mongo: false
+    services:
+      mongodb:
+        image: mongo:8
+        ports:
+          - 27017:27017
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -44,6 +52,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run test:coverage --workspace=${{ matrix.workspace }}
+        env:
+          MONGODB_URI: mongodb://localhost:27017/leafflow_test
       - uses: codecov/codecov-action@v4
         with:
           name: coverage-${{ matrix.workspace }}

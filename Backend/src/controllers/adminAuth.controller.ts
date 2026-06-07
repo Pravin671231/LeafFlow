@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import bcrypt from "bcryptjs";
+import { Types } from "mongoose";
 import { Admin } from "../models/Admin";
 import { OtpSession } from "../models/OtpSession";
 import { AppError } from "../utils/AppError";
@@ -20,7 +21,7 @@ const LOCK_DURATION_MS = 15 * 60 * 1000;
 const MAX_FAILED_ATTEMPTS = 5;
 const MAX_OTP_ATTEMPTS = 5;
 
-export async function login(req: Request, res: Response, next: NextFunction): Promise<void> {
+export async function login(req: Request, res: Response, _next: NextFunction): Promise<void> {
   const parsed = loginSchema.safeParse(req.body);
   if (!parsed.success) throw new AppError(400, "VALIDATION_ERROR", String(parsed.error));
 
@@ -66,7 +67,7 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
   res.json({ otpSessionId: session._id.toString(), expiresInSeconds: OTP_TTL_SECONDS });
 }
 
-export async function verifyOtp(req: Request, res: Response, next: NextFunction): Promise<void> {
+export async function verifyOtp(req: Request, res: Response, _next: NextFunction): Promise<void> {
   const parsed = verifyOtpSchema.safeParse(req.body);
   if (!parsed.success) throw new AppError(400, "VALIDATION_ERROR", String(parsed.error));
 
@@ -94,7 +95,7 @@ export async function verifyOtp(req: Request, res: Response, next: NextFunction)
 
   await OtpSession.deleteOne({ _id: session._id });
 
-  const rawRefresh = await createRefreshToken(admin._id as any);
+  const rawRefresh = await createRefreshToken(admin._id as Types.ObjectId);
   const accessToken = signAccessToken({ adminId: admin._id.toString(), role: "admin" });
 
   res.cookie("refreshToken", rawRefresh, {
@@ -107,16 +108,14 @@ export async function verifyOtp(req: Request, res: Response, next: NextFunction)
   res.json({ accessToken });
 }
 
-export async function refresh(req: Request, res: Response, next: NextFunction): Promise<void> {
+export async function refresh(req: Request, res: Response, _next: NextFunction): Promise<void> {
   const raw = req.cookies?.refreshToken as string | undefined;
   if (!raw) throw new AppError(401, "INVALID_REFRESH_TOKEN", "No refresh token");
 
   let adminId: string;
-  let tokenHash: string;
   try {
     const result = await validateRefreshToken(raw);
     adminId = result.adminId.toString();
-    tokenHash = result.tokenHash;
   } catch {
     throw new AppError(401, "INVALID_REFRESH_TOKEN", "Invalid refresh token");
   }
@@ -125,7 +124,7 @@ export async function refresh(req: Request, res: Response, next: NextFunction): 
   res.json({ accessToken });
 }
 
-export async function logout(req: Request, res: Response, next: NextFunction): Promise<void> {
+export async function logout(req: Request, res: Response, _next: NextFunction): Promise<void> {
   const raw = req.cookies?.refreshToken as string | undefined;
   if (raw) {
     try {
@@ -139,13 +138,13 @@ export async function logout(req: Request, res: Response, next: NextFunction): P
   res.json({ success: true });
 }
 
-export async function me(req: Request, res: Response, next: NextFunction): Promise<void> {
+export async function me(req: Request, res: Response, _next: NextFunction): Promise<void> {
   const admin = await Admin.findById(req.admin?.adminId).select("-passwordHash");
   if (!admin) throw new AppError(404, "NOT_FOUND", "Admin not found");
   res.json(admin);
 }
 
-export async function forgotPasswordSendOtp(req: Request, res: Response, next: NextFunction): Promise<void> {
+export async function forgotPasswordSendOtp(req: Request, res: Response, _next: NextFunction): Promise<void> {
   const parsed = forgotPasswordSendSchema.safeParse(req.body);
   if (!parsed.success) throw new AppError(400, "VALIDATION_ERROR", String(parsed.error));
 
@@ -175,7 +174,7 @@ export async function forgotPasswordSendOtp(req: Request, res: Response, next: N
   res.json({ success: true });
 }
 
-export async function forgotPasswordReset(req: Request, res: Response, next: NextFunction): Promise<void> {
+export async function forgotPasswordReset(req: Request, res: Response, _next: NextFunction): Promise<void> {
   const parsed = forgotPasswordResetSchema.safeParse(req.body);
   if (!parsed.success) throw new AppError(400, "VALIDATION_ERROR", String(parsed.error));
 
@@ -202,7 +201,7 @@ export async function forgotPasswordReset(req: Request, res: Response, next: Nex
   res.json({ success: true });
 }
 
-export async function resetPasswordSendOtp(req: Request, res: Response, next: NextFunction): Promise<void> {
+export async function resetPasswordSendOtp(req: Request, res: Response, _next: NextFunction): Promise<void> {
   const admin = await Admin.findById(req.admin?.adminId);
   if (!admin) throw new AppError(404, "NOT_FOUND", "Admin not found");
 
@@ -225,7 +224,7 @@ export async function resetPasswordSendOtp(req: Request, res: Response, next: Ne
   res.json({ success: true });
 }
 
-export async function resetPasswordConfirm(req: Request, res: Response, next: NextFunction): Promise<void> {
+export async function resetPasswordConfirm(req: Request, res: Response, _next: NextFunction): Promise<void> {
   const parsed = resetPasswordConfirmSchema.safeParse(req.body);
   if (!parsed.success) throw new AppError(400, "VALIDATION_ERROR", String(parsed.error));
 

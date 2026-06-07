@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
-import { Admin, IAdmin } from "../../src/models/Admin";
+import { Admin } from "../../src/models/Admin";
 
 const MONGO_URI = process.env.MONGODB_URI ?? "mongodb://localhost:27017/leafflow_test";
 
