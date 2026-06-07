@@ -24,14 +24,36 @@ jobs:
       - run: npm ci
       - run: npm run lint
 
-  test:
+  test-backend:
+    name: Test (backend)
+    runs-on: ubuntu-latest
+    services:
+      mongodb:
+        image: mongo:8
+        ports:
+          - 27017:27017
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run test:coverage --workspace=backend
+        env:
+          MONGODB_URI: mongodb://localhost:27017/leafflow_test
+      - uses: codecov/codecov-action@v4
+        with:
+          name: coverage-backend
+          directory: Backend/coverage/
+          fail_ci_if_error: false
+
+  test-frontend:
     name: Test (${{ matrix.workspace }})
     runs-on: ubuntu-latest
     strategy:
       matrix:
         include:
-          - workspace: backend
-            coverage_dir: Backend
           - workspace: buyer-app
             coverage_dir: buyer-app
           - workspace: admin-app
@@ -48,4 +70,4 @@ jobs:
         with:
           name: coverage-${{ matrix.workspace }}
           directory: ${{ matrix.coverage_dir }}/coverage/
-          if-no-files-found: error
+          fail_ci_if_error: false

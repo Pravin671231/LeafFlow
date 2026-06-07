@@ -22,7 +22,7 @@ describe("sendOtpEmail", () => {
   });
 
   it("calls sendMail with correct recipient and subject", async () => {
-    const { sendOtpEmail } = await import("../../src/services/email");
+    const { sendOtpEmail } = await import("../../src/services/email.js");
     await sendOtpEmail("user@example.com", "123456");
 
     expect(sendMailMock).toHaveBeenCalledOnce();
@@ -32,7 +32,7 @@ describe("sendOtpEmail", () => {
   });
 
   it("includes the OTP in the email body", async () => {
-    const { sendOtpEmail } = await import("../../src/services/email");
+    const { sendOtpEmail } = await import("../../src/services/email.js");
     await sendOtpEmail("user@example.com", "654321");
 
     const [mailOptions] = sendMailMock.mock.calls[0];
@@ -42,7 +42,8 @@ describe("sendOtpEmail", () => {
   it("throws if SMTP_HOST is missing", async () => {
     const orig = process.env.SMTP_HOST;
     delete process.env.SMTP_HOST;
-    await expect(import("../../src/services/email?bust=" + Date.now())).rejects.toThrow("SMTP_HOST is not set");
+    const { sendOtpEmail } = await import("../../src/services/email?bust=" + Date.now());
+    await expect(sendOtpEmail("test@example.com", "123456")).rejects.toThrow("SMTP_HOST is not set");
     process.env.SMTP_HOST = orig;
   });
 });
