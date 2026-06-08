@@ -1,9 +1,9 @@
 import "dotenv/config";
-import express, { Request, Response, NextFunction } from "express";
+import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import router from "./routes";
-import { AppError } from "./utils/AppError";
+import { errorHandler } from "./utils/errorHandler";
 
 const app = express();
 
@@ -26,13 +26,6 @@ app.get("/health", (req, res) => {
 
 app.use("/api", router);
 
-app.use((err: Error, req: Request, res: Response, _next: NextFunction) => {
-  if (err instanceof AppError) {
-    res.status(err.statusCode).json({ success: false, code: err.code, message: err.message });
-    return;
-  }
-  console.error(err);
-  res.status(500).json({ success: false, code: "INTERNAL_ERROR", message: "Internal server error" });
-});
+app.use(errorHandler);
 
 export default app;
