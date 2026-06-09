@@ -7,6 +7,7 @@ import { AppError } from "../utils/AppError";
 import { generateOtp, hashOtp, verifyOtp as verifyOtpHash } from "../services/otp";
 import { signAccessToken, createRefreshToken, validateRefreshToken, revokeRefreshToken } from "../services/token";
 import { sendOtpEmail } from "../services/email";
+import { sendResponse } from "../utils/sendResponse";
 import type {
   LoginBody,
   VerifyOtpBody,
@@ -61,7 +62,7 @@ export async function login(req: Request, res: Response, _next: NextFunction): P
     // Email delivery failure does not block the login flow
   }
 
-  res.json({ otpSessionId: session._id.toString(), expiresInSeconds: OTP_TTL_SECONDS });
+  sendResponse({ res, data: { otpSessionId: session._id.toString(), expiresInSeconds: OTP_TTL_SECONDS } });
 }
 
 export async function verifyOtp(req: Request, res: Response, _next: NextFunction): Promise<void> {
@@ -99,7 +100,7 @@ export async function verifyOtp(req: Request, res: Response, _next: NextFunction
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 
-  res.json({ accessToken });
+  sendResponse({ res, data: { accessToken } });
 }
 
 export async function refresh(req: Request, res: Response, _next: NextFunction): Promise<void> {
@@ -115,7 +116,7 @@ export async function refresh(req: Request, res: Response, _next: NextFunction):
   }
 
   const accessToken = signAccessToken({ adminId, role: "admin" });
-  res.json({ accessToken });
+  sendResponse({ res, data: { accessToken } });
 }
 
 export async function logout(req: Request, res: Response, _next: NextFunction): Promise<void> {
@@ -129,20 +130,20 @@ export async function logout(req: Request, res: Response, _next: NextFunction): 
     }
   }
   res.clearCookie("refreshToken");
-  res.json({ success: true });
+  sendResponse({ res });
 }
 
 export async function me(req: Request, res: Response, _next: NextFunction): Promise<void> {
   const admin = await Admin.findById(req.admin?.adminId).select("-passwordHash");
   if (!admin) throw new AppError(404, "NOT_FOUND", "Admin not found");
-  res.json(admin);
+  sendResponse({ res, data: admin });
 }
 
 export async function forgotPasswordSendOtp(req: Request, res: Response, _next: NextFunction): Promise<void> {
   const { loginEmail } = req.body as ForgotPasswordSendBody;
   const admin = await Admin.findOne({ loginEmail });
   if (!admin) {
-    res.json({ success: true });
+    sendResponse({ res });
     return;
   }
 
@@ -162,7 +163,7 @@ export async function forgotPasswordSendOtp(req: Request, res: Response, _next: 
     // Silent failure
   }
 
-  res.json({ success: true });
+  sendResponse({ res });
 }
 
 export async function forgotPasswordReset(req: Request, res: Response, _next: NextFunction): Promise<void> {
@@ -186,7 +187,7 @@ export async function forgotPasswordReset(req: Request, res: Response, _next: Ne
   await Admin.findOneAndUpdate({ loginEmail: session.identifier }, { passwordHash, passwordChangedAt: new Date() });
   await OtpSession.deleteOne({ _id: session._id });
 
-  res.json({ success: true });
+  sendResponse({ res });
 }
 
 export async function resetPasswordSendOtp(req: Request, res: Response, _next: NextFunction): Promise<void> {
@@ -209,7 +210,7 @@ export async function resetPasswordSendOtp(req: Request, res: Response, _next: N
     // Silent failure
   }
 
-  res.json({ success: true });
+  sendResponse({ res });
 }
 
 export async function resetPasswordConfirm(req: Request, res: Response, _next: NextFunction): Promise<void> {
@@ -233,5 +234,5 @@ export async function resetPasswordConfirm(req: Request, res: Response, _next: N
   await Admin.findByIdAndUpdate(req.admin?.adminId, { passwordHash, passwordChangedAt: new Date() });
   await OtpSession.deleteOne({ _id: session._id });
 
-  res.json({ success: true });
+  sendResponse({ res });
 }
