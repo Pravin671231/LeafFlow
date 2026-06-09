@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const loginSchema = z.object({
-  loginEmail: z.string().email(),
+  loginEmail: z.email(),
   password: z.string().min(1),
 });
 
@@ -13,7 +13,7 @@ export const verifyOtpSchema = z.object({
 export const refreshSchema = z.object({});
 
 export const forgotPasswordSendSchema = z.object({
-  loginEmail: z.string().email(),
+  loginEmail: z.email(),
 });
 
 export const forgotPasswordResetSchema = z.object({
