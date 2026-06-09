@@ -9,13 +9,14 @@ LeafFlow is a single-seller e-commerce platform for ornamental plants, built as 
 - **buyer-app** — Next.js 16 customer-facing storefront (React 19, SSR, App Router)
 - **admin-app** — Vite 8 + React 19 seller dashboard (SPA)
 
-**Current state (June 2026):** Scaffold + Docker complete (M0–M2). Auth, catalog, and commerce features are not yet implemented. `Backend` exposes only `GET /health`. `connectDB()` in `src/index.ts` is mocked — real Mongoose connection comes in M4 (issue #14).
+**Current state (June 2026):** Admin auth is fully implemented (OTP login, JWT + refresh tokens, password reset, account lockout). `connectDB()` in `src/index.ts` is mocked — real Mongoose connection comes in M4 (issue #14). Buyer/product/catalog/commerce features are not yet started. buyer-app and admin-app are scaffolds with no real pages or features.
 
 ## Commands
 
 ### Local dev (Docker — preferred)
 ```
 make dev       # start all 4 services (mongo, backend, buyer-app, admin-app) with hot reload
+make prod      # build and start production stack (detached)
 make down      # stop containers and remove mongo_data volume
 make logs      # tail logs from all services
 make ps        # show container status
@@ -54,6 +55,8 @@ npm run test:coverage:buyer-app
 npm run test:coverage:admin-app
 ```
 
+Coverage thresholds (Backend): 80% lines/functions, 75% branches. `src/index.ts` and `src/scripts/**` are excluded from coverage.
+
 ### Backend build & start
 ```
 npm run build --workspace backend     # tsc → dist/
@@ -75,20 +78,38 @@ LeafFlow/
 └── eslint.config.ts
 ```
 
-### Backend structure (planned — populate from SRS §9.1)
-`src/app.ts` configures the Express app; `src/index.ts` starts the server and calls `connectDB()` (currently mocked). Scaffolded directories are empty and ready to populate per this layout:
+Requires Node ≥ 24.15.0.
+
+### Backend structure
+
+`src/app.ts` configures the Express app; `src/index.ts` starts the server with graceful shutdown.
+
 ```
 src/
-├── config/       # env, db, razorpay, r2 init
-├── controllers/
-├── middleware/   # auth, validate, errorHandler
-├── models/       # Mongoose schemas
-├── routes/       # /api/admin, /api/buyer, /api/webhooks
-├── services/     # otp, email, payment, storage
-├── schemas/      # Zod request schemas
-└── utils/
+├── config/       # env.ts (Zod-validated), db.ts (Mongoose — mocked until M4), constants.ts, index.ts
+├── controllers/  # adminAuth.controller.ts (7 handlers: login, verifyOtp, refresh, logout, me, forgotPassword, resetPassword)
+├── middleware/   # adminAuth.ts (JWT validation), validate.ts (Zod), rateLimiter.ts, index.ts
+├── models/       # Admin.ts, OtpSession.ts, RefreshToken.ts, index.ts
+├── routes/       # admin/auth.ts (8 endpoints), index.ts (mounts /api/admin/auth)
+├── services/     # adminAuth.service.ts, email.ts, otp.ts, token.ts (JWT sign/verify), index.ts
+├── schemas/      # auth.ts (Zod schemas for login, verify-otp, forgot-password), index.ts
+├── utils/        # logger.ts (Pino), errorHandler.ts, sendResponse.ts, AppError.ts
+└── scripts/      # seed.ts (admin seeder)
 ```
-API base: `/api`. Error shape: `{ success: false, code: string, message: string }`.
+
+**Implemented admin auth endpoints** (`/api/admin/auth`):
+`POST /login` → `POST /verify-otp` → `POST /refresh` → `POST /logout`
+`GET /me` · `POST /forgot-password` · `POST /reset-password`
+
+**What's NOT yet implemented** (planned M5–M6): buyer models (User, Product, Cart, Order, Payment), buyer/product/order routes, Razorpay integration, Cloudflare R2 storage.
+
+### Backend coding patterns
+
+- **Responses**: Always use `sendResponse(res, status, data)` from `src/utils/sendResponse.ts`. Error shape: `{ success: false, code: string, message: string }`.
+- **Errors**: Throw `new AppError(message, statusCode, code)` from `src/utils/AppError.ts`; the `errorHandler` middleware catches it.
+- **Logging**: Use the Pino logger from `src/utils/logger.ts` — never `console.log`.
+- **Validation**: Apply `validate(schema)` middleware (Zod) in routes before controllers.
+- **Config**: Access validated env through `src/config/env.ts`, never `process.env` directly.
 
 ### Frontend structure (planned)
 ```
@@ -110,8 +131,8 @@ admin-app/src/
 | **admin-app** | **RTK Query** (`@reduxjs/toolkit`) | **Redux slices** (auth session, sidebar, table filters) |
 | **buyer-app** | **TanStack Query** | **Zustand** (cart, checkout step) |
 
-### Key data models (MongoDB/Mongoose — implement in M4–M6)
-`Admin`, `OtpSession`, `RefreshToken` (M4) → `User`, `Category`, `Product` (M5) → `Cart`, `Order`, `Payment` (M6). See SRS §10 for full field lists.
+### Key data models (MongoDB/Mongoose)
+`Admin`, `OtpSession`, `RefreshToken` (M4, implemented schemas) → `User`, `Category`, `Product` (M5) → `Cart`, `Order`, `Payment` (M6). See `docs/SRS.md` §10 for full field lists.
 
 ### External integrations
 MongoDB 8, Cloudflare R2 (S3-compatible), Razorpay (India), Gmail SMTP (Nodemailer), Google OAuth / One Tap.
