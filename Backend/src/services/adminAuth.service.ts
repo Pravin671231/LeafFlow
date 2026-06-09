@@ -16,6 +16,55 @@ import {
   BCRYPT_ROUNDS_PASSWORD,
 } from "../config/constants";
 
+// Creates an OTP session and sends the OTP email. Email failure is non-fatal.
+async function issueOtpSession(
+  purpose: "admin_login" | "admin_forgot" | "admin_reset",
+  identifier: string,
+  deliveryEmail: string,
+  adminId: Types.ObjectId
+): Promise<string> {
+  const otp = generateOtp();
+  const otpHash = await hashOtp(otp);
+  const session = await OtpSession.create({
+    purpose,
+    identifier,
+    otpHash,
+    expiresAt: new Date(Date.now() + OTP_TTL_MS),
+    attemptCount: 0,
+  });
+  try {
+    await sendOtpEmail(deliveryEmail, otp);
+  } catch (err) {
+    logger.warn({ err, adminId }, `OTP email delivery failed — ${purpose} flow continues`);
+  }
+  return session._id.toString();
+}
+
+// Verifies an OTP session by ID + purpose. Returns the session identifier on success.
+// Increments attemptCount on wrong OTP; deletes the session on success.
+async function consumeOtpSession(
+  otpSessionId: string,
+  otp: string,
+  purpose: string
+): Promise<{ identifier: string }> {
+  const session = await OtpSession.findById(otpSessionId);
+  if (!session || session.purpose !== purpose) {
+    throw new AppError(401, "INVALID_OTP", "Invalid OTP session");
+  }
+  if (session.expiresAt < new Date()) throw new AppError(401, "OTP_EXPIRED", "OTP has expired");
+  if (session.attemptCount >= MAX_OTP_ATTEMPTS) throw new AppError(429, "OTP_MAX_ATTEMPTS", "Too many attempts");
+
+  const valid = await verifyOtpHash(otp, session.otpHash);
+  if (!valid) {
+    session.attemptCount += 1;
+    await session.save();
+    throw new AppError(401, "INVALID_OTP", "Invalid OTP");
+  }
+
+  await OtpSession.deleteOne({ _id: session._id });
+  return { identifier: session.identifier };
+}
+
 export async function login(
   loginEmail: string,
   password: string
@@ -42,46 +91,24 @@ export async function login(
   admin.lastLoginAt = new Date();
   await admin.save();
 
-  const otp = generateOtp();
-  const otpHash = await hashOtp(otp);
-  const session = await OtpSession.create({
-    purpose: "admin_login",
-    identifier: loginEmail,
-    otpHash,
-    expiresAt: new Date(Date.now() + OTP_TTL_MS),
-    attemptCount: 0,
-  });
+  const otpSessionId = await issueOtpSession(
+    "admin_login",
+    loginEmail,
+    admin.otpDeliveryEmail,
+    admin._id as Types.ObjectId
+  );
 
-  try {
-    await sendOtpEmail(admin.otpDeliveryEmail, otp);
-  } catch (err) {
-    logger.warn({ err, adminId: admin._id }, "OTP email delivery failed — login flow continues");
-  }
-
-  return { otpSessionId: session._id.toString(), expiresInSeconds: OTP_TTL_SECONDS };
+  return { otpSessionId, expiresInSeconds: OTP_TTL_SECONDS };
 }
 
 export async function verifyOtpAndIssueTokens(
   otpSessionId: string,
   otp: string
 ): Promise<{ accessToken: string; rawRefresh: string }> {
-  const session = await OtpSession.findById(otpSessionId);
-  if (!session) throw new AppError(401, "INVALID_OTP", "OTP session not found");
+  const { identifier } = await consumeOtpSession(otpSessionId, otp, "admin_login");
 
-  if (session.expiresAt < new Date()) throw new AppError(401, "OTP_EXPIRED", "OTP has expired");
-  if (session.attemptCount >= MAX_OTP_ATTEMPTS) throw new AppError(429, "OTP_MAX_ATTEMPTS", "Too many OTP attempts");
-
-  const valid = await verifyOtpHash(otp, session.otpHash);
-  if (!valid) {
-    session.attemptCount += 1;
-    await session.save();
-    throw new AppError(401, "INVALID_OTP", "Invalid OTP");
-  }
-
-  const admin = await Admin.findOne({ loginEmail: session.identifier });
+  const admin = await Admin.findOne({ loginEmail: identifier });
   if (!admin) throw new AppError(401, "INVALID_OTP", "Admin not found");
-
-  await OtpSession.deleteOne({ _id: session._id });
 
   const rawRefresh = await createRefreshToken(admin._id as Types.ObjectId);
   const accessToken = signAccessToken({ adminId: admin._id.toString(), role: "admin" });
@@ -121,21 +148,12 @@ export async function forgotPasswordSendOtp(loginEmail: string): Promise<void> {
   const admin = await Admin.findOne({ loginEmail });
   if (!admin) return;
 
-  const otp = generateOtp();
-  const otpHash = await hashOtp(otp);
-  await OtpSession.create({
-    purpose: "admin_forgot",
-    identifier: loginEmail,
-    otpHash,
-    expiresAt: new Date(Date.now() + OTP_TTL_MS),
-    attemptCount: 0,
-  });
-
-  try {
-    await sendOtpEmail(admin.otpDeliveryEmail, otp);
-  } catch (err) {
-    logger.warn({ err, adminId: admin._id }, "OTP email delivery failed — forgot password flow continues");
-  }
+  await issueOtpSession(
+    "admin_forgot",
+    loginEmail,
+    admin.otpDeliveryEmail,
+    admin._id as Types.ObjectId
+  );
 }
 
 export async function forgotPasswordReset(
@@ -143,45 +161,21 @@ export async function forgotPasswordReset(
   otp: string,
   newPassword: string
 ): Promise<void> {
-  const session = await OtpSession.findById(otpSessionId);
-  if (!session || session.purpose !== "admin_forgot") {
-    throw new AppError(401, "INVALID_OTP", "Invalid OTP session");
-  }
-
-  if (session.expiresAt < new Date()) throw new AppError(401, "OTP_EXPIRED", "OTP has expired");
-  if (session.attemptCount >= MAX_OTP_ATTEMPTS) throw new AppError(429, "OTP_MAX_ATTEMPTS", "Too many attempts");
-
-  const valid = await verifyOtpHash(otp, session.otpHash);
-  if (!valid) {
-    session.attemptCount += 1;
-    await session.save();
-    throw new AppError(401, "INVALID_OTP", "Invalid OTP");
-  }
-
+  const { identifier } = await consumeOtpSession(otpSessionId, otp, "admin_forgot");
   const passwordHash = await bcrypt.hash(newPassword, BCRYPT_ROUNDS_PASSWORD);
-  await Admin.findOneAndUpdate({ loginEmail: session.identifier }, { passwordHash, passwordChangedAt: new Date() });
-  await OtpSession.deleteOne({ _id: session._id });
+  await Admin.findOneAndUpdate({ loginEmail: identifier }, { passwordHash, passwordChangedAt: new Date() });
 }
 
 export async function resetPasswordSendOtp(adminId: string): Promise<void> {
   const admin = await Admin.findById(adminId);
   if (!admin) throw new AppError(404, "NOT_FOUND", "Admin not found");
 
-  const otp = generateOtp();
-  const otpHash = await hashOtp(otp);
-  await OtpSession.create({
-    purpose: "admin_reset",
-    identifier: admin.loginEmail,
-    otpHash,
-    expiresAt: new Date(Date.now() + OTP_TTL_MS),
-    attemptCount: 0,
-  });
-
-  try {
-    await sendOtpEmail(admin.otpDeliveryEmail, otp);
-  } catch (err) {
-    logger.warn({ err, adminId }, "OTP email delivery failed — reset password flow continues");
-  }
+  await issueOtpSession(
+    "admin_reset",
+    admin.loginEmail,
+    admin.otpDeliveryEmail,
+    admin._id as Types.ObjectId
+  );
 }
 
 export async function resetPasswordConfirm(
@@ -190,22 +184,7 @@ export async function resetPasswordConfirm(
   otp: string,
   newPassword: string
 ): Promise<void> {
-  const session = await OtpSession.findById(otpSessionId);
-  if (!session || session.purpose !== "admin_reset") {
-    throw new AppError(401, "INVALID_OTP", "Invalid OTP session");
-  }
-
-  if (session.expiresAt < new Date()) throw new AppError(401, "OTP_EXPIRED", "OTP has expired");
-  if (session.attemptCount >= MAX_OTP_ATTEMPTS) throw new AppError(429, "OTP_MAX_ATTEMPTS", "Too many attempts");
-
-  const valid = await verifyOtpHash(otp, session.otpHash);
-  if (!valid) {
-    session.attemptCount += 1;
-    await session.save();
-    throw new AppError(401, "INVALID_OTP", "Invalid OTP");
-  }
-
+  await consumeOtpSession(otpSessionId, otp, "admin_reset");
   const passwordHash = await bcrypt.hash(newPassword, BCRYPT_ROUNDS_PASSWORD);
   await Admin.findByIdAndUpdate(adminId, { passwordHash, passwordChangedAt: new Date() });
-  await OtpSession.deleteOne({ _id: session._id });
 }

@@ -37,6 +37,7 @@ describe("POST /api/admin/auth/refresh", () => {
     const admin = await seedAdmin();
     const rawToken = "valid-raw-token";
     await RefreshToken.create({
+      selector: rawToken.slice(0, 16),
       tokenHash: await bcrypt.hash(rawToken, 10),
       adminId: admin._id,
       role: "admin",
@@ -55,6 +56,7 @@ describe("POST /api/admin/auth/refresh", () => {
     const admin = await seedAdmin();
     const rawToken = "revoked-token";
     await RefreshToken.create({
+      selector: rawToken.slice(0, 16),
       tokenHash: await bcrypt.hash(rawToken, 10),
       adminId: admin._id,
       role: "admin",
@@ -77,6 +79,7 @@ describe("POST /api/admin/auth/logout", () => {
     const token = signAccessToken({ adminId: admin._id.toString(), role: "admin" });
     const rawToken = "logout-test-token";
     await RefreshToken.create({
+      selector: rawToken.slice(0, 16),
       tokenHash: await bcrypt.hash(rawToken, 10),
       adminId: admin._id,
       role: "admin",

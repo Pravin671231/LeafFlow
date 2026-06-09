@@ -4,7 +4,7 @@ import { randomBytes } from "crypto";
 import { Types } from "mongoose";
 import { RefreshToken } from "../models/RefreshToken";
 import { env } from "../config/env";
-import { REFRESH_TOKEN_TTL_MS } from "../config/constants";
+import { REFRESH_TOKEN_TTL_MS, BCRYPT_ROUNDS_OTP } from "../config/constants";
 
 export interface AccessTokenPayload {
   adminId: string;
@@ -26,8 +26,10 @@ export function verifyAccessToken(token: string): AccessTokenPayload {
 
 export async function createRefreshToken(adminId: Types.ObjectId): Promise<string> {
   const raw = randomBytes(32).toString("hex");
-  const tokenHash = await bcrypt.hash(raw, 10);
+  const selector = raw.slice(0, 16);
+  const tokenHash = await bcrypt.hash(raw, BCRYPT_ROUNDS_OTP);
   await RefreshToken.create({
+    selector,
     tokenHash,
     adminId,
     role: "admin",
@@ -43,17 +45,16 @@ export async function revokeRefreshToken(tokenHash: string): Promise<void> {
 export async function validateRefreshToken(
   raw: string
 ): Promise<{ adminId: Types.ObjectId; tokenHash: string }> {
-  const records = await RefreshToken.find({
+  const selector = raw.slice(0, 16);
+  const record = await RefreshToken.findOne({
+    selector,
     role: "admin",
     revokedAt: { $exists: false },
     expiresAt: { $gt: new Date() },
   });
-  for (const record of records) {
-    const match = await bcrypt.compare(raw, record.tokenHash);
-    if (match) {
-      if (!record.adminId) throw new Error("Token has no adminId");
-      return { adminId: record.adminId as Types.ObjectId, tokenHash: record.tokenHash };
-    }
-  }
-  throw new Error("Invalid refresh token");
+  if (!record) throw new Error("Invalid refresh token");
+  const match = await bcrypt.compare(raw, record.tokenHash);
+  if (!match) throw new Error("Invalid refresh token");
+  if (!record.adminId) throw new Error("Token has no adminId");
+  return { adminId: record.adminId as Types.ObjectId, tokenHash: record.tokenHash };
 }
