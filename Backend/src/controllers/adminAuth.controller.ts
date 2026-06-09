@@ -7,12 +7,12 @@ import { AppError } from "../utils/AppError";
 import { generateOtp, hashOtp, verifyOtp as verifyOtpHash } from "../services/otp";
 import { signAccessToken, createRefreshToken, validateRefreshToken, revokeRefreshToken } from "../services/token";
 import { sendOtpEmail } from "../services/email";
-import {
-  loginSchema,
-  verifyOtpSchema,
-  forgotPasswordSendSchema,
-  forgotPasswordResetSchema,
-  resetPasswordConfirmSchema,
+import type {
+  LoginBody,
+  VerifyOtpBody,
+  ForgotPasswordSendBody,
+  ForgotPasswordResetBody,
+  ResetPasswordConfirmBody,
 } from "../schemas/auth";
 
 const OTP_TTL_MS = 5 * 60 * 1000;
@@ -22,10 +22,7 @@ const MAX_FAILED_ATTEMPTS = 5;
 const MAX_OTP_ATTEMPTS = 5;
 
 export async function login(req: Request, res: Response, _next: NextFunction): Promise<void> {
-  const parsed = loginSchema.safeParse(req.body);
-  if (!parsed.success) throw new AppError(400, "VALIDATION_ERROR", String(parsed.error));
-
-  const { loginEmail, password } = parsed.data;
+  const { loginEmail, password } = req.body as LoginBody;
   const admin = await Admin.findOne({ loginEmail });
   if (!admin) throw new AppError(401, "INVALID_CREDENTIALS", "Invalid credentials");
 
@@ -68,10 +65,7 @@ export async function login(req: Request, res: Response, _next: NextFunction): P
 }
 
 export async function verifyOtp(req: Request, res: Response, _next: NextFunction): Promise<void> {
-  const parsed = verifyOtpSchema.safeParse(req.body);
-  if (!parsed.success) throw new AppError(400, "VALIDATION_ERROR", String(parsed.error));
-
-  const { otpSessionId, otp } = parsed.data;
+  const { otpSessionId, otp } = req.body as VerifyOtpBody;
   const session = await OtpSession.findById(otpSessionId);
   if (!session) throw new AppError(401, "INVALID_OTP", "OTP session not found");
 
@@ -145,10 +139,7 @@ export async function me(req: Request, res: Response, _next: NextFunction): Prom
 }
 
 export async function forgotPasswordSendOtp(req: Request, res: Response, _next: NextFunction): Promise<void> {
-  const parsed = forgotPasswordSendSchema.safeParse(req.body);
-  if (!parsed.success) throw new AppError(400, "VALIDATION_ERROR", String(parsed.error));
-
-  const { loginEmail } = parsed.data;
+  const { loginEmail } = req.body as ForgotPasswordSendBody;
   const admin = await Admin.findOne({ loginEmail });
   if (!admin) {
     res.json({ success: true });
@@ -175,10 +166,7 @@ export async function forgotPasswordSendOtp(req: Request, res: Response, _next: 
 }
 
 export async function forgotPasswordReset(req: Request, res: Response, _next: NextFunction): Promise<void> {
-  const parsed = forgotPasswordResetSchema.safeParse(req.body);
-  if (!parsed.success) throw new AppError(400, "VALIDATION_ERROR", String(parsed.error));
-
-  const { otpSessionId, otp, newPassword } = parsed.data;
+  const { otpSessionId, otp, newPassword } = req.body as ForgotPasswordResetBody;
   const session = await OtpSession.findById(otpSessionId);
   if (!session || session.purpose !== "admin_forgot") {
     throw new AppError(401, "INVALID_OTP", "Invalid OTP session");
@@ -225,10 +213,7 @@ export async function resetPasswordSendOtp(req: Request, res: Response, _next: N
 }
 
 export async function resetPasswordConfirm(req: Request, res: Response, _next: NextFunction): Promise<void> {
-  const parsed = resetPasswordConfirmSchema.safeParse(req.body);
-  if (!parsed.success) throw new AppError(400, "VALIDATION_ERROR", String(parsed.error));
-
-  const { otpSessionId, otp, newPassword } = parsed.data;
+  const { otpSessionId, otp, newPassword } = req.body as ResetPasswordConfirmBody;
   const session = await OtpSession.findById(otpSessionId);
   if (!session || session.purpose !== "admin_reset") {
     throw new AppError(401, "INVALID_OTP", "Invalid OTP session");
