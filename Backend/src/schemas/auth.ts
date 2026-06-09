@@ -1,4 +1,12 @@
 import { z } from "zod";
+import { OTP_LENGTH } from "../config/constants";
+
+const passwordSchema = z
+  .string()
+  .min(8, "Password must be at least 8 characters")
+  .regex(/[A-Z]/, "Must contain at least one uppercase letter")
+  .regex(/[a-z]/, "Must contain at least one lowercase letter")
+  .regex(/[0-9]/, "Must contain at least one number");
 
 export const loginSchema = z.object({
   loginEmail: z.email(),
@@ -7,7 +15,7 @@ export const loginSchema = z.object({
 
 export const verifyOtpSchema = z.object({
   otpSessionId: z.string().min(1),
-  otp: z.string().length(6),
+  otp: z.string().length(OTP_LENGTH),
 });
 
 export const refreshSchema = z.object({});
@@ -18,16 +26,16 @@ export const forgotPasswordSendSchema = z.object({
 
 export const forgotPasswordResetSchema = z.object({
   otpSessionId: z.string().min(1),
-  otp: z.string().length(6),
-  newPassword: z.string().min(8),
+  otp: z.string().length(OTP_LENGTH),
+  newPassword: passwordSchema,
 });
 
 export const resetPasswordSendSchema = z.object({});
 
 export const resetPasswordConfirmSchema = z.object({
   otpSessionId: z.string().min(1),
-  otp: z.string().length(6),
-  newPassword: z.string().min(8),
+  otp: z.string().length(OTP_LENGTH),
+  newPassword: passwordSchema,
 });
 
 export type LoginBody = z.infer<typeof loginSchema>;

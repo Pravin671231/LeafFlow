@@ -14,7 +14,7 @@ const RefreshTokenSchema = new Schema<IRefreshToken>({
   userId: { type: Schema.Types.ObjectId, ref: "User" },
   adminId: { type: Schema.Types.ObjectId, ref: "Admin" },
   role: { type: String, required: true, enum: ["admin", "buyer"] },
-  expiresAt: { type: Date, required: true },
+  expiresAt: { type: Date, required: true, index: { expireAfterSeconds: 0 } },
   revokedAt: { type: Date },
 });
 

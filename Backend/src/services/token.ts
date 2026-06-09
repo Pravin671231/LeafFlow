@@ -3,16 +3,17 @@ import bcrypt from "bcryptjs";
 import { randomBytes } from "crypto";
 import { Types } from "mongoose";
 import { RefreshToken } from "../models/RefreshToken";
+import { env } from "../config/env";
+import { REFRESH_TOKEN_TTL_MS } from "../config/constants";
 
 export interface AccessTokenPayload {
   adminId: string;
   role: "admin";
 }
 
-const JWT_PRIVATE_KEY = (process.env.JWT_PRIVATE_KEY || "").replace(/\\n/g, "\n");
-const JWT_PUBLIC_KEY = (process.env.JWT_PUBLIC_KEY || "").replace(/\\n/g, "\n");
-const JWT_EXPIRES_IN = (process.env.JWT_EXPIRES_IN || "15m") as SignOptions["expiresIn"];
-const REFRESH_EXPIRES_MS = 7 * 24 * 60 * 60 * 1000;
+const JWT_PRIVATE_KEY = env.JWT_PRIVATE_KEY.replace(/\\n/g, "\n");
+const JWT_PUBLIC_KEY = env.JWT_PUBLIC_KEY.replace(/\\n/g, "\n");
+const JWT_EXPIRES_IN = env.JWT_EXPIRES_IN as SignOptions["expiresIn"];
 
 export function signAccessToken(payload: AccessTokenPayload): string {
   return jwt.sign(payload, JWT_PRIVATE_KEY, { algorithm: "RS256", expiresIn: JWT_EXPIRES_IN });
@@ -30,7 +31,7 @@ export async function createRefreshToken(adminId: Types.ObjectId): Promise<strin
     tokenHash,
     adminId,
     role: "admin",
-    expiresAt: new Date(Date.now() + REFRESH_EXPIRES_MS),
+    expiresAt: new Date(Date.now() + REFRESH_TOKEN_TTL_MS),
   });
   return raw;
 }

@@ -3,15 +3,18 @@ import { Types } from "mongoose";
 import { Admin } from "../models/Admin";
 import { OtpSession } from "../models/OtpSession";
 import { AppError } from "../utils/AppError";
+import { logger } from "../utils/logger";
 import { generateOtp, hashOtp, verifyOtp as verifyOtpHash } from "./otp";
 import { signAccessToken, createRefreshToken, validateRefreshToken, revokeRefreshToken } from "./token";
 import { sendOtpEmail } from "./email";
-
-const OTP_TTL_MS = 5 * 60 * 1000;
-const OTP_TTL_SECONDS = 300;
-const LOCK_DURATION_MS = 15 * 60 * 1000;
-const MAX_FAILED_ATTEMPTS = 5;
-const MAX_OTP_ATTEMPTS = 5;
+import {
+  OTP_TTL_MS,
+  OTP_TTL_SECONDS,
+  LOCK_DURATION_MS,
+  MAX_FAILED_ATTEMPTS,
+  MAX_OTP_ATTEMPTS,
+  BCRYPT_ROUNDS_PASSWORD,
+} from "../config/constants";
 
 export async function login(
   loginEmail: string,
@@ -51,8 +54,8 @@ export async function login(
 
   try {
     await sendOtpEmail(admin.otpDeliveryEmail, otp);
-  } catch {
-    // Email delivery failure does not block the login flow
+  } catch (err) {
+    logger.warn({ err, adminId: admin._id }, "OTP email delivery failed — login flow continues");
   }
 
   return { otpSessionId: session._id.toString(), expiresInSeconds: OTP_TTL_SECONDS };
@@ -130,8 +133,8 @@ export async function forgotPasswordSendOtp(loginEmail: string): Promise<void> {
 
   try {
     await sendOtpEmail(admin.otpDeliveryEmail, otp);
-  } catch {
-    // Silent failure
+  } catch (err) {
+    logger.warn({ err, adminId: admin._id }, "OTP email delivery failed — forgot password flow continues");
   }
 }
 
@@ -155,7 +158,7 @@ export async function forgotPasswordReset(
     throw new AppError(401, "INVALID_OTP", "Invalid OTP");
   }
 
-  const passwordHash = await bcrypt.hash(newPassword, 12);
+  const passwordHash = await bcrypt.hash(newPassword, BCRYPT_ROUNDS_PASSWORD);
   await Admin.findOneAndUpdate({ loginEmail: session.identifier }, { passwordHash, passwordChangedAt: new Date() });
   await OtpSession.deleteOne({ _id: session._id });
 }
@@ -176,8 +179,8 @@ export async function resetPasswordSendOtp(adminId: string): Promise<void> {
 
   try {
     await sendOtpEmail(admin.otpDeliveryEmail, otp);
-  } catch {
-    // Silent failure
+  } catch (err) {
+    logger.warn({ err, adminId }, "OTP email delivery failed — reset password flow continues");
   }
 }
 
@@ -202,7 +205,7 @@ export async function resetPasswordConfirm(
     throw new AppError(401, "INVALID_OTP", "Invalid OTP");
   }
 
-  const passwordHash = await bcrypt.hash(newPassword, 12);
+  const passwordHash = await bcrypt.hash(newPassword, BCRYPT_ROUNDS_PASSWORD);
   await Admin.findByIdAndUpdate(adminId, { passwordHash, passwordChangedAt: new Date() });
   await OtpSession.deleteOne({ _id: session._id });
 }
