@@ -16,8 +16,8 @@ describe("POST /api/admin/auth/login", () => {
       .send({ loginEmail: "admin@leafflow.com", password: "Password123!" });
 
     expect(res.status).toBe(200);
-    expect(res.body).toHaveProperty("otpSessionId");
-    expect(res.body).toHaveProperty("expiresInSeconds", 300);
+    expect(res.body).toHaveProperty("data.otpSessionId");
+    expect(res.body).toHaveProperty("data.expiresInSeconds", 300);
   });
 
   it("I2: wrong password → 401 INVALID_CREDENTIALS", async () => {

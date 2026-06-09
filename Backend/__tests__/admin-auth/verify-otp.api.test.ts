@@ -26,7 +26,7 @@ describe("POST /api/admin/auth/login/verify-otp", () => {
       .send({ otpSessionId: session._id.toString(), otp });
 
     expect(res.status).toBe(200);
-    expect(res.body).toHaveProperty("accessToken");
+    expect(res.body).toHaveProperty("data.accessToken");
     const cookies = res.headers["set-cookie"] as unknown as string[];
     expect(cookies.some((c: string) => c.startsWith("refreshToken="))).toBe(true);
   });
