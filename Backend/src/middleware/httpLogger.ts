@@ -14,4 +14,19 @@ export const httpLogger = pinoHttp({
     if (res.statusCode >= 400) return "warn";
     return "info";
   },
+  serializers: {
+    req(req) {
+      return {
+        id: req.id,
+        method: req.method,
+        url: req.url,
+        remoteAddress: req.remoteAddress,
+      };
+    },
+    res(res) {
+      return {
+        statusCode: res.statusCode,
+      };
+    },
+  },
 });
