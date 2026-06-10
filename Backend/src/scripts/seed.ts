@@ -22,12 +22,9 @@ async function seed(): Promise<void> {
   await connectDB();
 
   try {
-    const existing = await Admin.findOne({ loginEmail });
-
-    if (existing) {
-      console.log("Admin already exists, skipping");
-      await disconnectDB();
-      process.exit(0);
+    const deleted = await Admin.deleteMany({});
+    if (deleted.deletedCount > 0) {
+      console.log(`Deleted ${deleted.deletedCount} existing admin(s)`);
     }
 
     const passwordHash = await bcrypt.hash(password, 12);
