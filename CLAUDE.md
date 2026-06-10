@@ -61,6 +61,7 @@ Coverage thresholds (Backend): 80% lines/functions, 75% branches. `src/index.ts`
 ```
 npm run build --workspace backend     # tsc → dist/
 npm run start --workspace backend     # node dist/index.js
+npm run seed --workspace backend      # reset admin record from .env credentials
 ```
 
 ## Architecture
@@ -68,12 +69,18 @@ npm run start --workspace backend     # node dist/index.js
 ### Monorepo layout
 ```
 LeafFlow/
-├── Backend/          Express API (src/app.ts, src/index.ts)
-├── buyer-app/        Next.js app (app/ router)
-├── admin-app/        Vite SPA (src/)
-├── e2e/              Playwright workspace (planned, M9)
-├── docs/SRS.md       Full software requirements spec
-├── docs/milestone.md Delivery roadmap (M0–M9)
+├── Backend/               Express API (src/app.ts, src/index.ts)
+├── buyer-app/             Next.js app (app/ router)
+├── admin-app/             Vite SPA (src/)
+├── e2e/                   Playwright workspace (planned, M9)
+├── docs/
+│   ├── SRS.md             Full software requirements spec
+│   ├── milestone.md       Delivery roadmap (M0–M9)
+│   ├── issues.md
+│   ├── ARCHITECTURE/
+│   │   └── backend.md     Backend architecture rules — read before writing backend code
+│   └── testcase/
+│       └── backend.test.scenario.md   Admin auth test scenarios (Issue #35)
 ├── tsconfig.base.json
 └── eslint.config.ts
 ```
@@ -88,28 +95,33 @@ Requires Node ≥ 24.15.0.
 src/
 ├── config/       # env.ts (Zod-validated), db.ts (Mongoose — mocked until M4), constants.ts, index.ts
 ├── controllers/  # adminAuth.controller.ts (7 handlers: login, verifyOtp, refresh, logout, me, forgotPassword, resetPassword)
-├── middleware/   # adminAuth.ts (JWT validation), validate.ts (Zod), rateLimiter.ts, index.ts
+├── middleware/   # adminAuth.ts, validate.ts, rateLimiter.ts, errorHandler.ts, httpLogger.ts, cors.ts, index.ts
 ├── models/       # Admin.ts, OtpSession.ts, RefreshToken.ts, index.ts
-├── routes/       # admin/auth.ts (8 endpoints), index.ts (mounts /api/admin/auth)
+├── routes/       # admin/auth.ts (9 endpoints), index.ts (mounts /api/admin/auth)
 ├── services/     # adminAuth.service.ts, email.ts, otp.ts, token.ts (JWT sign/verify), index.ts
-├── schemas/      # auth.ts (Zod schemas for login, verify-otp, forgot-password), index.ts
-├── utils/        # logger.ts (Pino), errorHandler.ts, sendResponse.ts, AppError.ts
-└── scripts/      # seed.ts (admin seeder)
+├── schemas/      # auth.ts (Zod schemas for login, verify-otp, forgot-password, reset-password), index.ts
+├── utils/        # logger.ts (Pino), sendResponse.ts, AppError.ts
+└── scripts/      # seed.ts (admin seeder — always deletes existing admin before creating)
 ```
 
 **Implemented admin auth endpoints** (`/api/admin/auth`):
-`POST /login` → `POST /verify-otp` → `POST /refresh` → `POST /logout`
-`GET /me` · `POST /forgot-password` · `POST /reset-password`
+`POST /login` → `POST /login/verify-otp` → `POST /refresh` → `POST /logout`
+`GET /me` · `POST /forgot-password/send-otp` · `POST /forgot-password/reset`
+`POST /reset-password/send-otp` · `POST /reset-password/confirm`
 
 **What's NOT yet implemented** (planned M5–M6): buyer models (User, Product, Cart, Order, Payment), buyer/product/order routes, Razorpay integration, Cloudflare R2 storage.
 
 ### Backend coding patterns
 
-- **Responses**: Always use `sendResponse(res, status, data)` from `src/utils/sendResponse.ts`. Error shape: `{ success: false, code: string, message: string }`.
-- **Errors**: Throw `new AppError(message, statusCode, code)` from `src/utils/AppError.ts`; the `errorHandler` middleware catches it.
-- **Logging**: Use the Pino logger from `src/utils/logger.ts` — never `console.log`.
-- **Validation**: Apply `validate(schema)` middleware (Zod) in routes before controllers.
-- **Config**: Access validated env through `src/config/env.ts`, never `process.env` directly.
+For full rules and code examples read `docs/ARCHITECTURE/backend.md`. Key invariants:
+
+- **Responses**: Always `sendResponse({ res, data, message })` from `src/utils/sendResponse.ts`. Never `res.json()` directly.
+- **Errors**: Throw `new AppError(statusCode, code, message, details?)` from `src/utils/AppError.ts`; `errorHandler` middleware catches everything.
+- **Validation errors**: `validate(schema)` middleware maps all Zod issues to `details: { field: message }` automatically.
+- **Logging**: `createLogger("name")` from `src/utils/logger.ts` — never `console.log`.
+- **Validation**: Apply `validate(schema)` in routes before every controller that reads `req.body`.
+- **Config**: `import { env } from "../config/env"` — never `process.env` directly.
+- **Import order**: external packages → internal modules → module-level inits (`const log = createLogger(...)`).
 
 ### Frontend structure (planned)
 ```
@@ -153,9 +165,18 @@ Copy `Backend/.env.example` to `Backend/.env` and fill in:
 ```
 PORT=3000
 MONGODB_URI=mongodb://localhost:27017/leafflow
-JWT_SECRET=...
-JWT_EXPIRES_IN=7d
+JWT_PRIVATE_KEY=...        # RS256 private key (PEM)
+JWT_PUBLIC_KEY=...         # RS256 public key (PEM)
+JWT_EXPIRES_IN=15m
+CORS_ORIGIN=http://localhost:5173
 NODE_ENV=development
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=...
+SMTP_PASS=...
+MAIL_FROM=no-reply@leafflow.com
+ADMIN_LOGIN_EMAIL=admin@leafflow.com
+ADMIN_PASSWORD=...
 ```
 When using Docker Compose, `MONGODB_URI` is injected automatically as `mongodb://mongo:27017/leafflow`. The `.env` file is only needed for non-Docker local runs.
 
