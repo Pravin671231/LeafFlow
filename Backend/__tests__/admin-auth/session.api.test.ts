@@ -20,7 +20,7 @@ describe("GET /api/admin/auth/me", () => {
       .set("Authorization", `Bearer ${token}`);
 
     expect(res.status).toBe(200);
-    expect(res.body).toHaveProperty("loginEmail", "admin@leafflow.com");
+    expect(res.body).toHaveProperty("data.loginEmail", "admin@leafflow.com");
   });
 
   it("I10: expired/invalid JWT → 401", async () => {
@@ -37,6 +37,7 @@ describe("POST /api/admin/auth/refresh", () => {
     const admin = await seedAdmin();
     const rawToken = "valid-raw-token";
     await RefreshToken.create({
+      selector: rawToken.slice(0, 16),
       tokenHash: await bcrypt.hash(rawToken, 10),
       adminId: admin._id,
       role: "admin",
@@ -48,13 +49,14 @@ describe("POST /api/admin/auth/refresh", () => {
       .set("Cookie", `refreshToken=${rawToken}`);
 
     expect(res.status).toBe(200);
-    expect(res.body).toHaveProperty("accessToken");
+    expect(res.body).toHaveProperty("data.accessToken");
   });
 
   it("I12: revoked refresh token → 401 INVALID_REFRESH_TOKEN", async () => {
     const admin = await seedAdmin();
     const rawToken = "revoked-token";
     await RefreshToken.create({
+      selector: rawToken.slice(0, 16),
       tokenHash: await bcrypt.hash(rawToken, 10),
       adminId: admin._id,
       role: "admin",
@@ -77,6 +79,7 @@ describe("POST /api/admin/auth/logout", () => {
     const token = signAccessToken({ adminId: admin._id.toString(), role: "admin" });
     const rawToken = "logout-test-token";
     await RefreshToken.create({
+      selector: rawToken.slice(0, 16),
       tokenHash: await bcrypt.hash(rawToken, 10),
       adminId: admin._id,
       role: "admin",

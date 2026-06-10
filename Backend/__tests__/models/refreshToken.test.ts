@@ -5,6 +5,7 @@ describe("RefreshToken model", () => {
   it("rejects a document missing required fields", () => {
     const doc = new RefreshToken({});
     const err = doc.validateSync();
+    expect(err?.errors["selector"]).toBeDefined();
     expect(err?.errors["tokenHash"]).toBeDefined();
     expect(err?.errors["role"]).toBeDefined();
     expect(err?.errors["expiresAt"]).toBeDefined();
@@ -12,6 +13,7 @@ describe("RefreshToken model", () => {
 
   it("rejects an invalid role value", () => {
     const doc = new RefreshToken({
+      selector: "abcdef0123456789",
       tokenHash: "abc123",
       role: "superadmin",
       expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
@@ -23,6 +25,7 @@ describe("RefreshToken model", () => {
   it("accepts valid role values", () => {
     for (const role of ["admin", "buyer"] as const) {
       const doc = new RefreshToken({
+        selector: "abcdef0123456789",
         tokenHash: "abc123",
         role,
         expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
@@ -33,6 +36,7 @@ describe("RefreshToken model", () => {
 
   it("accepts a document without revokedAt", () => {
     const doc = new RefreshToken({
+      selector: "abcdef0123456789",
       tokenHash: "abc123",
       role: "admin",
       expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
@@ -43,6 +47,7 @@ describe("RefreshToken model", () => {
 
   it("accepts a document without userId or adminId", () => {
     const doc = new RefreshToken({
+      selector: "abcdef0123456789",
       tokenHash: "abc123",
       role: "buyer",
       expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),

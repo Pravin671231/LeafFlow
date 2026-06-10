@@ -39,11 +39,9 @@ describe("sendOtpEmail", () => {
     expect(mailOptions.text).toContain("654321");
   });
 
-  it("throws if SMTP_HOST is missing", async () => {
-    const orig = process.env.SMTP_HOST;
-    delete process.env.SMTP_HOST;
-    const { sendOtpEmail } = await import("../../src/services/email?bust=" + Date.now());
-    await expect(sendOtpEmail("test@example.com", "123456")).rejects.toThrow("SMTP_HOST is not set");
-    process.env.SMTP_HOST = orig;
+  it("rejects when sendMail fails", async () => {
+    sendMailMock.mockRejectedValueOnce(new Error("SMTP error"));
+    const { sendOtpEmail } = await import("../../src/services/email.js");
+    await expect(sendOtpEmail("test@example.com", "123456")).rejects.toThrow("SMTP error");
   });
 });

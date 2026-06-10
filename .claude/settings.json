@@ -32,10 +32,21 @@
       "Bash(Get-ChildItem Backend/src -Recurse -File)",
       "Bash(Select-Object FullName)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/health)",
-      "Bash(kill %1)"
+      "Bash(kill %1)",
+      "Bash(ls \"C:\\\\Users\\\\Praveen\\\\.claude\\\\skills\\\\\")",
+      "Read(//c/Users/Praveen/.claude/**)",
+      "PowerShell(Head -20)",
+      "Bash(Get-ChildItem \"E:\\\\Projects\\\\LeafFlow\\\\Backend\\\\src\" -Recurse)",
+      "Bash(node -e ' *)",
+      "Bash(del \"e:\\\\Projects\\\\LeafFlow\\\\rsa_keys.json\")",
+      "PowerShell($proc = Start-Process -NoNewWindow -PassThru -FilePath \"npm\" -ArgumentList \"run\",\"start\",\"--workspace\",\"backend\" -WorkingDirectory \"e:\\\\Projects\\\\LeafFlow\"; Start-Sleep 5; $code = \\(Invoke-WebRequest -Uri \"http://localhost:3000/health\" -UseBasicParsing -ErrorAction SilentlyContinue\\).StatusCode; Stop-Process -Id $proc.Id -Force -ErrorAction SilentlyContinue; if \\($code -ne 200\\) { Write-Error \"Health check FAILED — HTTP $code\" } else { Write-Host \"Health check passed \\(HTTP $code\\)\" })",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5000/health)"
     ],
     "deny": [
       "Read(**/.env)"
+    ],
+    "additionalDirectories": [
+      "E:\\Projects\\LeafFlow\\.claude\\skills"
     ]
   }
 }

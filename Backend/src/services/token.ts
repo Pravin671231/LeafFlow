@@ -3,16 +3,17 @@ import bcrypt from "bcryptjs";
 import { randomBytes } from "crypto";
 import { Types } from "mongoose";
 import { RefreshToken } from "../models/RefreshToken";
+import { env } from "../config/env";
+import { REFRESH_TOKEN_TTL_MS, BCRYPT_ROUNDS_OTP } from "../config/constants";
 
 export interface AccessTokenPayload {
   adminId: string;
   role: "admin";
 }
 
-const JWT_PRIVATE_KEY = (process.env.JWT_PRIVATE_KEY || "").replace(/\\n/g, "\n");
-const JWT_PUBLIC_KEY = (process.env.JWT_PUBLIC_KEY || "").replace(/\\n/g, "\n");
-const JWT_EXPIRES_IN = (process.env.JWT_EXPIRES_IN || "15m") as SignOptions["expiresIn"];
-const REFRESH_EXPIRES_MS = 7 * 24 * 60 * 60 * 1000;
+const JWT_PRIVATE_KEY = env.JWT_PRIVATE_KEY.replace(/\\n/g, "\n");
+const JWT_PUBLIC_KEY = env.JWT_PUBLIC_KEY.replace(/\\n/g, "\n");
+const JWT_EXPIRES_IN = env.JWT_EXPIRES_IN as SignOptions["expiresIn"];
 
 export function signAccessToken(payload: AccessTokenPayload): string {
   return jwt.sign(payload, JWT_PRIVATE_KEY, { algorithm: "RS256", expiresIn: JWT_EXPIRES_IN });
@@ -25,12 +26,14 @@ export function verifyAccessToken(token: string): AccessTokenPayload {
 
 export async function createRefreshToken(adminId: Types.ObjectId): Promise<string> {
   const raw = randomBytes(32).toString("hex");
-  const tokenHash = await bcrypt.hash(raw, 10);
+  const selector = raw.slice(0, 16);
+  const tokenHash = await bcrypt.hash(raw, BCRYPT_ROUNDS_OTP);
   await RefreshToken.create({
+    selector,
     tokenHash,
     adminId,
     role: "admin",
-    expiresAt: new Date(Date.now() + REFRESH_EXPIRES_MS),
+    expiresAt: new Date(Date.now() + REFRESH_TOKEN_TTL_MS),
   });
   return raw;
 }
@@ -42,17 +45,16 @@ export async function revokeRefreshToken(tokenHash: string): Promise<void> {
 export async function validateRefreshToken(
   raw: string
 ): Promise<{ adminId: Types.ObjectId; tokenHash: string }> {
-  const records = await RefreshToken.find({
+  const selector = raw.slice(0, 16);
+  const record = await RefreshToken.findOne({
+    selector,
     role: "admin",
     revokedAt: { $exists: false },
     expiresAt: { $gt: new Date() },
   });
-  for (const record of records) {
-    const match = await bcrypt.compare(raw, record.tokenHash);
-    if (match) {
-      if (!record.adminId) throw new Error("Token has no adminId");
-      return { adminId: record.adminId as Types.ObjectId, tokenHash: record.tokenHash };
-    }
-  }
-  throw new Error("Invalid refresh token");
+  if (!record) throw new Error("Invalid refresh token");
+  const match = await bcrypt.compare(raw, record.tokenHash);
+  if (!match) throw new Error("Invalid refresh token");
+  if (!record.adminId) throw new Error("Token has no adminId");
+  return { adminId: record.adminId as Types.ObjectId, tokenHash: record.tokenHash };
 }

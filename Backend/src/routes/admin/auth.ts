@@ -1,18 +1,24 @@
 import { Router } from "express";
-import { asyncHandler } from "../../utils/asyncHandler";
-import { adminAuth } from "../../middleware/adminAuth";
+import { adminAuth, validate, loginLimiter, otpLimiter } from "../../middleware";
 import * as ctrl from "../../controllers/adminAuth.controller";
+import {
+  loginSchema,
+  verifyOtpSchema,
+  forgotPasswordSendSchema,
+  forgotPasswordResetSchema,
+  resetPasswordConfirmSchema,
+} from "../../schemas/auth";
 
 const router = Router();
 
-router.post("/login", asyncHandler(ctrl.login));
-router.post("/login/verify-otp", asyncHandler(ctrl.verifyOtp));
-router.post("/refresh", asyncHandler(ctrl.refresh));
-router.post("/logout", adminAuth, asyncHandler(ctrl.logout));
-router.get("/me", adminAuth, asyncHandler(ctrl.me));
-router.post("/forgot-password/send-otp", asyncHandler(ctrl.forgotPasswordSendOtp));
-router.post("/forgot-password/reset", asyncHandler(ctrl.forgotPasswordReset));
-router.post("/reset-password/send-otp", adminAuth, asyncHandler(ctrl.resetPasswordSendOtp));
-router.post("/reset-password/confirm", adminAuth, asyncHandler(ctrl.resetPasswordConfirm));
+router.post("/login", loginLimiter, validate(loginSchema), ctrl.login);
+router.post("/login/verify-otp", otpLimiter, validate(verifyOtpSchema), ctrl.verifyOtp);
+router.post("/refresh", ctrl.refresh);
+router.post("/logout", adminAuth, ctrl.logout);
+router.get("/me", adminAuth, ctrl.me);
+router.post("/forgot-password/send-otp", loginLimiter, validate(forgotPasswordSendSchema), ctrl.forgotPasswordSendOtp);
+router.post("/forgot-password/reset", validate(forgotPasswordResetSchema), ctrl.forgotPasswordReset);
+router.post("/reset-password/send-otp", adminAuth, ctrl.resetPasswordSendOtp);
+router.post("/reset-password/confirm", adminAuth, validate(resetPasswordConfirmSchema), ctrl.resetPasswordConfirm);
 
 export default router;

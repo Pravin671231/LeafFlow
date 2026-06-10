@@ -1,21 +1,34 @@
-import dotenv from "dotenv";
-dotenv.config();
-import app from "./app.js";
-import { connectDB } from "./config/db.js";
+import "./config/env";
+import "dotenv/config";
+import mongoose from "mongoose";
+import app from "./app";
+import { connectDB } from "./config/db";
+import { env } from "./config/env";
+import { createLogger } from "./utils/logger";
 
-const PORT = process.env.PORT || 3000;
+const log = createLogger("server");
 
-async function startServer() {
-  try {
-    await connectDB();
+async function startServer(): Promise<void> {
+  await connectDB();
 
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+  const server = app.listen(env.PORT, () => {
+    log.info({ port: env.PORT }, "Server started");
+  });
+
+  const shutdown = async (signal: string): Promise<void> => {
+    log.info({ signal }, "Shutdown signal received");
+    server.close(async () => {
+      await mongoose.disconnect();
+      log.info("Server shut down gracefully");
+      process.exit(0);
     });
-  } catch (error) {
-    console.error("Error starting server:", error);
-    process.exit(1);
-  }
+  };
+
+  process.on("SIGTERM", () => shutdown("SIGTERM"));
+  process.on("SIGINT", () => shutdown("SIGINT"));
 }
 
-startServer();
+startServer().catch((err) => {
+  log.error({ err }, "Failed to start server");
+  process.exit(1);
+});
