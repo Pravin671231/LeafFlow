@@ -1,10 +1,7 @@
-import "./config/env";
-import "dotenv/config";
 import express from "express";
 import cookieParser from "cookie-parser";
-import { corsMiddleware, httpLogger } from "./middleware";
+import { corsMiddleware, httpLogger, errorHandler } from "./middleware";
 import router from "./routes";
-import { errorHandler } from "./utils/errorHandler";
 
 const app = express();
 
