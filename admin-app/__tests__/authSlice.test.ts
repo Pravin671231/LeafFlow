@@ -1,11 +1,15 @@
 import { describe, it, expect } from 'vitest';
-import authReducer, { setCredentials, clearCredentials } from '../src/store/authSlice';
-import type { Admin } from '../src/store/authSlice';
+import authReducer, { setCredentials, clearCredentials } from '../src/features/auth/authSlice';
+import type { Admin } from '../src/features/auth/authTypes';
 
 const mockAdmin: Admin = {
   id: '1',
   loginEmail: 'admin@leafflow.com',
   otpDeliveryEmail: 'pravin@gmail.com',
+  name: 'Admin User',
+  role: 'admin',
+  isActive: true,
+  lastLoginAt: null,
 };
 
 describe('authSlice', () => {

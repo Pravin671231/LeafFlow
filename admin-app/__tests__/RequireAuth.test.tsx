@@ -2,19 +2,19 @@ import { describe, it, expect } from 'vitest';
 import { screen } from '@testing-library/react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { renderWithProviders } from './testUtils';
-import { RequireAuth } from '../src/components/RequireAuth';
+import { ProtectedRoute } from '../src/components/common/ProtectedRoute';
 
 function LocationDisplay() {
   const { pathname } = useLocation();
   return <div data-testid="location">{pathname}</div>;
 }
 
-describe('RequireAuth', () => {
+describe('ProtectedRoute', () => {
   // U4
   it('renders child route when authenticated', () => {
     renderWithProviders(
       <Routes>
-        <Route element={<RequireAuth />}>
+        <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<div>Dashboard Content</div>} />
         </Route>
         <Route path="/login" element={<div>Login Page</div>} />
@@ -30,7 +30,7 @@ describe('RequireAuth', () => {
   it('redirects to /login when not authenticated', () => {
     renderWithProviders(
       <Routes>
-        <Route element={<RequireAuth />}>
+        <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<div>Dashboard Content</div>} />
         </Route>
         <Route path="/login" element={<LocationDisplay />} />

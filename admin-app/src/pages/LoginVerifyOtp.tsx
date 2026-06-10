@@ -1,88 +1,105 @@
-import { useState, useEffect, useRef } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { useVerifyOtpMutation } from '../store/authApi';
-import { setCredentials } from '../store/authSlice';
-import type { AppDispatch } from '../store/store';
-
-interface LocationState {
-  otpSessionId: string;
-  loginEmail: string;
-  expiresInSeconds?: number;
-}
-
-function formatCountdown(seconds: number): string {
-  const m = Math.floor(seconds / 60);
-  const s = seconds % 60;
-  return `${m}:${s.toString().padStart(2, '0')}`;
-}
+import { useRef, useEffect } from 'react';
+import { useVerifyOtpForm } from '../forms/auth/useVerifyOtpForm';
+import { useCountdown } from '../hooks/useCountdown';
+import { Button } from '../components/ui/Button';
 
 export function LoginVerifyOtp() {
-  const location = useLocation();
-  const state = location.state as LocationState;
-  const { otpSessionId, loginEmail, expiresInSeconds = 300 } = state ?? {};
+  const {
+    form,
+    digits,
+    updateDigit,
+    handleKeyDown,
+    handlePaste,
+    onSubmit,
+    isLoading,
+    apiError,
+    expiresInSeconds,
+    resendDisabled,
+    handleResend,
+  } = useVerifyOtpForm();
 
-  const [otp, setOtp] = useState('');
-  const [error, setError] = useState('');
-  const [countdown, setCountdown] = useState(expiresInSeconds);
-  const [resendDisabled, setResendDisabled] = useState(false);
+  const { formatted } = useCountdown(expiresInSeconds);
+  const { handleSubmit, formState: { errors } } = form;
 
-  const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
-  const [verifyOtp, { isLoading }] = useVerifyOtpMutation();
-
-  const resendTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const inputRefs = Array.from({ length: 6 }, () =>
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useRef<HTMLInputElement>(null),
+  );
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCountdown((prev) => (prev > 0 ? prev - 1 : 0));
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      if (resendTimerRef.current) clearTimeout(resendTimerRef.current);
-    };
-  }, []);
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError('');
-    try {
-      const result = await verifyOtp({ loginEmail, otpSessionId, otp }).unwrap();
-      dispatch(setCredentials({ admin: result.admin, accessToken: result.accessToken }));
-      navigate('/dashboard');
-    } catch {
-      setError('Invalid OTP');
-    }
-  }
-
-  function handleResend() {
-    setResendDisabled(true);
-    resendTimerRef.current = setTimeout(() => setResendDisabled(false), 60000);
-  }
+    inputRefs[0]?.current?.focus();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <form onSubmit={handleSubmit}>
-      <p>Expires in: {formatCountdown(countdown)}</p>
-      <label htmlFor="otp">Verification Code</label>
-      <input
-        id="otp"
-        type="text"
-        inputMode="numeric"
-        maxLength={6}
-        required
-        value={otp}
-        onChange={(e) => setOtp(e.target.value)}
-      />
-      {error && <p role="alert">{error}</p>}
-      <button type="submit" disabled={isLoading}>
-        Verify
-      </button>
-      <button type="button" disabled={resendDisabled} onClick={handleResend}>
-        Resend
-      </button>
-    </form>
+    <div className="min-h-screen flex items-center justify-center bg-base-200">
+      <div className="card w-full max-w-sm bg-base-100 shadow-xl">
+        <div className="card-body gap-5">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold text-primary">LeafFlow</h1>
+            <p className="text-base-content/60 text-sm mt-1">Admin Portal</p>
+          </div>
+
+          <h2 className="text-xl font-semibold text-center">Verify OTP</h2>
+          <p className="text-center text-base-content/60 text-sm">
+            Enter the 6-digit code sent to your email
+          </p>
+
+          <div className="flex items-center justify-center gap-1 text-sm text-base-content/60">
+            <span>Expires in:</span>
+            <span className="font-mono font-semibold text-primary">{formatted}</span>
+          </div>
+
+          {apiError && (
+            <div role="alert" className="alert alert-error alert-soft text-sm">
+              {apiError}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5" noValidate>
+            <div className="flex justify-center gap-2">
+              {digits.map((digit, index) => (
+                <input
+                  key={index}
+                  ref={inputRefs[index]}
+                  aria-label={index === 0 ? 'Verification Code' : undefined}
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={1}
+                  value={digit}
+                  className="input w-12 h-12 text-center text-xl font-bold p-0"
+                  onChange={(e) => updateDigit(index, e.target.value, inputRefs)}
+                  onKeyDown={(e) => handleKeyDown(index, e, inputRefs)}
+                  onPaste={(e) => handlePaste(e, inputRefs)}
+                />
+              ))}
+            </div>
+
+            {errors.otp && (
+              <p className="text-error text-xs text-center">{errors.otp.message}</p>
+            )}
+
+            <Button type="submit" isLoading={isLoading} className="w-full">
+              Verify
+            </Button>
+
+            <div className="text-center">
+              <button
+                type="button"
+                className="btn btn-ghost btn-sm"
+                disabled={resendDisabled}
+                onClick={handleResend}
+              >
+                Resend
+              </button>
+              {resendDisabled && (
+                <p className="text-xs text-base-content/50 mt-1">
+                  Resend available in 60s
+                </p>
+              )}
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   );
 }

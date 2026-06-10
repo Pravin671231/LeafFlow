@@ -2,9 +2,9 @@ import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import authReducer from '../src/store/authSlice';
-import { authApi } from '../src/store/authApi';
-import type { AuthState } from '../src/store/authSlice';
+import authReducer from '../src/features/auth/authSlice';
+import { baseApi } from '../src/api/baseApi';
+import type { AuthState } from '../src/features/auth/authTypes';
 
 interface PreloadedState {
   auth?: Partial<AuthState>;
@@ -14,9 +14,10 @@ export function createTestStore(preloadedState: PreloadedState = {}) {
   return configureStore({
     reducer: {
       auth: authReducer,
-      [authApi.reducerPath]: authApi.reducer,
+      [baseApi.reducerPath]: baseApi.reducer,
     },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(authApi.middleware),
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().concat(baseApi.middleware),
     preloadedState: {
       auth: {
         admin: null,

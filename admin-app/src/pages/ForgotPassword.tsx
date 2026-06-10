@@ -1,113 +1,135 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useForgotPasswordSendOtpMutation, useForgotPasswordResetMutation } from '../store/authApi';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useForgotPasswordForm } from '../forms/auth/useForgotPasswordForm';
+import { Input } from '../components/ui/Input';
+import { Button } from '../components/ui/Button';
+import { Link } from 'react-router-dom';
+
+const otpStepSchema = z.object({
+  otp: z.string().length(6, 'Enter the 6-digit code'),
+});
+type OtpStepValues = z.infer<typeof otpStepSchema>;
 
 export function ForgotPassword() {
-  const [step, setStep] = useState<1 | 2 | 3>(1);
-  const [loginEmail, setLoginEmail] = useState('');
-  const [otpSessionId, setOtpSessionId] = useState('');
-  const [otp, setOtp] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
+  const {
+    step,
+    emailForm,
+    resetForm,
+    onSubmitEmail,
+    onSubmitOtp,
+    onSubmitReset,
+    isSending,
+    isResetting,
+    apiError,
+  } = useForgotPasswordForm();
 
-  const navigate = useNavigate();
-  const [sendOtp, { isLoading: isSending }] = useForgotPasswordSendOtpMutation();
-  const [resetPassword, { isLoading: isResetting }] = useForgotPasswordResetMutation();
-
-  async function handleStep1(e: React.FormEvent) {
-    e.preventDefault();
-    setError('');
-    try {
-      const result = await sendOtp({ loginEmail }).unwrap();
-      setOtpSessionId(result.otpSessionId);
-      setStep(2);
-    } catch {
-      setError('Failed to send OTP. Please try again.');
-    }
-  }
-
-  function handleStep2(e: React.FormEvent) {
-    e.preventDefault();
-    setError('');
-    setStep(3);
-  }
-
-  async function handleStep3(e: React.FormEvent) {
-    e.preventDefault();
-    setError('');
-    if (newPassword !== confirmPassword) {
-      setError('Passwords do not match');
-      return;
-    }
-    try {
-      await resetPassword({ loginEmail, otpSessionId, otp, newPassword }).unwrap();
-      navigate('/login');
-    } catch {
-      setError('Failed to reset password. Please try again.');
-    }
-  }
+  const otpForm = useForm<OtpStepValues>({
+    resolver: zodResolver(otpStepSchema),
+  });
 
   return (
-    <div>
-      {step === 1 && (
-        <form onSubmit={handleStep1}>
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            type="email"
-            required
-            value={loginEmail}
-            onChange={(e) => setLoginEmail(e.target.value)}
-          />
-          {error && <p role="alert">{error}</p>}
-          <button type="submit" disabled={isSending}>
-            Send OTP
-          </button>
-        </form>
-      )}
+    <div className="min-h-screen flex items-center justify-center bg-base-200">
+      <div className="card w-full max-w-sm bg-base-100 shadow-xl">
+        <div className="card-body gap-5">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold text-primary">LeafFlow</h1>
+            <p className="text-base-content/60 text-sm mt-1">Admin Portal</p>
+          </div>
 
-      {step === 2 && (
-        <form onSubmit={handleStep2}>
-          <label htmlFor="otp">Verification Code</label>
-          <input
-            id="otp"
-            type="text"
-            inputMode="numeric"
-            maxLength={6}
-            required
-            value={otp}
-            onChange={(e) => setOtp(e.target.value)}
-          />
-          {error && <p role="alert">{error}</p>}
-          <button type="submit">Verify</button>
-        </form>
-      )}
+          <h2 className="text-xl font-semibold text-center">Reset Password</h2>
 
-      {step === 3 && (
-        <form onSubmit={handleStep3}>
-          <label htmlFor="new-password">New Password</label>
-          <input
-            id="new-password"
-            type="password"
-            required
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-          />
-          <label htmlFor="confirm-password">Confirm Password</label>
-          <input
-            id="confirm-password"
-            type="password"
-            required
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-          {error && <p role="alert">{error}</p>}
-          <button type="submit" disabled={isResetting}>
-            Reset
-          </button>
-        </form>
-      )}
+          {/* Steps indicator */}
+          <ul className="steps w-full">
+            <li className={`step ${step >= 1 ? 'step-primary' : ''}`}>Email</li>
+            <li className={`step ${step >= 2 ? 'step-primary' : ''}`}>Verify</li>
+            <li className={`step ${step >= 3 ? 'step-primary' : ''}`}>Password</li>
+          </ul>
+
+          {apiError && (
+            <div role="alert" className="alert alert-error alert-soft text-sm">
+              {apiError}
+            </div>
+          )}
+
+          {/* Step 1: Email */}
+          {step === 1 && (
+            <form
+              onSubmit={emailForm.handleSubmit(onSubmitEmail)}
+              className="flex flex-col gap-4"
+              noValidate
+            >
+              <Input
+                id="email"
+                label="Email"
+                type="email"
+                autoComplete="email"
+                error={emailForm.formState.errors.loginEmail?.message}
+                {...emailForm.register('loginEmail')}
+              />
+              <Button type="submit" isLoading={isSending} className="w-full">
+                Send OTP
+              </Button>
+              <div className="text-center">
+                <Link to="/login" className="link link-primary text-sm">
+                  Back to login
+                </Link>
+              </div>
+            </form>
+          )}
+
+          {/* Step 2: OTP */}
+          {step === 2 && (
+            <form
+              onSubmit={otpForm.handleSubmit(onSubmitOtp)}
+              className="flex flex-col gap-4"
+              noValidate
+            >
+              <Input
+                id="otp"
+                label="Verification Code"
+                type="text"
+                inputMode="numeric"
+                maxLength={6}
+                error={otpForm.formState.errors.otp?.message}
+                {...otpForm.register('otp')}
+              />
+              <Button type="submit" className="w-full">
+                Verify
+              </Button>
+            </form>
+          )}
+
+          {/* Step 3: New password */}
+          {step === 3 && (
+            <form
+              onSubmit={resetForm.handleSubmit(onSubmitReset)}
+              className="flex flex-col gap-4"
+              noValidate
+            >
+              <Input
+                id="new-password"
+                label="New Password"
+                type="password"
+                autoComplete="new-password"
+                error={resetForm.formState.errors.newPassword?.message}
+                {...resetForm.register('newPassword')}
+              />
+              <Input
+                id="confirm-password"
+                label="Confirm Password"
+                type="password"
+                autoComplete="new-password"
+                error={resetForm.formState.errors.confirmPassword?.message}
+                {...resetForm.register('confirmPassword')}
+              />
+              <Button type="submit" isLoading={isResetting} className="w-full">
+                Reset Password
+              </Button>
+            </form>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
