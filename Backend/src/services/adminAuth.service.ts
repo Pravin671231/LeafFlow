@@ -3,7 +3,9 @@ import { Types } from "mongoose";
 import { Admin } from "../models/Admin";
 import { OtpSession } from "../models/OtpSession";
 import { AppError } from "../utils/AppError";
-import { logger } from "../utils/logger";
+import { createLogger } from "../utils/logger";
+
+const log = createLogger("adminAuth");
 import { generateOtp, hashOtp, verifyOtp as verifyOtpHash } from "./otp";
 import { signAccessToken, createRefreshToken, validateRefreshToken, revokeRefreshToken } from "./token";
 import { sendOtpEmail } from "./email";
@@ -35,7 +37,7 @@ async function issueOtpSession(
   try {
     await sendOtpEmail(deliveryEmail, otp);
   } catch (err) {
-    logger.warn({ err, adminId }, `OTP email delivery failed — ${purpose} flow continues`);
+    log.warn({ err, adminId }, `OTP email delivery failed — ${purpose} flow continues`);
   }
   return session._id.toString();
 }

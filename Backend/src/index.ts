@@ -4,20 +4,22 @@ import mongoose from "mongoose";
 import app from "./app";
 import { connectDB } from "./config/db";
 import { env } from "./config/env";
-import { logger } from "./utils/logger";
+import { createLogger } from "./utils/logger";
+
+const log = createLogger("server");
 
 async function startServer(): Promise<void> {
   await connectDB();
 
   const server = app.listen(env.PORT, () => {
-    logger.info({ port: env.PORT }, "Server started");
+    log.info({ port: env.PORT }, "Server started");
   });
 
   const shutdown = async (signal: string): Promise<void> => {
-    logger.info({ signal }, "Shutdown signal received");
+    log.info({ signal }, "Shutdown signal received");
     server.close(async () => {
       await mongoose.disconnect();
-      logger.info("Server shut down gracefully");
+      log.info("Server shut down gracefully");
       process.exit(0);
     });
   };
@@ -27,6 +29,6 @@ async function startServer(): Promise<void> {
 }
 
 startServer().catch((err) => {
-  logger.error({ err }, "Failed to start server");
+  log.error({ err }, "Failed to start server");
   process.exit(1);
 });
