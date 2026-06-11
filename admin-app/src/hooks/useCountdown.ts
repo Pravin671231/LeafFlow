@@ -4,11 +4,12 @@ export function useCountdown(initialSeconds: number) {
   const [seconds, setSeconds] = useState(initialSeconds);
 
   useEffect(() => {
+    setSeconds(initialSeconds);
     const id = setInterval(() => {
       setSeconds((s) => (s > 0 ? s - 1 : 0));
     }, 1000);
     return () => clearInterval(id);
-  }, []);
+  }, [initialSeconds]);
 
   const minutes = Math.floor(seconds / 60);
   const secs = seconds % 60;
