@@ -1,14 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectAccessToken } from '../../features/auth/authSelectors';
 import { setCredentials, clearCredentials } from '../../features/auth/authSlice';
 import { authApi } from '../../api/authApi';
 import { Loader } from '../ui/Loader';
-import type { AppDispatch } from '../../app/store';
+import { useAppSelector, useAppDispatch } from '../../app/hooks';
 
 export function AuthInitializer({ children }: { children: React.ReactNode }) {
-  const dispatch = useDispatch<AppDispatch>();
-  const accessToken = useSelector(selectAccessToken);
+  const dispatch = useAppDispatch();
+  const accessToken = useAppSelector((state) => state.auth.accessToken);
   const [isInitializing, setIsInitializing] = useState(!accessToken);
   const hasRun = useRef(false);
 

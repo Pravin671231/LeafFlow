@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useLoginForm } from '../forms/auth/useLoginForm';
 import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
+import { ROUTES } from '../routes/routes';
 
 export function Login() {
   const { form, onSubmit, isLoading, apiError } = useLoginForm();
@@ -48,7 +49,7 @@ export function Login() {
                 {...register('password')}
               />
               <div className="text-right">
-                <Link to="/forgot-password" className="link link-primary text-xs">
+                <Link to={ROUTES.FORGOT_PASSWORD} className="link link-primary text-xs">
                   Forgot password?
                 </Link>
               </div>

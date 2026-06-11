@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../../routes/routes';
 import {
   forgotPasswordEmailSchema,
   forgotPasswordResetSchema,
@@ -59,7 +60,7 @@ export function useForgotPasswordForm() {
         otp: data.otp,
         newPassword: data.newPassword,
       }).unwrap();
-      navigate('/login');
+      navigate(ROUTES.LOGIN);
     } catch (err) {
       const e = err as { data?: { message?: string } };
       setApiError(e?.data?.message ?? 'Failed to reset password. Please try again.');

@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router-dom';
 import { loginSchema, type LoginFormValues } from './login.schema';
 import { useLoginMutation } from '../../api/authApi';
+import { ROUTES } from '../../routes/routes';
 
 export function useLoginForm() {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ export function useLoginForm() {
     setApiError('');
     try {
       const result = await login(data).unwrap();
-      navigate('/login/verify-otp', {
+      navigate(ROUTES.LOGIN_VERIFY_OTP, {
         state: {
           otpSessionId: result.otpSessionId,
           loginEmail: data.loginEmail,

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../features/auth/useAuth';
+import { ROUTES } from '../../routes/routes';
 
 export function Navbar() {
   const { admin, handleLogout, isLoggingOut } = useAuth();
@@ -35,7 +36,7 @@ export function Navbar() {
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow"
           >
             <li>
-              <Link to="/settings/reset-password">Change Password</Link>
+              <Link to={ROUTES.RESET_PASSWORD}>Change Password</Link>
             </li>
             <li>
               <button onClick={handleLogout} disabled={isLoggingOut}>

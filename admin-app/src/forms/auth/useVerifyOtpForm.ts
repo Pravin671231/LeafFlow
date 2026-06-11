@@ -2,11 +2,11 @@ import { useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { verifyOtpSchema, type VerifyOtpFormValues } from './verifyOtp.schema';
 import { useVerifyOtpMutation } from '../../api/authApi';
 import { setCredentials } from '../../features/auth/authSlice';
-import type { AppDispatch } from '../../app/store';
+import { useAppDispatch } from '../../app/hooks';
+import { ROUTES } from '../../routes/routes';
 
 interface LocationState {
   otpSessionId: string;
@@ -17,7 +17,7 @@ interface LocationState {
 export function useVerifyOtpForm() {
   const navigate = useNavigate();
   const location = useLocation();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const state = location.state as LocationState;
   const { otpSessionId, expiresInSeconds = 300 } = state ?? {};
 
@@ -69,7 +69,7 @@ export function useVerifyOtpForm() {
     try {
       const result = await verifyOtp({ otpSessionId, otp }).unwrap();
       dispatch(setCredentials({ admin: result.admin, accessToken: result.accessToken }));
-      navigate('/dashboard');
+      navigate(ROUTES.DASHBOARD);
     } catch (err) {
       const e = err as { data?: { message?: string } };
       setApiError(e?.data?.message ?? 'Invalid OTP');

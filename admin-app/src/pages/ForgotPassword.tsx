@@ -5,6 +5,7 @@ import { useForgotPasswordForm } from '../forms/auth/useForgotPasswordForm';
 import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
 import { Link } from 'react-router-dom';
+import { ROUTES } from '../routes/routes';
 
 const otpStepSchema = z.object({
   otp: z.string().length(6, 'Enter the 6-digit code'),
@@ -71,7 +72,7 @@ export function ForgotPassword() {
                 Send OTP
               </Button>
               <div className="text-center">
-                <Link to="/login" className="link link-primary text-sm">
+                <Link to={ROUTES.LOGIN} className="link link-primary text-sm">
                   Back to login
                 </Link>
               </div>

@@ -3,6 +3,7 @@ import { useResetPasswordForm } from '../forms/auth/useResetPasswordForm';
 import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
 import { Navbar } from '../components/layout/Navbar';
+import { ROUTES } from '../routes/routes';
 
 export function ResetPassword() {
   const {
@@ -30,7 +31,7 @@ export function ResetPassword() {
         <div className="card w-full max-w-sm bg-base-100 shadow-xl">
           <div className="card-body gap-5">
             <div>
-              <Link to="/dashboard" className="link link-primary text-sm">
+              <Link to={ROUTES.DASHBOARD} className="link link-primary text-sm">
                 ← Back to Dashboard
               </Link>
             </div>
@@ -54,7 +55,7 @@ export function ResetPassword() {
                 <div role="alert" className="alert alert-success alert-soft w-full">
                   Password updated successfully!
                 </div>
-                <Link to="/dashboard" className="btn btn-primary btn-sm">
+                <Link to={ROUTES.DASHBOARD} className="btn btn-primary btn-sm">
                   Back to Dashboard
                 </Link>
               </div>

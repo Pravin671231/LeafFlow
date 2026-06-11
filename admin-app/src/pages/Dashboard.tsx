@@ -1,13 +1,13 @@
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { selectAdmin } from '../features/auth/authSelectors';
 import { useGetMeQuery } from '../api/authApi';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../features/auth/useAuth';
+import { useAppSelector } from '../app/hooks';
+import { ROUTES } from '../routes/routes';
 import { Navbar } from '../components/layout/Navbar';
 import { Button } from '../components/ui/Button';
 
 export function Dashboard() {
-  const reduxAdmin = useSelector(selectAdmin);
+  const reduxAdmin = useAppSelector((state) => state.auth.admin);
   const { data: me, isLoading } = useGetMeQuery();
   const { handleLogout, isLoggingOut } = useAuth();
 
@@ -73,7 +73,7 @@ export function Dashboard() {
                 </div>
 
                 <div className="card-actions justify-end mt-4">
-                  <Link to="/settings/reset-password" className="btn btn-outline btn-sm">
+                  <Link to={ROUTES.RESET_PASSWORD} className="btn btn-outline btn-sm">
                     Change Password
                   </Link>
                 </div>

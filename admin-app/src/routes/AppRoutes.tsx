@@ -6,18 +6,19 @@ import { LoginVerifyOtp } from '../pages/LoginVerifyOtp';
 import { ForgotPassword } from '../pages/ForgotPassword';
 import { Dashboard } from '../pages/Dashboard';
 import { ResetPassword } from '../pages/ResetPassword';
+import { ROUTES } from './routes';
 
 export function AppRoutes() {
   return (
     <AuthInitializer>
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/login/verify-otp" element={<LoginVerifyOtp />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path={ROUTES.LOGIN} element={<Login />} />
+        <Route path={ROUTES.LOGIN_VERIFY_OTP} element={<LoginVerifyOtp />} />
+        <Route path={ROUTES.FORGOT_PASSWORD} element={<ForgotPassword />} />
         <Route element={<ProtectedRoute />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/settings/reset-password" element={<ResetPassword />} />
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
+          <Route path={ROUTES.RESET_PASSWORD} element={<ResetPassword />} />
+          <Route path={ROUTES.ROOT} element={<Navigate to={ROUTES.DASHBOARD} replace />} />
         </Route>
       </Routes>
     </AuthInitializer>
