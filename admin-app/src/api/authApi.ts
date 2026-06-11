@@ -1,5 +1,6 @@
 import { baseApi } from './baseApi';
 import type { Admin } from '../features/auth/authTypes';
+import { AUTH_ENDPOINTS } from './endpoints';
 
 // ─── Request / Response types ────────────────────────────────────────────────
 
@@ -62,7 +63,7 @@ function unwrapData(raw: unknown): Record<string, unknown> {
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation<LoginResponse, LoginRequest>({
-      query: (body) => ({ url: '/login', method: 'POST', body }),
+      query: (body) => ({ url: AUTH_ENDPOINTS.LOGIN, method: 'POST', body }),
       transformResponse: (raw): LoginResponse => {
         const d = unwrapData(raw);
         const r = raw as Record<string, unknown>;
@@ -75,7 +76,7 @@ export const authApi = baseApi.injectEndpoints({
     }),
 
     verifyOtp: builder.mutation<VerifyOtpResponse, VerifyOtpRequest>({
-      query: (body) => ({ url: '/login/verify-otp', method: 'POST', body }),
+      query: (body) => ({ url: AUTH_ENDPOINTS.VERIFY_OTP, method: 'POST', body }),
       transformResponse: (raw): VerifyOtpResponse => {
         const d = unwrapData(raw);
         const r = raw as Record<string, unknown>;
@@ -87,7 +88,7 @@ export const authApi = baseApi.injectEndpoints({
     }),
 
     refresh: builder.mutation<{ accessToken: string }, void>({
-      query: () => ({ url: '/refresh', method: 'POST' }),
+      query: () => ({ url: AUTH_ENDPOINTS.REFRESH, method: 'POST' }),
       transformResponse: (raw): { accessToken: string } => {
         const d = unwrapData(raw);
         const r = raw as Record<string, unknown>;
@@ -96,11 +97,11 @@ export const authApi = baseApi.injectEndpoints({
     }),
 
     logout: builder.mutation<void, void>({
-      query: () => ({ url: '/logout', method: 'POST' }),
+      query: () => ({ url: AUTH_ENDPOINTS.LOGOUT, method: 'POST' }),
     }),
 
     getMe: builder.query<Admin, void>({
-      query: () => '/me',
+      query: () => AUTH_ENDPOINTS.ME,
       transformResponse: (raw): Admin => {
         const d = unwrapData(raw);
         return {
@@ -119,7 +120,7 @@ export const authApi = baseApi.injectEndpoints({
       ForgotPasswordSendOtpResponse,
       ForgotPasswordSendOtpRequest
     >({
-      query: (body) => ({ url: '/forgot-password/send-otp', method: 'POST', body }),
+      query: (body) => ({ url: AUTH_ENDPOINTS.FORGOT_PASSWORD_SEND_OTP, method: 'POST', body }),
       transformResponse: (raw): ForgotPasswordSendOtpResponse => {
         const d = unwrapData(raw);
         const r = raw as Record<string, unknown>;
@@ -131,15 +132,15 @@ export const authApi = baseApi.injectEndpoints({
     }),
 
     forgotPasswordReset: builder.mutation<MessageResponse, ForgotPasswordResetRequest>({
-      query: (body) => ({ url: '/forgot-password/reset', method: 'POST', body }),
+      query: (body) => ({ url: AUTH_ENDPOINTS.FORGOT_PASSWORD_RESET, method: 'POST', body }),
     }),
 
     resetPasswordSendOtp: builder.mutation<MessageResponse, void>({
-      query: () => ({ url: '/reset-password/send-otp', method: 'POST' }),
+      query: () => ({ url: AUTH_ENDPOINTS.RESET_PASSWORD_SEND_OTP, method: 'POST' }),
     }),
 
     resetPasswordConfirm: builder.mutation<MessageResponse, ResetPasswordConfirmRequest>({
-      query: (body) => ({ url: '/reset-password/confirm', method: 'POST', body }),
+      query: (body) => ({ url: AUTH_ENDPOINTS.RESET_PASSWORD_CONFIRM, method: 'POST', body }),
     }),
   }),
 });

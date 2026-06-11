@@ -8,11 +8,10 @@ import {
 import type { RootState } from '../app/store';
 import { setCredentials, clearCredentials } from '../features/auth/authSlice';
 import type { Admin } from '../features/auth/authTypes';
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3000';
+import { API_BASE_URL, AUTH_BASE_PATH } from './constants';
 
 const rawBaseQuery = fetchBaseQuery({
-  baseUrl: `${API_BASE_URL}/api/admin/auth`,
+  baseUrl: `${API_BASE_URL}${AUTH_BASE_PATH}`,
   credentials: 'include',
   prepareHeaders(headers, { getState }) {
     const token = (getState() as RootState).auth.accessToken;
