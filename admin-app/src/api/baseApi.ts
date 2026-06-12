@@ -6,7 +6,7 @@ import {
   type FetchBaseQueryError,
 } from '@reduxjs/toolkit/query/react';
 import { setCredentials, clearCredentials } from '../features/auth/authSlice';
-import type { Admin, AuthState } from '../features/auth/authTypes';
+import type { AuthState } from '../features/auth/authTypes';
 type StoreAuthSlice = { auth: AuthState };
 import { API_BASE_URL, AUTH_BASE_PATH } from './constants';
 import type { ApiResponse } from '../types/api.types';
@@ -75,4 +75,3 @@ export const baseApi = createApi({
 });
 
 // Re-export Admin type for use in AuthInitializer endpoint typings
-export type { Admin };
