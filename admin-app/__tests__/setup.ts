@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom/vitest';
 import { afterAll, afterEach, beforeAll } from 'vitest';
+import { cleanup } from '@testing-library/react';
 
 import { server } from '../src/mocks/server.ts';
 
@@ -8,6 +9,7 @@ beforeAll(() => {
 });
 
 afterEach(() => {
+  cleanup();
   server.resetHandlers();
 });
 
