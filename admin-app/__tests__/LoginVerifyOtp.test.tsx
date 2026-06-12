@@ -62,7 +62,7 @@ describe('LoginVerifyOtp page', () => {
   it('dispatches setCredentials and navigates to /dashboard on valid OTP', async () => {
     server.use(
       http.post(`${BASE}/login/verify-otp`, () =>
-        HttpResponse.json({ success: true, accessToken: 'jwt', admin: mockAdmin }),
+        HttpResponse.json({ success: true, data: { accessToken: 'jwt', admin: mockAdmin } }),
       ),
     );
 

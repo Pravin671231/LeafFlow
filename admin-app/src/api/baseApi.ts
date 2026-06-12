@@ -5,16 +5,17 @@ import {
   type FetchArgs,
   type FetchBaseQueryError,
 } from '@reduxjs/toolkit/query/react';
-import type { RootState } from '../app/store';
 import { setCredentials, clearCredentials } from '../features/auth/authSlice';
-import type { Admin } from '../features/auth/authTypes';
+import type { Admin, AuthState } from '../features/auth/authTypes';
+type StoreAuthSlice = { auth: AuthState };
 import { API_BASE_URL, AUTH_BASE_PATH } from './constants';
+import type { ApiResponse } from '../types/api.types';
 
 const rawBaseQuery = fetchBaseQuery({
   baseUrl: `${API_BASE_URL}${AUTH_BASE_PATH}`,
   credentials: 'include',
   prepareHeaders(headers, { getState }) {
-    const token = (getState() as RootState).auth.accessToken;
+    const token = (getState() as StoreAuthSlice).auth.accessToken;
     if (token) {
       headers.set('Authorization', `Bearer ${token}`);
     }
@@ -22,30 +23,44 @@ const rawBaseQuery = fetchBaseQuery({
   },
 });
 
+// Strips the ApiResponse<T> envelope so every endpoint receives the unwrapped payload.
+// Falls back to { message } for responses that carry no data field (e.g. message-only responses).
+const baseQueryWithUnwrap: BaseQueryFn<
+  string | FetchArgs,
+  unknown,
+  FetchBaseQueryError
+> = async (args, api, extraOptions) => {
+  const result = await rawBaseQuery(args, api, extraOptions);
+  if (result.data !== undefined) {
+    const { data, message } = result.data as ApiResponse<unknown>;
+    const unwrapped = data !== undefined ? data : message !== undefined ? { message } : undefined;
+    return { ...result, data: unwrapped };
+  }
+  return result;
+};
+
 const baseQueryWithReauth: BaseQueryFn<
   string | FetchArgs,
   unknown,
   FetchBaseQueryError
 > = async (args, api, extraOptions) => {
-  let result = await rawBaseQuery(args, api, extraOptions);
+  let result = await baseQueryWithUnwrap(args, api, extraOptions);
 
   if (result.error?.status !== 401) return result;
 
-  const refreshResult = await rawBaseQuery(
+  const refreshResult = await baseQueryWithUnwrap(
     { url: '/refresh', method: 'POST' },
     api,
     extraOptions,
   );
 
   if (refreshResult.data) {
-    const raw = refreshResult.data as Record<string, unknown>;
-    const data = (raw.data ?? raw) as Record<string, unknown>;
-    const accessToken = (data.accessToken ?? '') as string;
-    const admin = (api.getState() as RootState).auth.admin;
+    const { accessToken } = refreshResult.data as { accessToken: string };
+    const admin = (api.getState() as StoreAuthSlice).auth.admin;
     if (admin) {
       api.dispatch(setCredentials({ admin, accessToken }));
     }
-    result = await rawBaseQuery(args, api, extraOptions);
+    result = await baseQueryWithUnwrap(args, api, extraOptions);
   } else {
     api.dispatch(clearCredentials());
   }

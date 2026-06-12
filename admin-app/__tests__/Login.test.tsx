@@ -30,9 +30,8 @@ describe('Login page', () => {
       http.post(`${BASE}/login`, () =>
         HttpResponse.json({
           success: true,
-          otpSessionId: 'sess1',
           message: 'OTP sent to registered email.',
-          expiresInSeconds: 300,
+          data: { otpSessionId: 'sess1', expiresInSeconds: 300 },
         }),
       ),
     );

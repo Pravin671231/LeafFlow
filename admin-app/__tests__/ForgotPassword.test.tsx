@@ -31,7 +31,7 @@ describe('ForgotPassword page', () => {
   it('advances to step 2 (OTP entry) after submitting email', async () => {
     server.use(
       http.post(`${BASE}/forgot-password/send-otp`, () =>
-        HttpResponse.json({ success: true, otpSessionId: 'sess2', message: 'OTP sent' }),
+        HttpResponse.json({ success: true, message: 'OTP sent', data: { otpSessionId: 'sess2' } }),
       ),
     );
 
@@ -49,7 +49,7 @@ describe('ForgotPassword page', () => {
   it('advances to step 3 (new password) after submitting OTP', async () => {
     server.use(
       http.post(`${BASE}/forgot-password/send-otp`, () =>
-        HttpResponse.json({ success: true, otpSessionId: 'sess2', message: 'OTP sent' }),
+        HttpResponse.json({ success: true, message: 'OTP sent', data: { otpSessionId: 'sess2' } }),
       ),
     );
 
@@ -74,7 +74,7 @@ describe('ForgotPassword page', () => {
   it('navigates to /login on matching passwords and successful reset', async () => {
     server.use(
       http.post(`${BASE}/forgot-password/send-otp`, () =>
-        HttpResponse.json({ success: true, otpSessionId: 'sess2', message: 'OTP sent' }),
+        HttpResponse.json({ success: true, message: 'OTP sent', data: { otpSessionId: 'sess2' } }),
       ),
       http.post(`${BASE}/forgot-password/reset`, () =>
         HttpResponse.json({ success: true, message: 'Password reset successfully' }),
@@ -105,7 +105,7 @@ describe('ForgotPassword page', () => {
   it('shows error and does not call API when passwords do not match', async () => {
     server.use(
       http.post(`${BASE}/forgot-password/send-otp`, () =>
-        HttpResponse.json({ success: true, otpSessionId: 'sess2', message: 'OTP sent' }),
+        HttpResponse.json({ success: true, message: 'OTP sent', data: { otpSessionId: 'sess2' } }),
       ),
     );
 
