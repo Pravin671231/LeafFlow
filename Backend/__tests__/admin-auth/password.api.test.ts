@@ -1,4 +1,10 @@
-import { describe, it, expect, beforeAll, afterAll, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeAll, afterAll, beforeEach } from "vitest";
+
+vi.mock("nodemailer", () => ({
+  default: {
+    createTransport: vi.fn(() => ({ sendMail: vi.fn().mockResolvedValue({ messageId: "test-id" }) })),
+  },
+}));
 import request from "supertest";
 import bcrypt from "bcryptjs";
 import app from "../../src/app";
