@@ -1,13 +1,13 @@
 import { Router } from "express";
-import { adminAuth, validate, loginLimiter, otpLimiter } from "../../middleware";
-import * as ctrl from "../../controllers/adminAuth.controller";
+import { adminAuth, validate, loginLimiter, otpLimiter } from "../middleware";
+import * as ctrl from "../controllers/adminAuth.controller";
 import {
   loginSchema,
   verifyOtpSchema,
   forgotPasswordSendSchema,
   forgotPasswordResetSchema,
   resetPasswordConfirmSchema,
-} from "../../schemas/auth";
+} from "../schemas/adminAuth.schema";
 
 const router = Router();
 

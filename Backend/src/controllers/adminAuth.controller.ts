@@ -7,7 +7,7 @@ import type {
   ForgotPasswordSendBody,
   ForgotPasswordResetBody,
   ResetPasswordConfirmBody,
-} from "../schemas/auth";
+} from "../schemas/adminAuth.schema";
 
 export async function login(req: Request, res: Response): Promise<void> {
   const { loginEmail, password } = req.body as LoginBody;
