@@ -138,3 +138,30 @@ Coverage target: ≥ 90% (§8.5)
 - Given: malformed or tampered token string
 - When: request hits `adminAuth`
 - Then: `401 { success: false, code: "INVALID_TOKEN" }`
+
+---
+
+## Feature: Buyer Authentication — User Model (Issue #37)
+
+SRS refs: §4.1 (BUY-001–006), §10.4, §11.3, §15.2
+Coverage target: ≥ 80% lines/functions, ≥ 75% branches (project threshold)
+
+---
+
+## Model Unit Tests
+
+All tests use `new User({...}).validateSync()` — synchronous, no DB.
+**Test file:** `Backend/__tests__/models/user.test.ts`
+**Model file (to be created):** `Backend/src/models/User.ts`
+
+| ID  | Description                                       | Input                                                           | Expected                                                     |
+|-----|---------------------------------------------------|-----------------------------------------------------------------|--------------------------------------------------------------|
+| U1  | Rejects doc missing required fields               | `{}`                                                            | `err.errors["email"]` and `err.errors["name"]` defined       |
+| U2  | Accepts doc without googleId and phone            | `{ email, name }`                                               | `validateSync()` → `undefined`                               |
+| U3  | Defaults `isVerified` to `false`                  | `{ email, name }`                                               | `doc.isVerified === false`                                   |
+| U4  | Defaults `role` to `"buyer"`                      | `{ email, name }`                                               | `doc.role === "buyer"`                                       |
+| U5  | Defaults `addresses` to empty array               | `{ email, name }`                                               | `doc.addresses` is `[]`                                      |
+| U6  | Lowercases the email                              | `email: "Test@Example.COM"`                                     | `doc.email === "test@example.com"`                           |
+| U7  | Rejects address entry missing required sub-fields | `addresses: [{}]`                                               | errors on `addresses.0.line1`, `.city`, `.state`, `.pincode` |
+| U8  | Accepts a valid address entry                     | `addresses: [{ line1, city, state, pincode, isDefault: true }]` | `validateSync()` → `undefined`                               |
+| U9  | Defaults address `isDefault` to `false`           | `addresses: [{ line1, city, state, pincode }]`                  | `doc.addresses[0].isDefault === false`                       |
