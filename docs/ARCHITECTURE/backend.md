@@ -8,7 +8,7 @@
 | Framework | Express 5 (TypeScript, CommonJS output) |
 | Database | MongoDB 8 via Mongoose |
 | Validation | Zod |
-| Auth | JWT RS256 (access) + hashed refresh tokens in MongoDB |
+| Auth | JWT HS256 (access) + hashed refresh tokens in MongoDB |
 | Logging | Pino via `createLogger()` |
 | Testing | Vitest + Supertest |
 
@@ -29,7 +29,7 @@ Backend/
 │   ├── controllers/
 │   │   └── adminAuth.controller.ts   # Thin handlers: extract req → service → sendResponse
 │   ├── middleware/
-│   │   ├── adminAuth.ts              # RS256 JWT guard → populates req.admin
+│   │   ├── adminAuth.ts              # HS256 JWT guard → populates req.admin
 │   │   ├── cors.ts                   # CORS config from env.CORS_ORIGIN
 │   │   ├── errorHandler.ts           # Global 4-arg Express error handler (last in app.ts)
 │   │   ├── httpLogger.ts             # Pino HTTP request logger
@@ -133,7 +133,7 @@ export async function login(req: Request, res: Response): Promise<void> {
 
 ### `src/middleware/`
 - `validate(schema)` — maps all Zod issues to `{ field: message }` in `AppError.details`. Place before every controller that reads `req.body`.
-- `adminAuth` — verifies RS256 JWT; populates `req.admin: { adminId, role }`.
+- `adminAuth` — verifies HS256 JWT; populates `req.admin: { adminId, role }`.
 - `errorHandler` — 4-arg Express error handler. Must be the **last** middleware registered in `app.ts`.
 - `rateLimiter` — `loginLimiter` and `otpLimiter` for brute-force–sensitive endpoints.
 - All middleware exported from `src/middleware/index.ts`.
