@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { generateOtp, hashOtp, verifyOtp } from "../../src/services/otp";
+import { generateOtp, hashOtp, verifyOtp } from "../../src/utils";
+
 
 describe("generateOtp", () => {
   it("U1: returns a 6-digit numeric string", () => {
