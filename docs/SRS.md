@@ -403,7 +403,7 @@ Pin to **latest stable patch** within the stated series at implementation time. 
 | `cors`                  | 2.8.x     | CORS                                |
 | `express-rate-limit`    | 7.x       | Rate limiting                       |
 | `bcrypt`                | 6.x       | Password hashing                    |
-| `jsonwebtoken` / `jose` | 9.x / 6.x | JWT (RS256 access tokens per env)   |
+| `jsonwebtoken` / `jose` | 9.x / 6.x | JWT (HS256 access tokens)           |
 | `nodemailer`            | 7.x       | SMTP / admin & buyer OTP email      |
 | `google-auth-library`   | 10.x      | Google OAuth / One Tap verification |
 | `razorpay`              | 2.x       | Payments                            |
@@ -817,7 +817,7 @@ Base URL: `/api`. JSON request/response. Errors: `{ success: false, code: string
 
 | ID     | Requirement                                                                                                     |
 | ------ | --------------------------------------------------------------------------------------------------------------- |
-| SEC-01 | Access tokens: JWT RS256, 15-minute TTL (`JWT_PRIVATE_KEY` / `JWT_PUBLIC_KEY`).                                 |
+| SEC-01 | Access tokens: JWT HS256, 15-minute TTL (`JWT_SECRET`, minimum 32 characters).                                  |
 | SEC-02 | Refresh tokens: 7-day TTL, stored hashed, httpOnly cookie recommended for web clients.                          |
 | SEC-03 | Separate route namespaces: `/api/admin/*` vs `/api/buyer/*`; middleware enforces role.                          |
 | SEC-04 | Passwords hashed with bcrypt (cost factor ≥ 12).                                                                |
@@ -1013,8 +1013,7 @@ If you did not request this, ignore this email.
 | `NODE_ENV`                     | Backend   | `development` / `production`              |
 | `PORT`                         | Backend   | HTTP port (default `5000`)                |
 | `MONGODB_URI`                  | Backend   | MongoDB connection string                 |
-| `JWT_PRIVATE_KEY`              | Backend   | RS256 private key (PEM) for access tokens |
-| `JWT_PUBLIC_KEY`               | Backend   | RS256 public key (PEM) for verification   |
+| `JWT_SECRET`                   | Backend   | HMAC-SHA256 signing secret (≥ 32 chars)   |
 | `REFRESH_TOKEN_SECRET`         | Backend   | HMAC secret for hashing refresh tokens    |
 | `GOOGLE_CLIENT_ID`             | Backend   | Google OAuth client ID                    |
 | `RAZORPAY_KEY_ID`              | Backend   | Razorpay API key                          |

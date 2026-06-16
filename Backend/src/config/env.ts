@@ -1,5 +1,9 @@
 import dotenv from "dotenv";
-dotenv.config();
+import path from "path";
+
+const NODE_ENV = process.env.NODE_ENV ?? "development";
+const envFile = NODE_ENV === "production" ? ".env.prod" : NODE_ENV === "test" ? ".env.test" : ".env.dev";
+dotenv.config({ path: path.resolve(__dirname, `../../${envFile}`) });
 
 import { z } from "zod";
 
@@ -7,8 +11,7 @@ const envSchema = z.object({
   PORT: z.coerce.number().default(3000),
   NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
   MONGODB_URI: z.string().min(1, "MONGODB_URI is required"),
-  JWT_PRIVATE_KEY: z.string().min(1, "JWT_PRIVATE_KEY is required"),
-  JWT_PUBLIC_KEY: z.string().min(1, "JWT_PUBLIC_KEY is required"),
+  JWT_SECRET: z.string().min(32, "JWT_SECRET must be at least 32 characters"),
   JWT_EXPIRES_IN: z.string().default("15m"),
   CORS_ORIGIN: z.string().min(1, "CORS_ORIGIN is required"),
   SMTP_HOST: z.string().min(1, "SMTP_HOST is required"),
@@ -27,3 +30,7 @@ if (!parsed.success) {
 
 export const env = parsed.data;
 export type Env = typeof env;
+
+export const isDevelopment = () => env.NODE_ENV === "development";
+export const isProduction = () => env.NODE_ENV === "production";
+export const isTest = () => env.NODE_ENV === "test";
