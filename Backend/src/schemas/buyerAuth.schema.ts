@@ -12,3 +12,9 @@ export const verifyOtpSchema = z.object({
 });
 
 export type VerifyOtpBody = z.infer<typeof verifyOtpSchema>;
+
+export const oneTapSchema = z.object({
+  credential: z.string().min(1, "credential is required"),
+});
+
+export type OneTapBody = z.infer<typeof oneTapSchema>;

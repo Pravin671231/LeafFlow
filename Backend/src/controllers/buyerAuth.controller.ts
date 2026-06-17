@@ -7,9 +7,11 @@ import {
   refreshBuyerAccessToken,
   logoutBuyer,
   getBuyerProfile,
+  handleGoogleCallback,
+  handleOneTap,
 } from "../services/buyerAuth.service";
 import { AppError } from "../utils/AppError";
-import { SendOtpBody, VerifyOtpBody } from "../schemas/buyerAuth.schema";
+import { SendOtpBody, VerifyOtpBody, OneTapBody } from "../schemas/buyerAuth.schema";
 
 export async function sendOtp(req: Request, res: Response): Promise<void> {
   const { email } = req.body as SendOtpBody;
@@ -29,16 +31,35 @@ export async function verifyOtp(req: Request, res: Response): Promise<void> {
   sendResponse({ res, data: { accessToken }, message: "Login successful" });
 }
 
-export async function googleRedirect(req: Request, res: Response): Promise<void> {
-  sendResponse({ res, statusCode: 501, message: "Not implemented" });
+export async function googleRedirect(_req: Request, res: Response): Promise<void> {
+  const { getGoogleAuthUrl } = await import("../services/integrations/google.service.js");
+  const url = await getGoogleAuthUrl();
+  res.redirect(url);
 }
 
 export async function googleCallback(req: Request, res: Response): Promise<void> {
-  sendResponse({ res, statusCode: 501, message: "Not implemented" });
+  const code = req.query.code as string | undefined;
+  if (!code) throw new AppError(400, "MISSING_CODE", "Authorization code is required");
+  const { accessToken, refreshToken } = await handleGoogleCallback(code);
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    secure: env.NODE_ENV === "production",
+    sameSite: "strict",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  });
+  sendResponse({ res, data: { accessToken }, message: "Google login successful" });
 }
 
 export async function oneTap(req: Request, res: Response): Promise<void> {
-  sendResponse({ res, statusCode: 501, message: "Not implemented" });
+  const { credential } = req.body as OneTapBody;
+  const { accessToken, refreshToken } = await handleOneTap(credential);
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    secure: env.NODE_ENV === "production",
+    sameSite: "strict",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  });
+  sendResponse({ res, data: { accessToken }, message: "Google One Tap login successful" });
 }
 
 export async function refresh(req: Request, res: Response): Promise<void> {

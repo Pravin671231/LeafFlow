@@ -1,9 +1,10 @@
-import { User } from "../models/User";
+import { User, IUser } from "../models/User";
 import { AppError } from "../utils/AppError";
 import { OTP_TTL_SECONDS } from "../config";
 import { issueOtpSession, consumeOtpSession } from "./otp.service";
 import { generateAccessToken, generateRefreshToken } from "./token.service";
 import { storeRefreshToken, validateRefreshToken, revokeRefreshToken } from "./refreshToken.service";
+import { verifyGoogleCode, verifyGoogleOneTap } from "./integrations/google.service";
 import { createLogger } from "../utils/logger";
 
 const log = createLogger("buyerAuth");
@@ -68,4 +69,47 @@ export async function getBuyerProfile(userId: string) {
   const user = await User.findById(userId);
   if (!user) throw new AppError(404, "NOT_FOUND", "User not found");
   return user;
+}
+
+async function findOrCreateBuyer(
+  email: string,
+  googleId: string,
+  name?: string
+): Promise<IUser> {
+  const byGoogleId = await User.findOne({ googleId });
+  if (byGoogleId) return byGoogleId;
+
+  const byEmail = await User.findOne({ email });
+  if (byEmail) {
+    byEmail.googleId = googleId;
+    byEmail.isVerified = true;
+    await byEmail.save();
+    return byEmail;
+  }
+
+  return User.create({ email, googleId, name, isVerified: true });
+}
+
+async function issueGoogleTokens(user: IUser): Promise<{ accessToken: string; refreshToken: string }> {
+  const payload = { id: user._id.toString(), role: "buyer" };
+  const accessToken = generateAccessToken(payload);
+  const refreshToken = generateRefreshToken(payload);
+  await storeRefreshToken(refreshToken, user._id.toString(), "buyer");
+  return { accessToken, refreshToken };
+}
+
+export async function handleGoogleCallback(
+  code: string
+): Promise<{ accessToken: string; refreshToken: string }> {
+  const profile = await verifyGoogleCode(code);
+  const user = await findOrCreateBuyer(profile.email, profile.googleId, profile.name);
+  return issueGoogleTokens(user);
+}
+
+export async function handleOneTap(
+  credential: string
+): Promise<{ accessToken: string; refreshToken: string }> {
+  const profile = await verifyGoogleOneTap(credential);
+  const user = await findOrCreateBuyer(profile.email, profile.googleId, profile.name);
+  return issueGoogleTokens(user);
 }
