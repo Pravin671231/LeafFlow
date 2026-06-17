@@ -49,6 +49,7 @@ jobs:
           fail_ci_if_error: false
 
   test-frontend:
+    if: false # buyer-app and admin-app are scaffold-only — re-enable when frontend tests exist
     name: Test (${{ matrix.workspace }})
     runs-on: ubuntu-latest
     strategy:

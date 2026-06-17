@@ -1,12 +1,16 @@
-import { describe, it, expect, beforeAll, afterAll, beforeEach } from "vitest";
+import { describe, it, expect, beforeAll, afterAll, beforeEach, vi } from "vitest";
 import request from "supertest";
 import bcrypt from "bcryptjs";
 import app from "../../src/app";
 import { Admin } from "../../src/models/Admin";
 import { OtpSession } from "../../src/models/OtpSession";
-import { hashOtp } from "../../src/services/otp";
-import { signAccessToken } from "../../src/services/token";
+import { hashOtp } from "../../src/services/otp.service";
+import { generateAccessToken } from "../../src/services/token.service";
 import { connectTestDb, disconnectTestDb, clearCollections, seedAdmin } from "../helpers/seedAdmin";
+
+vi.mock("../../src/services/integrations/email.service", () => ({
+  sendOtpEmail: vi.fn().mockResolvedValue(undefined),
+}));
 
 beforeAll(connectTestDb);
 afterAll(disconnectTestDb);
@@ -97,7 +101,7 @@ describe("POST /api/admin/auth/forgot-password/reset — expiry and lockout", ()
 describe("POST /api/admin/auth/reset-password (authenticated)", () => {
   it("I16: send-otp with valid JWT → 200", async () => {
     const admin = await seedAdmin();
-    const token = signAccessToken({ adminId: admin._id.toString(), role: "admin" });
+    const token = generateAccessToken({ id: admin._id.toString(), role: "admin" });
 
     const res = await request(app)
       .post("/api/admin/auth/reset-password/send-otp")
@@ -108,7 +112,7 @@ describe("POST /api/admin/auth/reset-password (authenticated)", () => {
 
   it("I17: confirm with valid JWT + OTP → 200, password updated", async () => {
     const admin = await seedAdmin();
-    const token = signAccessToken({ adminId: admin._id.toString(), role: "admin" });
+    const token = generateAccessToken({ id: admin._id.toString(), role: "admin" });
     const otp = "321654";
     const session = await OtpSession.create({
       purpose: "admin_reset",
@@ -129,9 +133,11 @@ describe("POST /api/admin/auth/reset-password (authenticated)", () => {
 
 describe("POST /api/admin/auth/forgot-password/reset — error paths", () => {
   it("I23: invalid/missing session → 401 INVALID_OTP", async () => {
-    const res = await request(app)
-      .post("/api/admin/auth/forgot-password/reset")
-      .send({ otpSessionId: "000000000000000000000000", otp: "123456", newPassword: "NewPass123!" });
+    const res = await request(app).post("/api/admin/auth/forgot-password/reset").send({
+      otpSessionId: "000000000000000000000000",
+      otp: "123456",
+      newPassword: "NewPass123!",
+    });
 
     expect(res.status).toBe(401);
     expect(res.body).toMatchObject({ success: false, code: "INVALID_OTP" });
@@ -147,9 +153,11 @@ describe("POST /api/admin/auth/forgot-password/reset — error paths", () => {
       attemptCount: 0,
     });
 
-    const res = await request(app)
-      .post("/api/admin/auth/forgot-password/reset")
-      .send({ otpSessionId: session._id.toString(), otp: "999999", newPassword: "NewPassword123!" });
+    const res = await request(app).post("/api/admin/auth/forgot-password/reset").send({
+      otpSessionId: session._id.toString(),
+      otp: "999999",
+      newPassword: "NewPassword123!",
+    });
 
     expect(res.status).toBe(401);
     expect(res.body).toMatchObject({ success: false, code: "INVALID_OTP" });
@@ -159,7 +167,7 @@ describe("POST /api/admin/auth/forgot-password/reset — error paths", () => {
 describe("POST /api/admin/auth/reset-password — error paths", () => {
   it("I26: resetPasswordConfirm expired OTP → 401 OTP_EXPIRED", async () => {
     const admin = await seedAdmin();
-    const token = signAccessToken({ adminId: admin._id.toString(), role: "admin" });
+    const token = generateAccessToken({ id: admin._id.toString(), role: "admin" });
     const session = await OtpSession.create({
       purpose: "admin_reset",
       identifier: admin.loginEmail,
@@ -179,7 +187,7 @@ describe("POST /api/admin/auth/reset-password — error paths", () => {
 
   it("I27: resetPasswordConfirm max attempts → 429 OTP_MAX_ATTEMPTS", async () => {
     const admin = await seedAdmin();
-    const token = signAccessToken({ adminId: admin._id.toString(), role: "admin" });
+    const token = generateAccessToken({ id: admin._id.toString(), role: "admin" });
     const session = await OtpSession.create({
       purpose: "admin_reset",
       identifier: admin.loginEmail,
@@ -201,12 +209,16 @@ describe("POST /api/admin/auth/reset-password — error paths", () => {
 describe("POST /api/admin/auth/reset-password/confirm — error paths", () => {
   it("I20: invalid/missing session → 401 INVALID_OTP", async () => {
     const admin = await seedAdmin();
-    const token = signAccessToken({ adminId: admin._id.toString(), role: "admin" });
+    const token = generateAccessToken({ id: admin._id.toString(), role: "admin" });
 
     const res = await request(app)
       .post("/api/admin/auth/reset-password/confirm")
       .set("Authorization", `Bearer ${token}`)
-      .send({ otpSessionId: "000000000000000000000000", otp: "123456", newPassword: "NewPass123!" });
+      .send({
+        otpSessionId: "000000000000000000000000",
+        otp: "123456",
+        newPassword: "NewPass123!",
+      });
 
     expect(res.status).toBe(401);
     expect(res.body).toMatchObject({ success: false, code: "INVALID_OTP" });
@@ -214,7 +226,7 @@ describe("POST /api/admin/auth/reset-password/confirm — error paths", () => {
 
   it("I21: wrong OTP in reset-password confirm → 401 INVALID_OTP", async () => {
     const admin = await seedAdmin();
-    const token = signAccessToken({ adminId: admin._id.toString(), role: "admin" });
+    const token = generateAccessToken({ id: admin._id.toString(), role: "admin" });
     const session = await OtpSession.create({
       purpose: "admin_reset",
       identifier: admin.loginEmail,

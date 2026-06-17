@@ -25,17 +25,13 @@ jobs:
       - run: npm run lint
 
   test:
-    name: Test (${{ matrix.workspace }})
+    name: Test (backend)
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - workspace: backend
-            coverage_dir: Backend
-          - workspace: buyer-app
-            coverage_dir: buyer-app
-          - workspace: admin-app
-            coverage_dir: admin-app
+    services:
+      mongodb:
+        image: mongo:8
+        ports:
+          - 27017:27017
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -43,14 +39,16 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
-      - run: npm run test:coverage --workspace=${{ matrix.workspace }}
+      - run: npm run test:coverage --workspace=backend
+        env:
+          MONGODB_URI: mongodb://localhost:27017/leafflow_test
       - uses: codecov/codecov-action@v4
         with:
-          name: coverage-${{ matrix.workspace }}
-          directory: ${{ matrix.coverage_dir }}/coverage/
-          if-no-files-found: error
+          name: coverage-backend
+          directory: Backend/coverage/
 
   e2e:
+    if: false # E2E placeholder — activated in Issue #62
     name: E2E
     needs: [test]
     runs-on: ubuntu-latest

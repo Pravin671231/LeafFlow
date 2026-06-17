@@ -15,7 +15,7 @@ describe("connectDB", () => {
   it("connects on first attempt", async () => {
     mockConnect.mockResolvedValueOnce(mongoose);
 
-    const { connectDB } = await import("../../src/config/db");
+    const { connectDB } = await import("../../src/config/db.js");
     await connectDB();
 
     expect(mockConnect).toHaveBeenCalledTimes(1);
@@ -26,7 +26,7 @@ describe("connectDB", () => {
     mockConnect.mockRejectedValue(err);
 
     vi.useFakeTimers();
-    const { connectDB } = await import("../../src/config/db");
+    const { connectDB } = await import("../../src/config/db.js");
 
     const promise = connectDB();
     promise.catch(() => {}); // prevent unhandled rejection warning during timer advance

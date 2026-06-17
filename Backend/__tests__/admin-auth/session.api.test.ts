@@ -3,7 +3,7 @@ import request from "supertest";
 import bcrypt from "bcryptjs";
 import app from "../../src/app";
 import { RefreshToken } from "../../src/models/RefreshToken";
-import { signAccessToken } from "../../src/services/token";
+import { generateAccessToken } from "../../src/services/token.service";
 import { connectTestDb, disconnectTestDb, clearCollections, seedAdmin } from "../helpers/seedAdmin";
 
 beforeAll(connectTestDb);
@@ -13,7 +13,7 @@ beforeEach(clearCollections);
 describe("GET /api/admin/auth/me", () => {
   it("I9: valid JWT → 200 with admin profile", async () => {
     const admin = await seedAdmin();
-    const token = signAccessToken({ adminId: admin._id.toString(), role: "admin" });
+    const token = generateAccessToken({ id: admin._id.toString(), role: "admin" });
 
     const res = await request(app)
       .get("/api/admin/auth/me")
@@ -76,7 +76,7 @@ describe("POST /api/admin/auth/refresh", () => {
 describe("POST /api/admin/auth/logout", () => {
   it("I13: valid session → 200, refresh token revoked in DB", async () => {
     const admin = await seedAdmin();
-    const token = signAccessToken({ adminId: admin._id.toString(), role: "admin" });
+    const token = generateAccessToken({ id: admin._id.toString(), role: "admin" });
     const rawToken = "logout-test-token";
     await RefreshToken.create({
       selector: rawToken.slice(0, 16),
