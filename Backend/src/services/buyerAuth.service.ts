@@ -12,9 +12,9 @@ const log = createLogger("buyerAuth");
 export async function sendEmailOtp(
   email: string
 ): Promise<{ otpSessionId: string; expiresInSeconds: number }> {
-  let user = await User.findOne({ email });
+  const user = await User.findOne({ email });
   if (!user) {
-    user = await User.create({ email, isVerified: false });
+    await User.create({ email, isVerified: false });
     log.info({ email }, "New buyer created");
   }
 
