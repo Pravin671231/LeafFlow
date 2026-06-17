@@ -1,6 +1,8 @@
 export { Admin } from "./Admin";
 export { Category } from "./Category";
 export type { ICategory } from "./Category";
+export { Product } from "./Product";
+export type { IProduct } from "./Product";
 export type { IAdmin } from "./Admin";
 export { OtpSession } from "./OtpSession";
 export type { IOtpSession, OtpPurpose } from "./OtpSession";
