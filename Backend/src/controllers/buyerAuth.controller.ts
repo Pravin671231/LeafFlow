@@ -1,8 +1,12 @@
 import { Request, Response } from "express";
 import { sendResponse } from "../utils/sendResponse";
+import { sendEmailOtp } from "../services/buyerAuth.service";
+import { SendOtpBody } from "../schemas/buyerAuth.schema";
 
 export async function sendOtp(req: Request, res: Response): Promise<void> {
-  sendResponse({ res, statusCode: 501, message: "Not implemented" });
+  const { email } = req.body as SendOtpBody;
+  const data = await sendEmailOtp(email);
+  sendResponse({ res, data, message: "OTP sent to your email" });
 }
 
 export async function verifyOtp(req: Request, res: Response): Promise<void> {

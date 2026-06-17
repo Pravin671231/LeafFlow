@@ -11,7 +11,7 @@ interface IAddress {
 export interface IUser extends Document {
   email: string;
   googleId?: string;
-  name: string;
+  name?: string;
   phone?: string;
   addresses: IAddress[];
   role: "buyer";
@@ -33,7 +33,7 @@ const UserSchema = new Schema<IUser>(
   {
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     googleId: { type: String, unique: true, sparse: true },
-    name: { type: String, required: true, trim: true },
+    name: { type: String, trim: true },
     phone: { type: String, trim: true },
     addresses: { type: [AddressSchema], default: [] },
     role: { type: String, default: "buyer" },

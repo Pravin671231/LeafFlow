@@ -6,7 +6,7 @@ import { sendOtpEmail } from "./integrations/email.service";
 const log = createLogger("otp");
 
 export async function issueOtpSession(
-  purpose: "admin_login" | "admin_forgot" | "admin_reset",
+  purpose: "admin_login" | "admin_forgot" | "admin_reset" | "buyer_login",
   identifier: string,
   deliveryEmail: string
 ): Promise<string> {
