@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import { sendResponse } from "../utils/sendResponse";
-import { sendEmailOtp } from "../services/buyerAuth.service";
-import { SendOtpBody } from "../schemas/buyerAuth.schema";
+import { env } from "../config/env";
+import { sendEmailOtp, verifyEmailOtp } from "../services/buyerAuth.service";
+import { SendOtpBody, VerifyOtpBody } from "../schemas/buyerAuth.schema";
 
 export async function sendOtp(req: Request, res: Response): Promise<void> {
   const { email } = req.body as SendOtpBody;
@@ -10,7 +11,15 @@ export async function sendOtp(req: Request, res: Response): Promise<void> {
 }
 
 export async function verifyOtp(req: Request, res: Response): Promise<void> {
-  sendResponse({ res, statusCode: 501, message: "Not implemented" });
+  const { otpSessionId, otp } = req.body as VerifyOtpBody;
+  const { accessToken, refreshToken } = await verifyEmailOtp(otpSessionId, otp);
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    secure: env.NODE_ENV === "production",
+    sameSite: "strict",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  });
+  sendResponse({ res, data: { accessToken }, message: "Login successful" });
 }
 
 export async function googleRedirect(req: Request, res: Response): Promise<void> {

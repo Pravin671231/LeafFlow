@@ -6,13 +6,14 @@ const REFRESH_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 
 export async function storeRefreshToken(
   raw: string,
-  adminId: string,
+  id: string,
   role: "admin" | "buyer"
 ): Promise<void> {
   const selector = raw.slice(0, 16);
   const tokenHash = await bcrypt.hash(raw, 10);
   const expiresAt = new Date(Date.now() + REFRESH_TTL_MS);
-  await RefreshToken.create({ selector, tokenHash, adminId, role, expiresAt });
+  const ownerField = role === "admin" ? { adminId: id } : { userId: id };
+  await RefreshToken.create({ selector, tokenHash, ...ownerField, role, expiresAt });
 }
 
 export async function validateRefreshToken(

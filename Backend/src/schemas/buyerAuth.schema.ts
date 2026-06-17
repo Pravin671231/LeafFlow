@@ -7,7 +7,7 @@ export const sendOtpSchema = z.object({
 export type SendOtpBody = z.infer<typeof sendOtpSchema>;
 
 export const verifyOtpSchema = z.object({
-  email: z.string().email("Invalid email address"),
+  otpSessionId: z.string().min(1, "otpSessionId is required"),
   otp: z.string().length(6, "OTP must be 6 digits"),
 });
 
