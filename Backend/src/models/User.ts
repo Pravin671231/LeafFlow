@@ -32,14 +32,14 @@ const AddressSchema = new Schema<IAddress>(
 const UserSchema = new Schema<IUser>(
   {
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
-    googleId: { type: String, unique: true, sparse: true },
-    name: { type: String, trim: true },
-    phone: { type: String, trim: true },
+    googleId: { type: String, unique: true, sparse: true, default: null },
+    name: { type: String, trim: true, default: null },
+    phone: { type: String, trim: true, default: null },
     addresses: { type: [AddressSchema], default: [] },
     role: { type: String, default: "buyer" },
     isVerified: { type: Boolean, default: false },
   },
-  { timestamps: true }
+  { timestamps: true, versionKey: false }
 );
 
 export const User = model<IUser>("User", UserSchema);
