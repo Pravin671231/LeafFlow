@@ -1,13 +1,11 @@
 import { Admin } from "../models/Admin";
 import { AppError } from "../utils/AppError";
-import { createLogger } from "../utils/logger";
 
 import { LOCK_DURATION_MS, MAX_FAILED_ATTEMPTS, OTP_TTL_SECONDS } from "../config";
 import { consumeOtpSession, issueOtpSession } from "./otp.service";
 import { hashPassword, verifyPassword } from "../utils/shared/password.utils";
-import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from "./token.service";
-
-const log = createLogger("adminAuth");
+import { generateAccessToken, generateRefreshToken } from "./token.service";
+import { storeRefreshToken, validateRefreshToken, revokeRefreshToken } from "./refreshToken.service";
 
 export async function login(
   loginEmail: string,
@@ -51,8 +49,10 @@ export async function verifyOtpAndIssueTokens(
 
   const payload = { id: admin._id.toString(), role: "admin" };
 
-  const accessToken = await generateAccessToken(payload);
-  const refreshToken = await generateRefreshToken(payload);
+  const accessToken = generateAccessToken(payload);
+  const refreshToken = generateRefreshToken(payload);
+
+  await storeRefreshToken(refreshToken, admin._id.toString(), "admin");
 
   return { accessToken, refreshToken };
 }
@@ -60,21 +60,22 @@ export async function verifyOtpAndIssueTokens(
 export async function refreshAccessToken(raw: string): Promise<{ accessToken: string }> {
   let adminId: string;
   try {
-    const result = await verifyRefreshToken(raw);
-    adminId = result.id.toString();
+    const result = await validateRefreshToken(raw);
+    adminId = result.adminId;
   } catch {
     throw new AppError(401, "INVALID_REFRESH_TOKEN", "Invalid refresh token");
   }
-  const accessToken = await generateAccessToken({ id: adminId, role: "admin" });
+  const accessToken = generateAccessToken({ id: adminId, role: "admin" });
   return { accessToken };
 }
 
 export async function logoutAdmin(raw?: string): Promise<void> {
   if (!raw) return;
   try {
-    const token = await verifyRefreshToken(raw);
+    const { tokenHash } = await validateRefreshToken(raw);
+    await revokeRefreshToken(tokenHash);
   } catch {
-    // Token not found — proceed with logout anyway
+    // Token not found or invalid — proceed with logout anyway
   }
 }
 
