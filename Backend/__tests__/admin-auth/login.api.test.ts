@@ -1,8 +1,12 @@
-import { describe, it, expect, beforeAll, afterAll, beforeEach } from "vitest";
+import { describe, it, expect, beforeAll, afterAll, beforeEach, vi } from "vitest";
 import request from "supertest";
 import app from "../../src/app";
 import { Admin } from "../../src/models/Admin";
 import { connectTestDb, disconnectTestDb, clearCollections, seedAdmin } from "../helpers/seedAdmin";
+
+vi.mock("../../src/services/integrations/email.service", () => ({
+  sendOtpEmail: vi.fn().mockResolvedValue(undefined),
+}));
 
 beforeAll(connectTestDb);
 afterAll(disconnectTestDb);

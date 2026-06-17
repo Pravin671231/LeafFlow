@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
-import { Admin } from "../../src/models/Admin";
+import { Admin } from "../../src/models/Admin.js";
 
 const MONGO_URI = process.env.MONGODB_URI ?? "mongodb://localhost:27017/leafflow_test";
 
@@ -16,9 +16,9 @@ export async function disconnectTestDb() {
 }
 
 export async function clearCollections() {
-  const { Admin } = await import("../../src/models/Admin");
-  const { OtpSession } = await import("../../src/models/OtpSession");
-  const { RefreshToken } = await import("../../src/models/RefreshToken");
+  const { Admin } = await import("../../src/models/Admin.js");
+  const { OtpSession } = await import("../../src/models/OtpSession.js");
+  const { RefreshToken } = await import("../../src/models/RefreshToken.js");
   await Promise.all([Admin.deleteMany({}), OtpSession.deleteMany({}), RefreshToken.deleteMany({})]);
 }
 

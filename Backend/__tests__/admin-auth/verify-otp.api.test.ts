@@ -2,7 +2,7 @@ import { describe, it, expect, beforeAll, afterAll, beforeEach } from "vitest";
 import request from "supertest";
 import app from "../../src/app";
 import { OtpSession } from "../../src/models/OtpSession";
-import { hashOtp } from "../../src/services/otp";
+import { hashOtp } from "../../src/services/otp.service";
 import { connectTestDb, disconnectTestDb, clearCollections, seedAdmin } from "../helpers/seedAdmin";
 
 beforeAll(connectTestDb);

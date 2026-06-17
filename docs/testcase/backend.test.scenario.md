@@ -15,11 +15,10 @@ Coverage target: ≥ 90% (§8.5)
 | U2 | `hashOtp()` returns bcrypt hash, not plain text | `"123456"` | hash ≠ input; `bcrypt.compare` → true |
 | U3 | `verifyOtp()` returns true for correct OTP | correct otp + hash | `true` |
 | U4 | `verifyOtp()` returns false for wrong OTP | wrong otp + hash | `false` |
-| U5 | `signAccessToken()` returns RS256 JWT | admin payload | JWT with `alg: RS256` |
+| U5 | `signAccessToken()` returns HS256 JWT | admin payload | JWT with `alg: HS256` |
 | U6 | `verifyAccessToken()` returns payload for valid token | valid JWT | `{ adminId, role }` |
 | U7 | `verifyAccessToken()` throws for expired token | expired JWT | throws |
 | U8 | `verifyAccessToken()` throws for tampered token | bad JWT | throws |
-| U9 | `asyncHandler` calls next(err) when async fn throws | fn that throws | `next` called with error |
 
 ---
 
@@ -66,7 +65,7 @@ Coverage target: ≥ 90% (§8.5)
 - Then: `429 { success: false, code: "OTP_MAX_ATTEMPTS" }`
 
 **I9 — GET /me: valid JWT**
-- Given: valid RS256 access token
+- Given: valid HS256 access token
 - When: GET `/api/admin/auth/me` with Bearer token
 - Then: `200`, body contains admin profile fields
 
@@ -130,7 +129,7 @@ Coverage target: ≥ 90% (§8.5)
 - Then: `401 { success: false, code: "UNAUTHORIZED" }`
 
 **M3 — Expired JWT**
-- Given: expired RS256 token
+- Given: expired HS256 token
 - When: request hits `adminAuth`
 - Then: `401 { success: false, code: "TOKEN_EXPIRED" }`
 

@@ -1,11 +1,9 @@
-import { generateKeyPairSync } from "crypto";
+import { randomBytes } from "crypto";
 
-if (!process.env.JWT_PRIVATE_KEY) {
-  const { privateKey, publicKey } = generateKeyPairSync("rsa", {
-    modulusLength: 2048,
-    publicKeyEncoding: { type: "spki", format: "pem" },
-    privateKeyEncoding: { type: "pkcs8", format: "pem" },
-  });
-  process.env.JWT_PRIVATE_KEY = privateKey;
-  process.env.JWT_PUBLIC_KEY = publicKey;
+if (!process.env.ACCESS_SECRET) {
+  process.env.ACCESS_SECRET = randomBytes(32).toString("hex");
+}
+
+if (!process.env.REFRESH_SECRET) {
+  process.env.REFRESH_SECRET = randomBytes(32).toString("hex");
 }

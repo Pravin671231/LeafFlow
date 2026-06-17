@@ -22,7 +22,7 @@ services:
     volumes:
       - ./Backend/src:/app/Backend/src
     command: npx tsx watch src/index.ts
-    env_file: ./Backend/.env
+    env_file: ./Backend/.env.dev
     environment:
       PORT: "3000"
       MONGODB_URI: mongodb://mongo:27017/leafflow

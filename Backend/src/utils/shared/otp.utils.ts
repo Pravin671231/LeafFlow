@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import { randomInt } from "crypto";
-import { BCRYPT_ROUNDS_OTP } from "../config/constants";
+import { BCRYPT_ROUNDS_OTP } from "../../config";
 
 export function generateOtp(): string {
   return randomInt(100000, 1000000).toString();

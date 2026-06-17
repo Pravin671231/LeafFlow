@@ -22,7 +22,7 @@ describe("sendOtpEmail", () => {
   });
 
   it("calls sendMail with correct recipient and subject", async () => {
-    const { sendOtpEmail } = await import("../../src/services/email.js");
+    const { sendOtpEmail } = await import("../../src/services/integrations/email.service.js");
     await sendOtpEmail("user@example.com", "123456");
 
     expect(sendMailMock).toHaveBeenCalledOnce();
@@ -32,7 +32,7 @@ describe("sendOtpEmail", () => {
   });
 
   it("includes the OTP in the email body", async () => {
-    const { sendOtpEmail } = await import("../../src/services/email.js");
+    const { sendOtpEmail } = await import("../../src/services/integrations/email.service.js");
     await sendOtpEmail("user@example.com", "654321");
 
     const [mailOptions] = sendMailMock.mock.calls[0];
@@ -41,7 +41,7 @@ describe("sendOtpEmail", () => {
 
   it("rejects when sendMail fails", async () => {
     sendMailMock.mockRejectedValueOnce(new Error("SMTP error"));
-    const { sendOtpEmail } = await import("../../src/services/email.js");
+    const { sendOtpEmail } = await import("../../src/services/integrations/email.service.js");
     await expect(sendOtpEmail("test@example.com", "123456")).rejects.toThrow("SMTP error");
   });
 });

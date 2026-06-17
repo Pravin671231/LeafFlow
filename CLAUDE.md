@@ -161,12 +161,11 @@ All three workspaces use **Vitest** with **@testing-library/react** for UI and *
 
 ## Environment setup
 
-Copy `Backend/.env.example` to `Backend/.env` and fill in:
+Copy `Backend/.env.example` to `Backend/.env.dev` and fill in:
 ```
 PORT=3000
 MONGODB_URI=mongodb://localhost:27017/leafflow
-JWT_PRIVATE_KEY=...        # RS256 private key (PEM)
-JWT_PUBLIC_KEY=...         # RS256 public key (PEM)
+JWT_SECRET=...             # generate with: openssl rand -hex 32
 JWT_EXPIRES_IN=15m
 CORS_ORIGIN=http://localhost:5173
 NODE_ENV=development
@@ -178,7 +177,9 @@ MAIL_FROM=no-reply@leafflow.com
 ADMIN_LOGIN_EMAIL=admin@leafflow.com
 ADMIN_PASSWORD=...
 ```
-When using Docker Compose, `MONGODB_URI` is injected automatically as `mongodb://mongo:27017/leafflow`. The `.env` file is only needed for non-Docker local runs.
+Environment files by convention: `.env.dev` (local dev), `.env.prod` (production — values injected by Render), `.env.test` (committed to repo, safe test values). `env.ts` selects the correct file based on `NODE_ENV`.
+
+When using Docker Compose, `MONGODB_URI` is injected automatically as `mongodb://mongo:27017/leafflow`. The `.env.dev` file is only needed for non-Docker local runs.
 
 ## Branch strategy
 
