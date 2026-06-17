@@ -10,7 +10,7 @@ export const createProductSchema = z.object({
   scientificName: z.string().optional(),
   slug: z.string().optional(),
   description: z.string().optional(),
-  categoryId: z.string().min(1, "Category is required"),
+  categoryId: z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid category ID"),
   price: z.number().positive("Price must be positive"),
   compareAtPrice: z.number().positive().optional(),
   stock: z.number().int().min(0).optional(),
