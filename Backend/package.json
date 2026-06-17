@@ -10,7 +10,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "seed": "npx tsx src/scripts/seed.ts"
+    "seed": "npx tsx src/scripts/seed.ts",
+    "seed:categories": "npx tsx src/scripts/categorySeed.ts",
+    "seed:products": "npx tsx src/scripts/productSeed.ts"
   },
   "keywords": [],
   "author": "",
@@ -29,6 +31,7 @@
     "nodemailer": "^8.0.10",
     "pino": "^10.3.1",
     "pino-http": "^11.0.0",
+    "slugify": "^1.6.9",
     "zod": "^4.4.3"
   },
   "devDependencies": {

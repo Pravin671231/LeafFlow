@@ -1,8 +1,10 @@
 import bcrypt from "bcryptjs";
 import { randomInt } from "crypto";
 import { BCRYPT_ROUNDS_OTP } from "../../config";
+import { isDevelopment } from "../../config/env";
 
 export function generateOtp(): string {
+  if (isDevelopment()) return "112233";
   return randomInt(100000, 1000000).toString();
 }
 
