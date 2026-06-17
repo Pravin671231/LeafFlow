@@ -16,7 +16,7 @@ export async function connectDB(): Promise<void> {
     } catch (err) {
       log.error({ err, attempt, maxAttempts: MAX_ATTEMPTS }, "MongoDB connection attempt failed");
       if (attempt === MAX_ATTEMPTS) {
-        throw new Error("MongoDB connection failed after maximum attempts", { cause: err });
+         throw new Error("MongoDB connection failed after maximum attempts", { cause: err });
       }
       await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY_MS));
     }
