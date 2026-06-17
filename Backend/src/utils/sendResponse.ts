@@ -1,6 +1,6 @@
 import { Response } from "express";
 
-interface ResponseOptions<T = any> {
+interface ResponseOptions<T = unknown> {
   res: Response;
   statusCode?: number;
   success?: boolean;
@@ -8,7 +8,7 @@ interface ResponseOptions<T = any> {
   data?: T;
 }
 
-export const sendResponse = <T = any>({
+export const sendResponse = <T = unknown>({
   res,
   statusCode = 200,
   success = true,
