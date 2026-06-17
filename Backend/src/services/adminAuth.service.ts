@@ -61,7 +61,7 @@ export async function refreshAccessToken(raw: string): Promise<{ accessToken: st
   let adminId: string;
   try {
     const result = await validateRefreshToken(raw);
-    adminId = result.adminId;
+    adminId = result.id;
   } catch {
     throw new AppError(401, "INVALID_REFRESH_TOKEN", "Invalid refresh token");
   }

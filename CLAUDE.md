@@ -9,7 +9,7 @@ LeafFlow is a single-seller e-commerce platform for ornamental plants, built as 
 - **buyer-app** — Next.js 16 customer-facing storefront (React 19, SSR, App Router)
 - **admin-app** — Vite 8 + React 19 seller dashboard (SPA)
 
-**Current state (June 2026):** Admin auth is fully implemented (OTP login, JWT + refresh tokens, password reset, account lockout). `connectDB()` in `src/index.ts` is mocked — real Mongoose connection comes in M4 (issue #14). Buyer/product/catalog/commerce features are not yet started. buyer-app and admin-app are scaffolds with no real pages or features.
+**Current state (June 2026):** Admin auth backend and frontend are fully implemented (OTP login, JWT + refresh tokens, password reset, account lockout, route guards). `connectDB()` in `src/index.ts` is mocked — real Mongoose connection comes in M4. Buyer/product/catalog/commerce features are not yet started. buyer-app is a bare Next.js scaffold with no real pages or features.
 
 ## Commands
 
@@ -109,7 +109,7 @@ src/
 `GET /me` · `POST /forgot-password/send-otp` · `POST /forgot-password/reset`
 `POST /reset-password/send-otp` · `POST /reset-password/confirm`
 
-**What's NOT yet implemented** (planned M5–M6): buyer models (User, Product, Cart, Order, Payment), buyer/product/order routes, Razorpay integration, Cloudflare R2 storage.
+**What's NOT yet implemented**: buyer auth (User model, email OTP, Google OAuth/One Tap routes — issue #37), buyer models (Product, Cart, Order, Payment), buyer/product/order routes, Razorpay integration, Cloudflare R2 storage.
 
 ### Backend coding patterns
 
@@ -122,26 +122,42 @@ For full rules and code examples read `docs/ARCHITECTURE/backend.md`. Key invari
 - **Validation**: Apply `validate(schema)` in routes before every controller that reads `req.body`.
 - **Config**: `import { env } from "../config/env"` — never `process.env` directly.
 - **Import order**: external packages → internal modules → module-level inits (`const log = createLogger(...)`).
+- **JWT algorithm**: Both admin and buyer auth use **HS256** with `JWT_SECRET`. Admin middleware populates `req.admin`; buyer middleware (issue #37) will populate `req.user`. Reject tokens with `role === "admin"` on buyer routes with `403`.
 
-### Frontend structure (planned)
+### admin-app structure (implemented)
+
+Stack: React 19, Vite 8, RTK Query (`@reduxjs/toolkit`), `react-hook-form` + `zod`, `axios`, Tailwind CSS v4, DaisyUI, `react-router-dom` v7.
+
+```
+admin-app/src/
+├── app/          # provider.tsx (Redux + Router)
+├── components/
+│   ├── common/   # AuthInitializer.tsx, ProtectedRoute.tsx
+│   ├── layout/   # Navbar.tsx
+│   └── ui/       # Button, Input, Loader
+├── pages/        # Login, LoginVerifyOtp, ForgotPassword, ResetPassword, Dashboard
+├── routes/       # AppRoutes.tsx
+├── features/     # (planned: products, orders RTK Query slices)
+└── store/        # (planned: Redux store expansion)
+```
+
+### buyer-app structure (planned)
+
+Stack: Next.js 16, React 19, App Router, Tailwind CSS v4, DaisyUI. TanStack Query and Zustand are **planned but not yet installed**.
+
 ```
 buyer-app/src/
-├── components/
-├── hooks/        # TanStack Query hooks
-├── stores/       # Zustand (cart, checkout)
-└── lib/          # API client
-
-admin-app/src/
-├── features/     # products, orders, auth (RTK Query slices)
-├── store/        # Redux store + RTK Query API definitions
-└── components/
+├── components/    (planned)
+├── hooks/         (planned — TanStack Query hooks)
+├── stores/        (planned — Zustand: cart, checkout)
+└── lib/           (planned — API client)
 ```
 
 ### State management
 | App | Server / async state | Client / UI state |
 | --- | -------------------- | ----------------- |
-| **admin-app** | **RTK Query** (`@reduxjs/toolkit`) | **Redux slices** (auth session, sidebar, table filters) |
-| **buyer-app** | **TanStack Query** | **Zustand** (cart, checkout step) |
+| **admin-app** | **RTK Query** (`@reduxjs/toolkit`) | **Redux slices** (auth session) |
+| **buyer-app** | **TanStack Query** *(planned, not yet installed)* | **Zustand** *(planned, not yet installed)* |
 
 ### Key data models (MongoDB/Mongoose)
 `Admin`, `OtpSession`, `RefreshToken` (M4, implemented schemas) → `User`, `Category`, `Product` (M5) → `Cart`, `Order`, `Payment` (M6). See `docs/SRS.md` §10 for full field lists.
