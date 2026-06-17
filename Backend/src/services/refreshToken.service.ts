@@ -18,7 +18,7 @@ export async function storeRefreshToken(
 
 export async function validateRefreshToken(
   raw: string
-): Promise<{ adminId: string; tokenHash: string }> {
+): Promise<{ id: string; role: "admin" | "buyer"; tokenHash: string }> {
   const selector = raw.slice(0, 16);
   const record = await RefreshToken.findOne({ selector });
   if (!record) throw new AppError(401, "INVALID_REFRESH_TOKEN", "Refresh token not found");
@@ -28,7 +28,8 @@ export async function validateRefreshToken(
 
   if (record.revokedAt) throw new AppError(401, "INVALID_REFRESH_TOKEN", "Refresh token has been revoked");
 
-  return { adminId: record.adminId!.toString(), tokenHash: record.tokenHash };
+  const id = record.role === "admin" ? record.adminId!.toString() : record.userId!.toString();
+  return { id, role: record.role, tokenHash: record.tokenHash };
 }
 
 export async function revokeRefreshToken(tokenHash: string): Promise<void> {

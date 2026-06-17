@@ -3,7 +3,7 @@ import { AppError } from "../utils/AppError";
 import { OTP_TTL_SECONDS } from "../config";
 import { issueOtpSession, consumeOtpSession } from "./otp.service";
 import { generateAccessToken, generateRefreshToken } from "./token.service";
-import { storeRefreshToken } from "./refreshToken.service";
+import { storeRefreshToken, validateRefreshToken, revokeRefreshToken } from "./refreshToken.service";
 import { createLogger } from "../utils/logger";
 
 const log = createLogger("buyerAuth");
@@ -40,4 +40,32 @@ export async function verifyEmailOtp(
   await storeRefreshToken(refreshToken, user._id.toString(), "buyer");
 
   return { accessToken, refreshToken };
+}
+
+export async function refreshBuyerAccessToken(raw: string): Promise<{ accessToken: string }> {
+  let id: string;
+  try {
+    const result = await validateRefreshToken(raw);
+    id = result.id;
+  } catch {
+    throw new AppError(401, "INVALID_REFRESH_TOKEN", "Invalid refresh token");
+  }
+  const accessToken = generateAccessToken({ id, role: "buyer" });
+  return { accessToken };
+}
+
+export async function logoutBuyer(raw?: string): Promise<void> {
+  if (!raw) return;
+  try {
+    const { tokenHash } = await validateRefreshToken(raw);
+    await revokeRefreshToken(tokenHash);
+  } catch {
+    // Token not found or invalid — proceed with logout anyway
+  }
+}
+
+export async function getBuyerProfile(userId: string) {
+  const user = await User.findById(userId);
+  if (!user) throw new AppError(404, "NOT_FOUND", "User not found");
+  return user;
 }

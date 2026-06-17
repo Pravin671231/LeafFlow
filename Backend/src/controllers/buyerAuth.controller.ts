@@ -1,7 +1,14 @@
 import { Request, Response } from "express";
 import { sendResponse } from "../utils/sendResponse";
 import { env } from "../config/env";
-import { sendEmailOtp, verifyEmailOtp } from "../services/buyerAuth.service";
+import {
+  sendEmailOtp,
+  verifyEmailOtp,
+  refreshBuyerAccessToken,
+  logoutBuyer,
+  getBuyerProfile,
+} from "../services/buyerAuth.service";
+import { AppError } from "../utils/AppError";
 import { SendOtpBody, VerifyOtpBody } from "../schemas/buyerAuth.schema";
 
 export async function sendOtp(req: Request, res: Response): Promise<void> {
@@ -35,13 +42,20 @@ export async function oneTap(req: Request, res: Response): Promise<void> {
 }
 
 export async function refresh(req: Request, res: Response): Promise<void> {
-  sendResponse({ res, statusCode: 501, message: "Not implemented" });
+  const raw = req.cookies?.refreshToken as string | undefined;
+  if (!raw) throw new AppError(401, "INVALID_REFRESH_TOKEN", "No refresh token provided");
+  const data = await refreshBuyerAccessToken(raw);
+  sendResponse({ res, data, message: "Access token refreshed" });
 }
 
 export async function logout(req: Request, res: Response): Promise<void> {
-  sendResponse({ res, statusCode: 501, message: "Not implemented" });
+  const raw = req.cookies?.refreshToken as string | undefined;
+  await logoutBuyer(raw);
+  res.clearCookie("refreshToken");
+  sendResponse({ res, message: "Logged out successfully" });
 }
 
 export async function me(req: Request, res: Response): Promise<void> {
-  sendResponse({ res, statusCode: 501, message: "Not implemented" });
+  const data = await getBuyerProfile(req.user!.userId);
+  sendResponse({ res, data, message: "Profile fetched successfully" });
 }
