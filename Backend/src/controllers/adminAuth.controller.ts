@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import { sendResponse } from "../utils/sendResponse";
+import { AppError } from "../utils/AppError";
+import { env } from "../config/env";
 import * as adminAuthService from "../services/adminAuth.service";
 import type {
   LoginBody,
@@ -7,7 +9,7 @@ import type {
   ForgotPasswordSendBody,
   ForgotPasswordResetBody,
   ResetPasswordConfirmBody,
-} from "../schemas/auth";
+} from "../schemas/auth.schema";
 
 export async function login(req: Request, res: Response): Promise<void> {
   const { loginEmail, password } = req.body as LoginBody;
@@ -17,10 +19,13 @@ export async function login(req: Request, res: Response): Promise<void> {
 
 export async function verifyOtp(req: Request, res: Response): Promise<void> {
   const { otpSessionId, otp } = req.body as VerifyOtpBody;
-  const { accessToken, rawRefresh } = await adminAuthService.verifyOtpAndIssueTokens(otpSessionId, otp);
-  res.cookie("refreshToken", rawRefresh, {
+  const { accessToken, refreshToken } = await adminAuthService.verifyOtpAndIssueTokens(
+    otpSessionId,
+    otp
+  );
+  res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: env.NODE_ENV === "production",
     sameSite: "strict",
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
@@ -29,10 +34,7 @@ export async function verifyOtp(req: Request, res: Response): Promise<void> {
 
 export async function refresh(req: Request, res: Response): Promise<void> {
   const raw = req.cookies?.refreshToken as string | undefined;
-  if (!raw) {
-    sendResponse({ res, statusCode: 401, success: false, message: "No refresh token" });
-    return;
-  }
+  if (!raw) throw new AppError(401, "NO_REFRESH_TOKEN", "No refresh token provided");
   const data = await adminAuthService.refreshAccessToken(raw);
   sendResponse({ res, data, message: "Access token refreshed" });
 }

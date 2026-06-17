@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { verifyAccessToken } from "../services/token";
+import { verifyAccessToken } from "../services/token.service";
+import { AppError } from "../utils/AppError";
 
 export interface AdminPayload {
   adminId: string;
@@ -17,23 +18,25 @@ declare global {
 }
 /* eslint-enable @typescript-eslint/no-namespace */
 
-export function adminAuth(req: Request, res: Response, next: NextFunction): void {
+export async function adminAuth(req: Request, res: Response, next: NextFunction): Promise<void> {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    res.status(401).json({ success: false, code: "UNAUTHORIZED", message: "No token provided" });
-    return;
+    return next(new AppError(401, "UNAUTHORIZED", "No token provided"));
   }
 
   const token = authHeader.slice(7);
   try {
-    const payload = verifyAccessToken(token);
-    req.admin = { adminId: payload.adminId, role: payload.role };
+    const payload = await verifyAccessToken(token);
+    if (payload.role !== "admin" || !payload.id) {
+      return next(new AppError(401, "TOKEN_EXPIRED", "Token is invalid or expired"));
+    }
+
+    req.admin = { adminId: payload.id, role: payload.role };
     next();
   } catch (err) {
     if (err instanceof jwt.JsonWebTokenError && err.message === "invalid signature") {
-      res.status(401).json({ success: false, code: "INVALID_TOKEN", message: "Token signature is invalid" });
-      return;
+      return next(new AppError(401, "INVALID_TOKEN", "Token signature is invalid"));
     }
-    res.status(401).json({ success: false, code: "TOKEN_EXPIRED", message: "Token is invalid or expired" });
+    return next(new AppError(401, "TOKEN_EXPIRED", "Token is invalid or expired"));
   }
 }

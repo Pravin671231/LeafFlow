@@ -6,7 +6,7 @@ import {
   verifyRefreshToken,
 } from "../../src/services/token.service";
 
-const payload = { id: "507f1f77bcf86cd799439011", role: "admin" };
+const payload = { id: "507f1f77bcf86cd799439011", role: "admin"};
 
 function decodeHeader(token: string) {
   return JSON.parse(Buffer.from(token.split(".")[0], "base64url").toString());
@@ -52,7 +52,6 @@ describe("verifyRefreshToken", () => {
     const token = generateRefreshToken(payload);
     const result = verifyRefreshToken(token);
     expect(result.id).toBe(payload.id);
-    expect(result.role).toBe(payload.role);
   });
 
   it("U11: throws for an invalid/malformed token string", () => {

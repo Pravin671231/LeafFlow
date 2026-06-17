@@ -19,7 +19,6 @@ Coverage target: ≥ 90% (§8.5)
 | U6 | `verifyAccessToken()` returns payload for valid token | valid JWT | `{ adminId, role }` |
 | U7 | `verifyAccessToken()` throws for expired token | expired JWT | throws |
 | U8 | `verifyAccessToken()` throws for tampered token | bad JWT | throws |
-| U9 | `asyncHandler` calls next(err) when async fn throws | fn that throws | `next` called with error |
 
 ---
 
