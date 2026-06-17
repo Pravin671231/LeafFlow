@@ -5,15 +5,8 @@ import { CreateProductBody, UpdateProductBody } from "../schemas/product.schema"
 
 export async function listProducts(req: Request, res: Response, next: NextFunction) {
   try {
-    const { page, limit, categoryId, isActive, q } = req.query;
-    const { products, total, page: p, limit: l } = await svc.listProducts({
-      page: page ? Number(page) : undefined,
-      limit: limit ? Number(limit) : undefined,
-      categoryId: categoryId as string | undefined,
-      isActive: isActive !== undefined ? isActive === "true" : undefined,
-      q: q as string | undefined,
-    });
-    sendResponse({ res, data: products, pagination: { page: p, limit: l, total } });
+    const { products, total, page, limit } = await svc.listProducts(req.query);
+    sendResponse({ res, data: products, pagination: { page, limit, total } });
   } catch (err) {
     next(err);
   }

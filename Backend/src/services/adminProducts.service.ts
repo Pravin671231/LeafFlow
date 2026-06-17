@@ -11,18 +11,20 @@ const log = createLogger("adminProducts");
 export interface ListProductsQuery {
   page?: unknown;
   limit?: unknown;
-  categoryId?: string;
-  isActive?: boolean;
-  q?: string;
+  categoryId?: unknown;
+  isActive?: unknown;
+  q?: unknown;
 }
 
 export async function listProducts(query: ListProductsQuery) {
   const { page, limit, skip } = parsePagination(query);
 
+  const activeFilter = query.isActive !== undefined ? query.isActive === "true" : undefined;
+
   const filter: Record<string, unknown> = {};
-  if (query.categoryId) filter.categoryId = new Types.ObjectId(query.categoryId);
-  if (query.isActive !== undefined) filter.isActive = query.isActive;
-  if (query.q) filter.$text = { $search: query.q };
+  if (query.categoryId) filter.categoryId = new Types.ObjectId(query.categoryId as string);
+  if (activeFilter !== undefined) filter.isActive = activeFilter;
+  if (query.q) filter.$text = { $search: query.q as string };
 
   const [products, total] = await Promise.all([
     Product.find(filter).skip(skip).limit(limit),
