@@ -41,8 +41,8 @@ describe("GET /api/admin/products", () => {
       .set("Authorization", `Bearer ${adminToken()}`);
 
     expect(res.status).toBe(200);
-    expect(res.body.data).toMatchObject({ total: 1, page: 1, limit: 20 });
-    expect(res.body.data.products).toHaveLength(1);
+    expect(res.body.data).toHaveLength(1);
+    expect(res.body.pagination).toMatchObject({ total: 1, page: 1, limit: 20 });
   });
 
   it("P3: ?categoryId filters by category", async () => {
@@ -56,8 +56,8 @@ describe("GET /api/admin/products", () => {
       .set("Authorization", `Bearer ${adminToken()}`);
 
     expect(res.status).toBe(200);
-    expect(res.body.data.products).toHaveLength(1);
-    expect(res.body.data.products[0].slug).toBe("p1");
+    expect(res.body.data).toHaveLength(1);
+    expect(res.body.data[0].slug).toBe("p1");
   });
 
   it("P4: ?isActive=false returns only inactive products", async () => {
@@ -69,8 +69,8 @@ describe("GET /api/admin/products", () => {
       .set("Authorization", `Bearer ${adminToken()}`);
 
     expect(res.status).toBe(200);
-    expect(res.body.data.products).toHaveLength(1);
-    expect(res.body.data.products[0].isActive).toBe(false);
+    expect(res.body.data).toHaveLength(1);
+    expect(res.body.data[0].isActive).toBe(false);
   });
 
   it("P5: ?q=monstera returns text-search matching products", async () => {
@@ -82,8 +82,8 @@ describe("GET /api/admin/products", () => {
       .set("Authorization", `Bearer ${adminToken()}`);
 
     expect(res.status).toBe(200);
-    expect(res.body.data.products).toHaveLength(1);
-    expect(res.body.data.products[0].slug).toBe("monstera");
+    expect(res.body.data).toHaveLength(1);
+    expect(res.body.data[0].slug).toBe("monstera");
   });
 
   it("P6: ?page=2&limit=2 returns correct offset", async () => {
@@ -96,9 +96,8 @@ describe("GET /api/admin/products", () => {
       .set("Authorization", `Bearer ${adminToken()}`);
 
     expect(res.status).toBe(200);
-    expect(res.body.data.page).toBe(2);
-    expect(res.body.data.limit).toBe(2);
-    expect(res.body.data.products).toHaveLength(1);
+    expect(res.body.pagination).toMatchObject({ page: 2, limit: 2 });
+    expect(res.body.data).toHaveLength(1);
   });
 });
 
