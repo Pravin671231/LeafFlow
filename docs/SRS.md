@@ -784,9 +784,9 @@ Base URL: `/api`. JSON request/response. Errors: `{ success: false, code: string
 
 | Method | Path                    | Auth     | Description                   |
 | ------ | ----------------------- | -------- | ----------------------------- |
-| GET    | `/buyer/products`       | Optional | List + filters                |
-| GET    | `/buyer/products/:slug` | Optional | Product detail                |
-| GET    | `/buyer/categories`     | Optional | Active categories             |
+| GET    | `/products`             | None     | List + filters                |
+| GET    | `/products/:slug`       | None     | Product detail                |
+| GET    | `/categories`           | None     | Active categories             |
 | GET    | `/buyer/cart`           | Buyer    | Get cart                      |
 | PUT    | `/buyer/cart`           | Buyer    | Sync cart items               |
 | POST   | `/buyer/orders`         | Buyer    | Create order + Razorpay order |
