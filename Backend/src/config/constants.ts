@@ -26,3 +26,7 @@ export const REFRESH_TOKEN_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 
 // bcrypt salt rounds for password hashing (higher = more secure but slower)
 export const BCRYPT_ROUNDS_PASSWORD = 12;
+
+//----------------- Upload constants --------------------//
+export const UPLOAD_MAX_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
+export const UPLOAD_ALLOWED_MIME_TYPES = ["image/jpeg", "image/png", "image/webp"] as const;

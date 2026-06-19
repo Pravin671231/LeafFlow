@@ -7,3 +7,4 @@ export { loginLimiter, otpLimiter } from "./rateLimiter";
 export { httpLogger } from "./httpLogger";
 export { corsMiddleware } from "./cors";
 export { errorHandler } from "./errorHandler";
+export { upload } from "./upload";
