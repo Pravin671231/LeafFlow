@@ -53,7 +53,7 @@ This SRS is the **requirements source of truth**. Delivery checklists and GitHub
 - Shopping cart and checkout with Razorpay (India)
 - Order management and status tracking
 - Admin product, category, inventory, and order management
-- Image storage via Cloudflare R2
+- Image storage via Cloudinary
 - Email OTP delivery via SMTP (admin and buyer)
 - Google OAuth and Google One Tap for buyers
 
@@ -133,7 +133,7 @@ flowchart LR
 | Client browsers | Chrome, Firefox, Safari 16+, Edge (latest 2 versions); mobile Safari and Chrome  |
 | Deployment      | Docker Compose locally; VPS + Nginx + SSL per [milestone.md](milestone.md) M2–M4 |
 | Payments        | Razorpay (India)                                                                 |
-| File storage    | Cloudflare R2 (S3-compatible API)                                                |
+| File storage    | Cloudinary (free tier)                                                           |
 
 ---
 
@@ -147,7 +147,7 @@ flowchart LR
 - **admin-app:** Vite 8 + React 19 SPA for seller dashboard.
 - **e2e:** Playwright workspace (planned per M0; not yet in repository).
 
-External integrations: MongoDB, Cloudflare R2, Razorpay, Gmail SMTP, Google OAuth.
+External integrations: MongoDB, Cloudinary, Razorpay, Gmail SMTP, Google OAuth.
 
 ```mermaid
 flowchart TB
@@ -157,14 +157,14 @@ flowchart TB
   end
   api[Backend Express API]
   db[(MongoDB)]
-  r2[Cloudflare R2]
+  cloudinary[Cloudinary]
   pay[Razorpay]
   smtp[Gmail SMTP]
   google[Google OAuth]
   buyer --> api
   admin --> api
   api --> db
-  api --> r2
+  api --> cloudinary
   api --> pay
   api --> smtp
   api --> google
@@ -293,7 +293,7 @@ Requirements use IDs `ADM-xxx`. Authentication detail in Section 15.
 | ------- | ------------------------------------------------------------------------------------------------------- |
 | ADM-020 | Admin shall create, read, update, delete products including images, price, stock, and plant attributes. |
 | ADM-021 | Admin shall create, read, update, delete categories.                                                    |
-| ADM-022 | Admin shall upload product images (stored in R2 public bucket).                                         |
+| ADM-022 | Admin shall upload product images (stored in Cloudinary).                                               |
 
 ### 5.4 Inventory (MVP)
 
@@ -334,7 +334,7 @@ Requirements use IDs `ADM-xxx`. Authentication detail in Section 15.
 
 - API p95 response time &lt; 500 ms for catalog reads under normal load (excluding image CDN).
 - Product list pages shall support pagination (default 20 items per page).
-- Images served via R2 CDN; not proxied through API for static assets.
+- Images served via Cloudinary CDN; not proxied through API for static assets.
 
 ### 6.2 Scalability
 
@@ -407,7 +407,7 @@ Pin to **latest stable patch** within the stated series at implementation time. 
 | `nodemailer`            | 7.x       | SMTP / admin & buyer OTP email      |
 | `google-auth-library`   | 10.x      | Google OAuth / One Tap verification |
 | `razorpay`              | 2.x       | Payments                            |
-| `@aws-sdk/client-s3`    | 3.x       | Cloudflare R2 (S3-compatible)       |
+| `cloudinary`            | 2.x       | Cloudinary image uploads            |
 | `pino` + `pino-http`    | 9.x       | Structured logging                  |
 | `vitest`                | 4.1.7     | Test runner                         |
 | `supertest`             | 7.2.2     | API integration tests               |
@@ -485,7 +485,7 @@ Pin to **latest stable patch** within the stated series at implementation time. 
 | ----------- | ------- | -------------------------- |
 | `vitest`    | 4.1.7   | Test runner                |
 | `supertest` | 7.2.2   | HTTP integration tests     |
-| `msw`       | 2.14.x  | Mock Razorpay, R2 in tests |
+| `msw`       | 2.14.x  | Mock Razorpay, Cloudinary in tests |
 
 ### 8.4 E2E Testing Package
 
@@ -664,7 +664,7 @@ All models use MongoDB via Mongoose. Timestamps (`createdAt`, `updatedAt`) on al
 | `compareAtPrice`    | number   | Optional                                  |
 | `stock`             | number   |                                           |
 | `lowStockThreshold` | number   | Default e.g. 5                            |
-| `images`            | string[] | R2 public URLs                            |
+| `images`            | string[] | Cloudinary public URLs                    |
 | `scientificName`    | string   | Optional                                  |
 | `commonName`        | string   |                                           |
 | `lightRequirement`  | enum     | `low`, `medium`, `bright_indirect`        |
@@ -784,9 +784,9 @@ Base URL: `/api`. JSON request/response. Errors: `{ success: false, code: string
 
 | Method | Path                    | Auth     | Description                   |
 | ------ | ----------------------- | -------- | ----------------------------- |
-| GET    | `/buyer/products`       | Optional | List + filters                |
-| GET    | `/buyer/products/:slug` | Optional | Product detail                |
-| GET    | `/buyer/categories`     | Optional | Active categories             |
+| GET    | `/products`             | None     | List + filters                |
+| GET    | `/products/:slug`       | None     | Product detail                |
+| GET    | `/categories`           | None     | Active categories             |
 | GET    | `/buyer/cart`           | Buyer    | Get cart                      |
 | PUT    | `/buyer/cart`           | Buyer    | Sync cart items               |
 | POST   | `/buyer/orders`         | Buyer    | Create order + Razorpay order |
@@ -803,7 +803,7 @@ Base URL: `/api`. JSON request/response. Errors: `{ success: false, code: string
 | GET/PATCH | `/admin/orders`               | Admin | Orders list / status update |
 | GET       | `/admin/customers`            | Admin | Buyer list                  |
 | GET       | `/admin/customers/:id/orders` | Admin | Buyer order history         |
-| POST      | `/admin/uploads/presign`      | Admin | R2 presigned upload URL     |
+| POST      | `/admin/uploads/image`        | Admin | Upload image to Cloudinary  |
 
 ### 11.6 Webhooks
 
@@ -834,16 +834,17 @@ Base URL: `/api`. JSON request/response. Errors: `{ success: false, code: string
 
 ## 13. File Storage Strategy
 
-| Bucket              | Access                           | Content            |
-| ------------------- | -------------------------------- | ------------------ |
-| `R2_PUBLIC_BUCKET`  | Public via CDN (`R2_PUBLIC_URL`) | Product images     |
-| `R2_PRIVATE_BUCKET` | Presigned URLs only              | Invoices (Phase 2) |
+Images are stored and served via **Cloudinary** (free tier). The backend uploads on behalf of the admin using the Cloudinary Node.js SDK; no presigned URLs or browser-to-storage round-trips are needed.
+
+| Folder              | Access      | Content            |
+| ------------------- | ----------- | ------------------ |
+| `leafflow/products` | Public CDN  | Product images     |
 
 **Upload flow**
 
-1. Admin requests presigned PUT URL from `POST /api/admin/uploads/presign`.
-2. Admin-app uploads directly to R2.
-3. Product record stores final public CDN URL.
+1. Admin-app sends the image file to `POST /api/admin/uploads/image` (multipart/form-data).
+2. Backend validates content type and size, then uploads to Cloudinary via the SDK.
+3. Backend returns the Cloudinary `secure_url`; product record stores that URL.
 
 **Constraints:** Max image size 5 MB; types `image/jpeg`, `image/png`, `image/webp`. Virus scanning optional Phase 2.
 
@@ -1019,12 +1020,9 @@ If you did not request this, ignore this email.
 | `RAZORPAY_KEY_ID`              | Backend   | Razorpay API key                          |
 | `RAZORPAY_KEY_SECRET`          | Backend   | Razorpay API secret                       |
 | `RAZORPAY_WEBHOOK_SECRET`      | Backend   | Webhook HMAC secret                       |
-| `R2_ACCOUNT_ID`                | Backend   | Cloudflare account ID                     |
-| `R2_ACCESS_KEY_ID`             | Backend   | R2 access key                             |
-| `R2_SECRET_ACCESS_KEY`         | Backend   | R2 secret key                             |
-| `R2_PUBLIC_BUCKET`             | Backend   | Public bucket (product images)            |
-| `R2_PRIVATE_BUCKET`            | Backend   | Private bucket (invoices Phase 2)         |
-| `R2_PUBLIC_URL`                | Backend   | CDN base URL for public bucket            |
+| `CLOUDINARY_CLOUD_NAME`        | Backend   | Cloudinary cloud name                     |
+| `CLOUDINARY_API_KEY`           | Backend   | Cloudinary API key                        |
+| `CLOUDINARY_API_SECRET`        | Backend   | Cloudinary API secret                     |
 | `SMTP_HOST`                    | Backend   | SMTP hostname (e.g. `smtp.gmail.com`)     |
 | `SMTP_PORT`                    | Backend   | SMTP port (587 TLS)                       |
 | `SMTP_USER`                    | Backend   | SMTP username                             |
