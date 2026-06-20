@@ -10,3 +10,5 @@ export { RefreshToken } from "./RefreshToken";
 export type { IRefreshToken } from "./RefreshToken";
 export { User } from "./User";
 export type { IUser } from "./User";
+export { Cart } from "./Cart";
+export type { ICart } from "./Cart";
