@@ -1,6 +1,8 @@
 import { Types } from "mongoose";
 import { Category } from "../../src/models/Category.js";
 import { Product } from "../../src/models/Product.js";
+import type { IProduct } from "../../src/models/Product.js";
+import { ICategory } from "../../src/models/Category.js";
 import { signAccessToken } from "../../src/services/token.service.js";
 
 let counter = 0;
@@ -10,7 +12,7 @@ export function adminToken() {
   return signAccessToken({ adminId: new Types.ObjectId().toString(), role: "admin" });
 }
 
-export async function seedCategory(overrides: Record<string, unknown> = {}) {
+export async function seedCategory(overrides: Partial<ICategory> = {}) {
   const id = uid();
   return Category.create({
     name: `Category ${id}`,
@@ -20,7 +22,7 @@ export async function seedCategory(overrides: Record<string, unknown> = {}) {
   });
 }
 
-export async function seedProduct(overrides: Record<string, unknown> = {}) {
+export async function seedProduct(overrides: Partial<IProduct> = {}) {
   const id = uid();
   const category = overrides.categoryId
     ? { _id: overrides.categoryId }

@@ -5,6 +5,7 @@ import adminProductsRouter from "./adminProducts.routes";
 import adminUploadsRouter from "./adminUploads.routes";
 import buyerAuthRouter from "./buyerAuth.routes";
 import cartRouter from "./cart.routes";
+import orderRouter from "./order.routes";
 import productRouter from "./product.routes";
 import categoryRouter from "./category.routes";
 
@@ -16,6 +17,7 @@ router.use("/admin/products", adminProductsRouter);
 router.use("/admin/uploads", adminUploadsRouter);
 router.use("/buyer/auth", buyerAuthRouter);
 router.use("/buyer/cart", cartRouter);
+router.use("/buyer/orders", orderRouter);
 router.use("/products", productRouter);
 router.use("/categories", categoryRouter);
 
