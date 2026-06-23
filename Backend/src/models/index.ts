@@ -12,3 +12,5 @@ export { User } from "./User";
 export type { IUser } from "./User";
 export { Cart } from "./Cart";
 export type { ICart } from "./Cart";
+export { Order } from "./Order";
+export type { IOrder, IOrderItem, IShippingAddress, PaymentStatus, OrderStatus } from "./Order";
