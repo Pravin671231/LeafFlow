@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LeafFlow Admin — Layout Shell</title>
+<link rel="stylesheet" href="_shared.css" />
+<style>
+  .zone-label {
+    position:absolute; font-size:.65rem; font-weight:700; text-transform:uppercase;
+    letter-spacing:.08em; padding:.15rem .4rem; border-radius:.25rem;
+    background:#1d4ed8; color:#fff; z-index:10;
+  }
+  .zone-overlay {
+    border: 2.5px dashed rgba(29,78,216,.4);
+    position:absolute; border-radius:.25rem; pointer-events:none;
+  }
+  .page-area-inner { position:relative; min-height:600px; }
+  .spec-table { width:100%; border-collapse:collapse; margin-top:1rem; }
+  .spec-table th,.spec-table td { padding:.5rem .75rem; font-size:.825rem; border-bottom:1px solid var(--border); text-align:left; }
+  .spec-table th { background:var(--gray-50); font-weight:700; color:var(--text-muted); font-size:.75rem; text-transform:uppercase; }
+  .annot-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:1.5rem; }
+  .annot-card { background:#fff; border:1px solid var(--border); border-radius:var(--radius-lg); padding:1rem; }
+  .annot-card h4 { font-size:.8rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:.06em; margin-bottom:.5rem; }
+  .annot-card ul { list-style:disc; margin-left:1.2rem; font-size:.82rem; color:var(--gray-600); line-height:1.7; }
+</style>
+</head>
+<body>
+<div style="max-width:1100px;margin:2rem auto;padding:0 1.5rem">
+  <div class="back-nav"><a href="index.html">← Back to Index</a></div>
+  <div class="flex items-center justify-between mb-4">
+    <div>
+      <h1 class="page-title">Layout Shell</h1>
+      <p class="page-subtitle">Persistent sidebar + sticky topbar + scrollable page content area</p>
+    </div>
+  </div>
+  <div class="wireframe-note">📐 Wireframe — annotated zones shown with dashed blue outlines. Real implementation uses Tailwind classes, not absolute positioning.</div>
+
+  <!-- LIVE SHELL MOCK -->
+  <div style="border:2px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-lg);position:relative">
+    <div class="app-shell" style="position:relative;min-height:640px">
+
+      <!-- SIDEBAR -->
+      <nav class="sidebar">
+        <div class="sidebar-logo">
+          <span class="sidebar-logo-icon">🌿</span>
+          <div>
+            <span class="sidebar-logo-text">LeafFlow</span>
+            <span class="sidebar-logo-sub">Admin Panel</span>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-section-label">Overview</div>
+          <div class="sidebar-nav-item active"><span class="icon">📊</span> Dashboard</div>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-section-label">Catalog</div>
+          <div class="sidebar-nav-item"><span class="icon">🪴</span> Products</div>
+          <div class="sidebar-nav-item"><span class="icon">🏷️</span> Categories</div>
+          <div class="sidebar-nav-item"><span class="icon">📦</span> Inventory <span class="badge-count">3</span></div>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-section-label">Commerce</div>
+          <div class="sidebar-nav-item"><span class="icon">📋</span> Orders <span class="badge-count">7</span></div>
+          <div class="sidebar-nav-item"><span class="icon">👥</span> Customers</div>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-section-label">System</div>
+          <div class="sidebar-nav-item"><span class="icon">⚙️</span> Settings</div>
+        </div>
+
+        <div class="sidebar-footer">
+          <div style="font-size:.75rem;color:rgba(255,255,255,.5)">v1.0.0 · LeafFlow Admin</div>
+        </div>
+      </nav>
+
+      <!-- PAGE AREA -->
+      <div class="page-area">
+        <!-- TOPBAR -->
+        <div class="topbar">
+          <div class="topbar-breadcrumb">
+            <span>Admin</span>
+            <span>›</span>
+            <span class="crumb-active">Dashboard</span>
+          </div>
+          <div class="topbar-spacer"></div>
+          <div class="topbar-actions">
+            <button class="topbar-icon-btn">
+              🔔
+              <span class="notif-dot"></span>
+            </button>
+            <div class="admin-avatar">PK</div>
+            <div style="font-size:.82rem">
+              <div style="font-weight:600;color:var(--gray-800)">Pravin K</div>
+              <div style="font-size:.7rem;color:var(--text-muted)">admin@leafflow.com</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTENT PLACEHOLDER -->
+        <div class="page-content">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Dashboard</h1>
+              <p class="page-subtitle">Welcome back, Pravin. Here's what's happening today.</p>
+            </div>
+            <button class="btn btn-outline btn-sm">🔄 Refresh</button>
+          </div>
+
+          <div style="background:var(--green-50);border:2px dashed var(--green-300);border-radius:var(--radius-lg);padding:3rem;text-align:center;color:var(--green-700)">
+            <div style="font-size:2rem;margin-bottom:.5rem">📊</div>
+            <strong>Page Content Area</strong>
+            <p style="font-size:.825rem;margin-top:.3rem;opacity:.7">Scrollable. Each page mounts its own content component here via React Router outlet.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SPEC TABLE -->
+  <div style="margin-top:2rem">
+    <h2 style="font-size:1rem;font-weight:700;margin-bottom:.75rem;color:var(--gray-700)">Layout Specifications</h2>
+    <table class="spec-table">
+      <thead><tr><th>Zone</th><th>Width / Height</th><th>Position</th><th>Behaviour</th><th>Component</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Sidebar</strong></td><td>240 px wide</td><td>fixed left, full height</td><td>Collapsible to 56 px icon-rail on mobile / toggle button</td><td><code>Sidebar.tsx</code></td></tr>
+        <tr><td><strong>Topbar</strong></td><td>100% – 240 px, 60 px tall</td><td>sticky top:0, z-50</td><td>Breadcrumb auto-derived from route, notification badge live from RTK Query</td><td><code>Topbar.tsx</code></td></tr>
+        <tr><td><strong>Page Content</strong></td><td>flex-1, min-height 100vh</td><td>margin-left:240px</td><td>Scrollable; each page owns its padding and header</td><td><code>&lt;Outlet /&gt;</code></td></tr>
+        <tr><td><strong>Logo</strong></td><td>240 × 64 px</td><td>top of sidebar</td><td>Links to /dashboard</td><td>Inline in <code>Sidebar.tsx</code></td></tr>
+        <tr><td><strong>Admin Avatar</strong></td><td>32 × 32 px</td><td>topbar right</td><td>Click opens dropdown: Profile · Reset Password · Sign Out</td><td><code>AdminMenu.tsx</code></td></tr>
+        <tr><td><strong>Notification Bell</strong></td><td>32 × 32 px</td><td>topbar right</td><td>Red dot when low-stock count > 0; click opens side-drawer (Phase 2)</td><td><code>NotifBell.tsx</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- IMPLEMENTATION NOTES -->
+  <div class="annot-grid">
+    <div class="annot-card">
+      <h4>Active Nav Highlight</h4>
+      <ul>
+        <li>Use <code>NavLink</code> from react-router-dom v7 with <code>className={({ isActive }) => ...}</code></li>
+        <li>Match on <code>end</code> prop for the root <code>/dashboard</code> route</li>
+        <li>Active item gets <code>border-left: 3px solid lime-400</code></li>
+        <li>Badge counts (orders, inventory) come from <code>dashboardApi.getDashboardStats()</code></li>
+      </ul>
+    </div>
+    <div class="annot-card">
+      <h4>Sidebar Collapse (Mobile / Compact)</h4>
+      <ul>
+        <li>Redux slice <code>uiSlice.sidebarOpen</code> boolean controls collapsed state</li>
+        <li>Collapsed: width 56 px, show only icon, tooltip on hover</li>
+        <li>Hamburger button in topbar toggles the slice</li>
+        <li>Below 768 px: sidebar overlays on top (fixed, z-100) with backdrop</li>
+      </ul>
+    </div>
+    <div class="annot-card">
+      <h4>Breadcrumb Generation</h4>
+      <ul>
+        <li>Derive from <code>useMatches()</code> (react-router-dom v7)</li>
+        <li>Each route defines <code>handle: { breadcrumb: "Products" }</code></li>
+        <li>Auto-truncates to 2 levels: <em>Section › Page</em></li>
+        <li>Dynamic segments (e.g. order ID) resolved from route params</li>
+      </ul>
+    </div>
+    <div class="annot-card">
+      <h4>Auth Guard Integration</h4>
+      <ul>
+        <li><code>ProtectedRoute.tsx</code> wraps all authenticated routes via <code>&lt;Outlet /&gt;</code></li>
+        <li>Reads <code>auth.status</code> from Redux; redirects to <code>/login</code> if <code>unauthenticated</code></li>
+        <li><code>AuthInitializer.tsx</code> calls <code>GET /api/admin/auth/me</code> on mount to hydrate Redux from cookie</li>
+        <li>Loading state shows full-page spinner, not shell (avoids layout flash)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</body>
+</html>

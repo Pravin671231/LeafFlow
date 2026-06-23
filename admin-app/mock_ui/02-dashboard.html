@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LeafFlow Admin — Dashboard</title>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+  .two-col { display:grid; grid-template-columns:1fr 380px; gap:1.25rem; margin-top:1.25rem; }
+  .low-stock-item { display:flex; align-items:center; gap:.75rem; padding:.65rem 0; border-bottom:1px solid var(--gray-100); }
+  .low-stock-item:last-child { border-bottom:none; }
+  .plant-thumb { width:36px;height:36px;border-radius:var(--radius-md);background:var(--green-100);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0; }
+  .recent-status { display:flex; align-items:center; gap:.5rem; }
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-logo"><span class="sidebar-logo-icon">🌿</span><div><span class="sidebar-logo-text">LeafFlow</span><span class="sidebar-logo-sub">Admin Panel</span></div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">Overview</div><div class="sidebar-nav-item active"><span class="icon">📊</span> Dashboard</div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">Catalog</div><div class="sidebar-nav-item"><span class="icon">🪴</span> Products</div><div class="sidebar-nav-item"><span class="icon">🏷️</span> Categories</div><div class="sidebar-nav-item"><span class="icon">📦</span> Inventory <span class="badge-count">3</span></div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">Commerce</div><div class="sidebar-nav-item"><span class="icon">📋</span> Orders <span class="badge-count">7</span></div><div class="sidebar-nav-item"><span class="icon">👥</span> Customers</div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">System</div><div class="sidebar-nav-item"><span class="icon">⚙️</span> Settings</div></div>
+    <div class="sidebar-footer"><div style="font-size:.7rem;color:rgba(255,255,255,.4)">v1.0.0</div></div>
+  </nav>
+
+  <div class="page-area">
+    <div class="topbar">
+      <div class="topbar-breadcrumb"><span>Admin</span><span>›</span><span class="crumb-active">Dashboard</span></div>
+      <div class="topbar-spacer"></div>
+      <div class="topbar-actions">
+        <button class="topbar-icon-btn">🔔<span class="notif-dot"></span></button>
+        <div class="admin-avatar">PK</div>
+        <div style="font-size:.82rem"><div style="font-weight:600">Pravin K</div><div style="font-size:.7rem;color:var(--text-muted)">admin@leafflow.com</div></div>
+      </div>
+    </div>
+
+    <div class="page-content">
+      <div class="back-nav"><a href="index.html">← Back to Index</a></div>
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Dashboard</h1>
+          <p class="page-subtitle">Overview · June 2026</p>
+        </div>
+        <div class="flex gap-2">
+          <select class="form-select" style="width:auto;padding:.4rem .75rem;font-size:.825rem">
+            <option>Last 30 days</option><option>Last 7 days</option><option>This month</option><option>All time</option>
+          </select>
+          <button class="btn btn-outline btn-sm">🔄 Refresh</button>
+        </div>
+      </div>
+
+      <!-- STAT CARDS -->
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-icon">💰</div>
+          <div class="stat-label">Total Revenue</div>
+          <div class="stat-value">₹84,320</div>
+          <div class="stat-delta up">▲ 12.4% vs last period</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📋</div>
+          <div class="stat-label">Total Orders</div>
+          <div class="stat-value">248</div>
+          <div class="stat-delta up">▲ 8.1% vs last period</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⏳</div>
+          <div class="stat-label">Pending Orders</div>
+          <div class="stat-value">7</div>
+          <div class="stat-delta down">▼ needs action</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📦</div>
+          <div class="stat-label">Low Stock Products</div>
+          <div class="stat-value">3</div>
+          <div class="stat-delta down">▼ below threshold</div>
+        </div>
+      </div>
+
+      <div class="annotation">
+        ADM-010 — Stat cards populated from <code>GET /api/admin/dashboard</code> via <code>dashboardApi.getDashboardStats(period)</code> RTK Query. Period synced with dropdown via Redux <code>dashboardSlice.period</code>. Skeleton loaders shown while <code>isLoading</code>.
+      </div>
+
+      <!-- TWO COL LAYOUT -->
+      <div class="two-col">
+
+        <!-- RECENT ORDERS TABLE -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">📋 Recent Orders</span>
+            <a href="07-orders-list.html" class="btn btn-outline btn-xs">View all →</a>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Order #</th>
+                  <th>Customer</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong style="font-family:monospace;font-size:.8rem">LF-0248</strong></td>
+                  <td>Ananya S.<div class="td-muted">ananya@gmail.com</div></td>
+                  <td>₹1,240</td>
+                  <td><span class="badge badge-warning">Packed</span></td>
+                  <td class="td-muted">Jun 23</td>
+                </tr>
+                <tr>
+                  <td><strong style="font-family:monospace;font-size:.8rem">LF-0247</strong></td>
+                  <td>Rohan M.<div class="td-muted">rohan@yahoo.in</div></td>
+                  <td>₹860</td>
+                  <td><span class="badge badge-info">Shipped</span></td>
+                  <td class="td-muted">Jun 22</td>
+                </tr>
+                <tr>
+                  <td><strong style="font-family:monospace;font-size:.8rem">LF-0246</strong></td>
+                  <td>Priya K.<div class="td-muted">priya.k@hotmail.com</div></td>
+                  <td>₹2,100</td>
+                  <td><span class="badge badge-success">Delivered</span></td>
+                  <td class="td-muted">Jun 21</td>
+                </tr>
+                <tr>
+                  <td><strong style="font-family:monospace;font-size:.8rem">LF-0245</strong></td>
+                  <td>Arjun T.<div class="td-muted">arjunt@gmail.com</div></td>
+                  <td>₹540</td>
+                  <td><span class="badge badge-error">Cancelled</span></td>
+                  <td class="td-muted">Jun 20</td>
+                </tr>
+                <tr>
+                  <td><strong style="font-family:monospace;font-size:.8rem">LF-0244</strong></td>
+                  <td>Meena R.</td>
+                  <td>₹3,400</td>
+                  <td><span class="badge badge-warning">Placed</span></td>
+                  <td class="td-muted">Jun 20</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card-footer">Showing last 5 orders · <a href="07-orders-list.html">View all 248 →</a></div>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div style="display:flex;flex-direction:column;gap:1.25rem">
+
+          <!-- LOW STOCK ALERTS -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">⚠️ Low Stock Alerts</span>
+              <a href="06-inventory.html" class="btn btn-outline btn-xs">Manage →</a>
+            </div>
+            <div class="card-body" style="padding:.5rem 1.25rem">
+              <div class="low-stock-item">
+                <div class="plant-thumb">🌵</div>
+                <div style="flex:1">
+                  <div style="font-size:.85rem;font-weight:600">Golden Barrel Cactus</div>
+                  <div class="stock-bar-wrap stock-low" style="margin-top:.25rem"><div class="stock-bar-bg"><div class="stock-bar-fill" style="width:25%"></div></div><span class="text-xs text-muted">2 remaining (threshold: 5)</span></div>
+                </div>
+                <span class="badge badge-warning">Low</span>
+              </div>
+              <div class="low-stock-item">
+                <div class="plant-thumb">🪷</div>
+                <div style="flex:1">
+                  <div style="font-size:.85rem;font-weight:600">Peace Lily</div>
+                  <div class="stock-bar-wrap stock-low" style="margin-top:.25rem"><div class="stock-bar-bg"><div class="stock-bar-fill" style="width:30%"></div></div><span class="text-xs text-muted">3 remaining (threshold: 8)</span></div>
+                </div>
+                <span class="badge badge-warning">Low</span>
+              </div>
+              <div class="low-stock-item">
+                <div class="plant-thumb">🌿</div>
+                <div style="flex:1">
+                  <div style="font-size:.85rem;font-weight:600">Boston Fern</div>
+                  <div class="stock-bar-wrap stock-zero" style="margin-top:.25rem"><div class="stock-bar-bg"><div class="stock-bar-fill" style="width:0%"></div></div><span class="text-xs text-muted">0 remaining</span></div>
+                </div>
+                <span class="badge badge-error">Out</span>
+              </div>
+            </div>
+            <div class="card-footer">3 products need restocking</div>
+          </div>
+
+          <!-- QUICK ACTIONS -->
+          <div class="card">
+            <div class="card-header"><span class="card-title">⚡ Quick Actions</span></div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:.5rem">
+              <a href="04-product-form.html" class="btn btn-primary btn-sm" style="width:100%;justify-content:center">➕ Add New Product</a>
+              <a href="07-orders-list.html" class="btn btn-outline btn-sm" style="width:100%;justify-content:center">📋 View Pending Orders</a>
+              <a href="05-categories.html" class="btn btn-outline btn-sm" style="width:100%;justify-content:center">🏷️ Manage Categories</a>
+              <a href="06-inventory.html" class="btn btn-outline btn-sm" style="width:100%;justify-content:center">📦 Adjust Inventory</a>
+            </div>
+          </div>
+
+          <!-- ORDER STATUS BREAKDOWN -->
+          <div class="card">
+            <div class="card-header"><span class="card-title">📊 Orders by Status</span></div>
+            <div class="card-body">
+              <div style="display:flex;flex-direction:column;gap:.6rem">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2"><span class="badge badge-warning" style="width:70px;justify-content:center">Placed</span></div>
+                  <div class="flex items-center gap-2" style="flex:1;margin:0 .75rem">
+                    <div style="flex:1;height:6px;background:var(--gray-200);border-radius:9999px;overflow:hidden"><div style="height:100%;width:28%;background:#f59e0b;border-radius:9999px"></div></div>
+                  </div>
+                  <span class="text-xs text-muted">7</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2"><span class="badge badge-neutral" style="width:70px;justify-content:center">Packed</span></div>
+                  <div class="flex items-center gap-2" style="flex:1;margin:0 .75rem">
+                    <div style="flex:1;height:6px;background:var(--gray-200);border-radius:9999px;overflow:hidden"><div style="height:100%;width:16%;background:var(--gray-400);border-radius:9999px"></div></div>
+                  </div>
+                  <span class="text-xs text-muted">4</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2"><span class="badge badge-info" style="width:70px;justify-content:center">Shipped</span></div>
+                  <div class="flex items-center gap-2" style="flex:1;margin:0 .75rem">
+                    <div style="flex:1;height:6px;background:var(--gray-200);border-radius:9999px;overflow:hidden"><div style="height:100%;width:44%;background:var(--blue-600);border-radius:9999px"></div></div>
+                  </div>
+                  <span class="text-xs text-muted">11</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2"><span class="badge badge-success" style="width:70px;justify-content:center">Delivered</span></div>
+                  <div class="flex items-center gap-2" style="flex:1;margin:0 .75rem">
+                    <div style="flex:1;height:6px;background:var(--gray-200);border-radius:9999px;overflow:hidden"><div style="height:100%;width:90%;background:var(--green-500);border-radius:9999px"></div></div>
+                  </div>
+                  <span class="text-xs text-muted">221</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2"><span class="badge badge-error" style="width:70px;justify-content:center">Cancelled</span></div>
+                  <div class="flex items-center gap-2" style="flex:1;margin:0 .75rem">
+                    <div style="flex:1;height:6px;background:var(--gray-200);border-radius:9999px;overflow:hidden"><div style="height:100%;width:20%;background:var(--red-500);border-radius:9999px"></div></div>
+                  </div>
+                  <span class="text-xs text-muted">5</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

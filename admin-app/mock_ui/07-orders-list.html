@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LeafFlow Admin — Orders List</title>
+<link rel="stylesheet" href="_shared.css"/>
+</head>
+<body>
+<div class="app-shell">
+  <nav class="sidebar">
+    <div class="sidebar-logo"><span class="sidebar-logo-icon">🌿</span><div><span class="sidebar-logo-text">LeafFlow</span><span class="sidebar-logo-sub">Admin Panel</span></div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">Overview</div><div class="sidebar-nav-item"><span class="icon">📊</span> Dashboard</div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">Catalog</div><div class="sidebar-nav-item"><span class="icon">🪴</span> Products</div><div class="sidebar-nav-item"><span class="icon">🏷️</span> Categories</div><div class="sidebar-nav-item"><span class="icon">📦</span> Inventory <span class="badge-count">3</span></div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">Commerce</div><div class="sidebar-nav-item active"><span class="icon">📋</span> Orders <span class="badge-count">7</span></div><div class="sidebar-nav-item"><span class="icon">👥</span> Customers</div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">System</div><div class="sidebar-nav-item"><span class="icon">⚙️</span> Settings</div></div>
+  </nav>
+
+  <div class="page-area">
+    <div class="topbar">
+      <div class="topbar-breadcrumb"><span>Admin</span><span>›</span><span class="crumb-active">Orders</span></div>
+      <div class="topbar-spacer"></div>
+      <div class="topbar-actions"><button class="topbar-icon-btn">🔔<span class="notif-dot"></span></button><div class="admin-avatar">PK</div></div>
+    </div>
+
+    <div class="page-content">
+      <div class="back-nav"><a href="index.html">← Back to Index</a></div>
+      <div class="page-header">
+        <div><h1 class="page-title">Orders</h1><p class="page-subtitle">248 total orders · 7 pending action</p></div>
+        <div class="flex gap-2">
+          <button class="btn btn-outline btn-sm">📤 Export CSV</button>
+        </div>
+      </div>
+
+      <!-- STATUS TABS -->
+      <div class="tabs">
+        <div class="tab">All <span class="tab-count">248</span></div>
+        <div class="tab active">Placed <span class="tab-count">7</span></div>
+        <div class="tab">Packed <span class="tab-count">4</span></div>
+        <div class="tab">Shipped <span class="tab-count">11</span></div>
+        <div class="tab">Delivered <span class="tab-count">221</span></div>
+        <div class="tab">Cancelled <span class="tab-count">5</span></div>
+      </div>
+
+      <div class="card">
+        <div class="filters-bar">
+          <div class="search-input-wrap">
+            <span class="icon">🔍</span>
+            <input class="form-input search-input" placeholder="Search by order # or customer…"/>
+          </div>
+          <input type="date" class="form-input" style="width:auto" value="2026-06-01"/>
+          <span class="text-muted">to</span>
+          <input type="date" class="form-input" style="width:auto" value="2026-06-23"/>
+          <select class="form-select" style="width:auto">
+            <option>All Payment Status</option>
+            <option>Pending</option><option>Paid</option><option>Failed</option><option>Refunded</option>
+          </select>
+          <button class="btn btn-outline btn-sm">Clear</button>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Order #</th>
+                <th>Customer</th>
+                <th>Items</th>
+                <th>Amount</th>
+                <th>Payment</th>
+                <th>Order Status</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><a href="08-order-detail.html" style="font-family:monospace;font-weight:700;font-size:.85rem">LF-0248</a></td>
+                <td><div style="font-size:.875rem;font-weight:500">Ananya Singh</div><div class="td-muted">ananya@gmail.com</div></td>
+                <td class="td-muted">2 items</td>
+                <td><strong>₹1,240</strong></td>
+                <td><span class="badge badge-success">Paid</span></td>
+                <td>
+                  <select class="form-select" style="width:auto;font-size:.78rem;padding:.25rem .5rem">
+                    <option selected>Placed</option><option>Packed</option><option>Shipped</option><option>Delivered</option><option>Cancelled</option>
+                  </select>
+                </td>
+                <td class="td-muted">Jun 23, 2026</td>
+                <td><a href="08-order-detail.html" class="btn btn-xs btn-outline">View</a></td>
+              </tr>
+              <tr>
+                <td><a href="08-order-detail.html" style="font-family:monospace;font-weight:700;font-size:.85rem">LF-0244</a></td>
+                <td><div style="font-size:.875rem;font-weight:500">Meena Rao</div><div class="td-muted">meenar@outlook.com</div></td>
+                <td class="td-muted">4 items</td>
+                <td><strong>₹3,400</strong></td>
+                <td><span class="badge badge-success">Paid</span></td>
+                <td>
+                  <select class="form-select" style="width:auto;font-size:.78rem;padding:.25rem .5rem">
+                    <option selected>Placed</option><option>Packed</option><option>Shipped</option><option>Delivered</option><option>Cancelled</option>
+                  </select>
+                </td>
+                <td class="td-muted">Jun 20, 2026</td>
+                <td><a href="08-order-detail.html" class="btn btn-xs btn-outline">View</a></td>
+              </tr>
+              <tr>
+                <td><a href="08-order-detail.html" style="font-family:monospace;font-weight:700;font-size:.85rem">LF-0241</a></td>
+                <td><div style="font-size:.875rem;font-weight:500">Karan Mehta</div><div class="td-muted">karan@gmail.com</div></td>
+                <td class="td-muted">1 item</td>
+                <td><strong>₹449</strong></td>
+                <td><span class="badge badge-success">Paid</span></td>
+                <td>
+                  <select class="form-select" style="width:auto;font-size:.78rem;padding:.25rem .5rem">
+                    <option selected>Placed</option><option>Packed</option><option>Shipped</option><option>Delivered</option><option>Cancelled</option>
+                  </select>
+                </td>
+                <td class="td-muted">Jun 18, 2026</td>
+                <td><a href="08-order-detail.html" class="btn btn-xs btn-outline">View</a></td>
+              </tr>
+              <tr>
+                <td><a href="08-order-detail.html" style="font-family:monospace;font-weight:700;font-size:.85rem">LF-0240</a></td>
+                <td><div style="font-size:.875rem;font-weight:500">Deepika N</div><div class="td-muted">deepika@yahoo.in</div></td>
+                <td class="td-muted">3 items</td>
+                <td><strong>₹2,090</strong></td>
+                <td><span class="badge badge-success">Paid</span></td>
+                <td>
+                  <select class="form-select" style="width:auto;font-size:.78rem;padding:.25rem .5rem">
+                    <option selected>Placed</option><option>Packed</option><option>Shipped</option><option>Delivered</option><option>Cancelled</option>
+                  </select>
+                </td>
+                <td class="td-muted">Jun 17, 2026</td>
+                <td><a href="08-order-detail.html" class="btn btn-xs btn-outline">View</a></td>
+              </tr>
+              <tr>
+                <td><a href="08-order-detail.html" style="font-family:monospace;font-weight:700;font-size:.85rem">LF-0238</a></td>
+                <td><div style="font-size:.875rem;font-weight:500">Sneha P</div><div class="td-muted">sneha.p@gmail.com</div></td>
+                <td class="td-muted">2 items</td>
+                <td><strong>₹798</strong></td>
+                <td><span class="badge badge-warning">Pending</span></td>
+                <td>
+                  <select class="form-select" style="width:auto;font-size:.78rem;padding:.25rem .5rem">
+                    <option selected>Placed</option><option>Packed</option><option>Shipped</option><option>Delivered</option><option>Cancelled</option>
+                  </select>
+                </td>
+                <td class="td-muted">Jun 15, 2026</td>
+                <td><a href="08-order-detail.html" class="btn btn-xs btn-outline">View</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer flex items-center justify-between">
+          <span>Showing placed orders (7). Use tabs above to filter by status.</span>
+          <div class="pagination">
+            <button class="page-btn active">1</button>
+            <button class="page-btn">›</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="annotation mt-3">
+        ADM-040 — Inline status dropdown calls <code>ordersApi.updateStatus({ orderId, status })</code> on change (confirm if downgrading). Tab selection passed as filter param. Date range uses <code>startDate</code> + <code>endDate</code> query params. Status update invalidates <code>Orders</code> + <code>Dashboard</code> tags.
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

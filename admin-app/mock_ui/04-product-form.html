@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LeafFlow Admin — Product Form</title>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+  .form-layout { display:grid; grid-template-columns:1fr 320px; gap:1.5rem; align-items:start; }
+  .form-section { background:#fff; border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden; }
+  .form-section-header { padding:.875rem 1.25rem; background:var(--gray-50); border-bottom:1px solid var(--border); }
+  .form-section-title { font-size:.875rem; font-weight:700; color:var(--gray-700); }
+  .form-section-body { padding:1.25rem; }
+  .attr-grid { display:grid; grid-template-columns:1fr 1fr; gap:.75rem; }
+  .char-count { font-size:.7rem; color:var(--text-muted); float:right; margin-top:.2rem; }
+  .sticky-sidebar { position:sticky; top:80px; }
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <nav class="sidebar">
+    <div class="sidebar-logo"><span class="sidebar-logo-icon">🌿</span><div><span class="sidebar-logo-text">LeafFlow</span><span class="sidebar-logo-sub">Admin Panel</span></div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">Overview</div><div class="sidebar-nav-item"><span class="icon">📊</span> Dashboard</div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">Catalog</div><div class="sidebar-nav-item active"><span class="icon">🪴</span> Products</div><div class="sidebar-nav-item"><span class="icon">🏷️</span> Categories</div><div class="sidebar-nav-item"><span class="icon">📦</span> Inventory <span class="badge-count">3</span></div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">Commerce</div><div class="sidebar-nav-item"><span class="icon">📋</span> Orders <span class="badge-count">7</span></div><div class="sidebar-nav-item"><span class="icon">👥</span> Customers</div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">System</div><div class="sidebar-nav-item"><span class="icon">⚙️</span> Settings</div></div>
+  </nav>
+
+  <div class="page-area">
+    <div class="topbar">
+      <div class="topbar-breadcrumb"><span>Admin</span><span>›</span><a href="03-products-list.html">Products</a><span>›</span><span class="crumb-active">Add Product</span></div>
+      <div class="topbar-spacer"></div>
+      <div class="topbar-actions"><button class="topbar-icon-btn">🔔</button><div class="admin-avatar">PK</div></div>
+    </div>
+
+    <div class="page-content">
+      <div class="back-nav"><a href="index.html">← Back to Index</a></div>
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Add Product</h1>
+          <p class="page-subtitle">Fill in all required fields then publish or save as draft.</p>
+        </div>
+        <div class="flex gap-2">
+          <a href="03-products-list.html" class="btn btn-outline">Cancel</a>
+          <button class="btn btn-outline">Save Draft</button>
+          <button class="btn btn-primary">Publish Product</button>
+        </div>
+      </div>
+
+      <form class="form-layout">
+        <!-- LEFT — main fields -->
+        <div style="display:flex;flex-direction:column;gap:1.25rem">
+
+          <!-- BASIC INFO -->
+          <div class="form-section">
+            <div class="form-section-header"><span class="form-section-title">📝 Basic Information</span></div>
+            <div class="form-section-body">
+              <div class="form-group">
+                <label class="form-label">Common Name <span class="required">*</span></label>
+                <input class="form-input" value="Monstera Deliciosa" />
+              </div>
+              <div class="form-row">
+                <div class="form-group mb-0">
+                  <label class="form-label">Scientific Name</label>
+                  <input class="form-input" placeholder="Monstera deliciosa" />
+                </div>
+                <div class="form-group mb-0">
+                  <label class="form-label">URL Slug <span class="required">*</span></label>
+                  <input class="form-input" value="monstera-deliciosa" />
+                  <div class="form-hint">Auto-generated from common name. Must be unique.</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Description <span class="required">*</span></label>
+                <textarea class="form-textarea" rows="4">Monstera Deliciosa, also known as the Swiss Cheese Plant, is loved for its dramatic split leaves and easy care. A tropical classic that thrives in bright indirect light and humid environments.</textarea>
+                <span class="char-count">213 / 1000</span>
+              </div>
+              <div class="form-group mb-0">
+                <label class="form-label">Category <span class="required">*</span></label>
+                <select class="form-select">
+                  <option>Tropical</option><option>Succulents</option><option>Air Purifying</option><option>Pet Friendly</option><option>Low Light</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- PRICING & STOCK -->
+          <div class="form-section">
+            <div class="form-section-header"><span class="form-section-title">💰 Pricing & Stock</span></div>
+            <div class="form-section-body">
+              <div class="form-row-3">
+                <div class="form-group mb-0">
+                  <label class="form-label">Price (₹) <span class="required">*</span></label>
+                  <input class="form-input" type="number" value="899" />
+                </div>
+                <div class="form-group mb-0">
+                  <label class="form-label">Compare-at Price (₹)</label>
+                  <input class="form-input" type="number" value="1199" />
+                  <div class="form-hint">Crossed-out price. Leave blank to hide.</div>
+                </div>
+                <div class="form-group mb-0">
+                  <label class="form-label">Stock Quantity <span class="required">*</span></label>
+                  <input class="form-input" type="number" value="14" />
+                </div>
+              </div>
+              <div class="form-group mt-3 mb-0">
+                <label class="form-label">Low Stock Threshold</label>
+                <input class="form-input" type="number" value="5" style="max-width:180px" />
+                <div class="form-hint">Alert triggers on dashboard when stock falls below this number.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PLANT ATTRIBUTES -->
+          <div class="form-section">
+            <div class="form-section-header"><span class="form-section-title">🌱 Plant Attributes</span></div>
+            <div class="form-section-body">
+              <div class="attr-grid">
+                <div class="form-group">
+                  <label class="form-label">Light Requirement <span class="required">*</span></label>
+                  <select class="form-select">
+                    <option>Bright Indirect</option><option>Low</option><option>Medium</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Water Frequency</label>
+                  <input class="form-input" value="Twice weekly" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Humidity Level</label>
+                  <select class="form-select">
+                    <option>High</option><option>Low</option><option>Medium</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Pot Size</label>
+                  <input class="form-input" value="6 inch" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Plant Height</label>
+                  <input class="form-input" value="40–60 cm" />
+                </div>
+                <div class="form-group" style="display:flex;align-items:center;padding-top:1.4rem">
+                  <label class="toggle-wrap">
+                    <div class="toggle on"></div>
+                    <span class="toggle-label">Pet Friendly 🐾</span>
+                  </label>
+                </div>
+              </div>
+              <div class="form-group mb-0">
+                <label class="form-label">Care Instructions</label>
+                <textarea class="form-textarea" rows="3" placeholder="Water when the top inch of soil is dry. Keep away from direct sun. Wipe leaves monthly to remove dust."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- IMAGES -->
+          <div class="form-section">
+            <div class="form-section-header"><span class="form-section-title">🖼️ Product Images (Cloudinary)</span></div>
+            <div class="form-section-body">
+              <div class="upload-zone">
+                <div class="upload-zone-icon">📤</div>
+                <p><strong>Click to upload</strong> or drag & drop images here</p>
+                <p style="font-size:.72rem;margin-top:.25rem">JPEG · PNG · WebP · Max 5 MB per image · Up to 8 images</p>
+              </div>
+              <div class="thumb-grid mt-3">
+                <div class="thumb" style="background:var(--green-100);display:flex;align-items:center;justify-content:center;font-size:1.75rem">🌿
+                  <button class="thumb-remove">✕</button>
+                </div>
+                <div class="thumb" style="background:var(--green-200);display:flex;align-items:center;justify-content:center;font-size:1.75rem">🌿</div>
+                <div class="thumb" style="background:#e0f7e9;display:flex;align-items:center;justify-content:center;font-size:1.75rem">🌿</div>
+              </div>
+              <p class="form-hint mt-2">First image is the cover photo. Drag to reorder. Uploaded to Cloudinary folder <code>leafflow/products</code>.</p>
+              <div class="alert alert-warning mt-3">
+                <span class="alert-icon">⚠️</span>
+                <span>Images uploaded here are stored permanently on Cloudinary. Deleting a product will NOT remove Cloudinary images automatically (Phase 2).</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT SIDEBAR — publish panel -->
+        <div class="sticky-sidebar" style="display:flex;flex-direction:column;gap:1.25rem">
+
+          <!-- PUBLISH STATUS -->
+          <div class="form-section">
+            <div class="form-section-header"><span class="form-section-title">📢 Publish Status</span></div>
+            <div class="form-section-body">
+              <label class="toggle-wrap mb-3" style="display:flex;align-items:center;gap:.75rem">
+                <div class="toggle on" style="flex-shrink:0"></div>
+                <div>
+                  <div class="toggle-label">Published (Active)</div>
+                  <div class="form-hint" style="margin-top:.1rem">Visible to buyers on storefront</div>
+                </div>
+              </label>
+              <hr class="divider" />
+              <div style="font-size:.8rem;color:var(--text-muted)">
+                <div>Created: <strong>—</strong></div>
+                <div style="margin-top:.3rem">Last saved: <strong>—</strong></div>
+              </div>
+            </div>
+            <div style="padding:.875rem 1.25rem;display:flex;flex-direction:column;gap:.5rem">
+              <button class="btn btn-outline btn-sm" style="width:100%;justify-content:center">Save Draft</button>
+              <button class="btn btn-primary btn-sm" style="width:100%;justify-content:center">Publish Product</button>
+            </div>
+          </div>
+
+          <!-- PREVIEW -->
+          <div class="form-section">
+            <div class="form-section-header"><span class="form-section-title">👁️ Buyer Preview</span></div>
+            <div class="form-section-body" style="padding:1rem">
+              <div style="border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;background:var(--green-50)">
+                <div style="background:var(--green-100);height:120px;display:flex;align-items:center;justify-content:center;font-size:3rem">🌿</div>
+                <div style="padding:.75rem">
+                  <div style="font-size:.9rem;font-weight:700">Monstera Deliciosa</div>
+                  <div style="font-size:.75rem;color:var(--text-muted)">Tropical · Bright Indirect</div>
+                  <div style="margin-top:.5rem;display:flex;align-items:center;gap:.5rem">
+                    <span style="font-size:1rem;font-weight:700;color:var(--green-700)">₹899</span>
+                    <span style="font-size:.75rem;text-decoration:line-through;color:var(--text-muted)">₹1,199</span>
+                  </div>
+                  <div style="margin-top:.5rem;font-size:.7rem;color:var(--green-600)">🐾 Pet Friendly &nbsp;·&nbsp; 14 in stock</div>
+                </div>
+              </div>
+              <p class="form-hint mt-2">This is how the product card appears to buyers.</p>
+            </div>
+          </div>
+
+          <!-- DANGER ZONE -->
+          <div class="form-section" style="border-color:var(--red-100)">
+            <div class="form-section-header" style="background:var(--red-100)"><span class="form-section-title" style="color:var(--red-600)">🗑️ Danger Zone</span></div>
+            <div class="form-section-body">
+              <p class="text-sm text-muted mb-3">Deleting a product is permanent and cannot be undone.</p>
+              <button class="btn btn-danger btn-sm" style="width:100%;justify-content:center">Delete Product</button>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="annotation mt-3">
+        ADM-020 + ADM-022 — <code>react-hook-form</code> + Zod schema validation. Image upload: POST to <code>/api/admin/uploads/image</code> → store returned <code>secure_url</code> in form array field. On submit call <code>createProduct</code> or <code>updateProduct</code> mutation. Navigate to products list on success.
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

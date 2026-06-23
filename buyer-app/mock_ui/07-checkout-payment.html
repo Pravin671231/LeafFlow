@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LeafFlow — Checkout: Payment</title>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+  .checkout-layout { display:grid;grid-template-columns:1fr 360px;gap:1.5rem;align-items:start; }
+  .sticky-summary { position:sticky;top:84px; }
+  .razorpay-btn { width:100%;padding:1rem;background:#3395FF;color:#fff;border:none;border-radius:var(--radius-lg);font-size:1rem;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.625rem;letter-spacing:.01em; }
+  .razorpay-btn:hover { background:#1d7fe5; }
+  .rzp-logo { font-size:1.125rem;font-weight:900; }
+  .confirm-card { background:var(--green-50);border:2px solid var(--green-300);border-radius:var(--radius-xl);padding:1.5rem;text-align:center; }
+  .payment-method-row { display:flex;align-items:center;gap:.75rem;padding:.875rem;border:1.5px solid var(--border);border-radius:var(--radius-lg);margin-bottom:.5rem;cursor:pointer;transition:border-color .15s; }
+  .payment-method-row.selected { border-color:var(--primary);background:var(--green-50); }
+  code { font-family:monospace;font-size:.8em;background:var(--gray-100);padding:.1rem .3rem;border-radius:.25rem; }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <a href="02-home.html" class="header-logo"><span class="header-logo-icon">🌿</span><div>LeafFlow<span class="header-logo-sub">Bring plants home</span></div></a>
+    <div class="header-spacer"></div>
+    <div class="header-actions"><div class="avatar-btn">AS</div></div>
+  </div>
+</header>
+
+<div class="page-wrapper">
+  <div class="page-content">
+    <div class="back-nav"><a href="index.html">← Back to Index</a> · <a href="06-checkout-address.html">← Edit Address</a></div>
+    <h1 class="page-title mb-1">Checkout</h1>
+
+    <!-- STEP INDICATOR -->
+    <div class="checkout-steps mb-5">
+      <div class="checkout-step done"><div class="checkout-step-dot">✓</div><div class="checkout-step-label">Shipping Address</div></div>
+      <div class="checkout-step-line active"></div>
+      <div class="checkout-step active"><div class="checkout-step-dot">2</div><div class="checkout-step-label">Payment</div></div>
+    </div>
+
+    <div class="checkout-layout">
+      <!-- LEFT -->
+      <div>
+        <!-- SELECTED ADDRESS PREVIEW -->
+        <div class="card mb-4">
+          <div class="card-body">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">
+              <div style="font-size:.9rem;font-weight:700">📦 Delivering to</div>
+              <a href="06-checkout-address.html" class="btn btn-ghost btn-sm">Change</a>
+            </div>
+            <div style="font-size:.875rem;color:var(--gray-600);line-height:1.6">
+              Ananya Singh · Home<br/>42, MG Road, Indiranagar, Bengaluru, Karnataka 560038<br/>📞 9876543210
+            </div>
+          </div>
+        </div>
+
+        <!-- PAYMENT METHOD TITLE -->
+        <div class="section-title mb-3">Choose Payment Method</div>
+
+        <!-- RAZORPAY (primary) -->
+        <div class="payment-method-row selected">
+          <div class="radio-dot filled"></div>
+          <div>
+            <div style="font-weight:700;font-size:.95rem">Pay via Razorpay</div>
+            <div style="font-size:.78rem;color:var(--text-muted)">UPI · Cards · Net Banking · Wallets — all on Razorpay's secure checkout</div>
+          </div>
+          <div style="margin-left:auto;font-size:1.25rem">💳</div>
+        </div>
+
+        <!-- INFO ABOUT RAZORPAY POPUP -->
+        <div class="alert alert-info mb-4" style="margin-top:.75rem">
+          <span class="alert-icon">ℹ️</span>
+          <span>Clicking <strong>Pay ₹2,147</strong> opens Razorpay's secure checkout popup where you can pay via UPI, card, netbanking or wallet.</span>
+        </div>
+
+        <!-- PAY BUTTON (main CTA) -->
+        <button class="razorpay-btn mb-4">
+          <span class="rzp-logo">₹</span>
+          Pay ₹2,147 via Razorpay
+        </button>
+
+        <div style="font-size:.75rem;color:var(--text-muted);text-align:center;margin-bottom:2rem">
+          🔒 Your payment is secured by Razorpay. We never store card details.
+        </div>
+
+        <!-- PAYMENT FAILED STATE (hidden, shows after failure) -->
+        <div class="alert alert-error mb-3" style="display:none">
+          <span class="alert-icon">❌</span>
+          <span><strong>Payment failed.</strong> No amount was deducted. Please try again.</span>
+        </div>
+
+        <!-- SUCCESS STATE (shows after payment.captured webhook) -->
+        <div class="confirm-card" style="display:none">
+          <div style="font-size:3rem;margin-bottom:.75rem">✅</div>
+          <div style="font-size:1.25rem;font-weight:800;color:var(--green-800);margin-bottom:.5rem">Payment Confirmed!</div>
+          <div style="font-size:.875rem;color:var(--gray-600);margin-bottom:1.25rem">Your order is being prepared. Redirecting to order confirmation…</div>
+          <div class="spinner" style="margin:0 auto"></div>
+        </div>
+      </div>
+
+      <!-- RIGHT: ORDER SUMMARY -->
+      <div class="sticky-summary">
+        <div class="summary-box">
+          <div style="font-size:1rem;font-weight:800;color:var(--green-800);margin-bottom:1rem">Order Summary</div>
+          <div class="cart-item" style="padding:.5rem 0;border-bottom:1px solid var(--border);margin-bottom:.5rem">
+            <div class="cart-thumb" style="width:40px;height:40px;font-size:1.5rem">🌿</div>
+            <div class="cart-info"><div class="cart-name">Monstera Deliciosa × 2</div></div>
+            <div class="cart-price">₹1,798</div>
+          </div>
+          <div class="cart-item" style="padding:.5rem 0;border-bottom:1px solid var(--border);margin-bottom:.5rem">
+            <div class="cart-thumb" style="width:40px;height:40px;font-size:1.5rem">🌵</div>
+            <div class="cart-info"><div class="cart-name">Golden Barrel Cactus × 1</div></div>
+            <div class="cart-price">₹349</div>
+          </div>
+          <div class="summary-row"><span>Subtotal</span><span>₹2,147</span></div>
+          <div class="summary-row"><span>Shipping</span><span style="color:var(--green-600);font-weight:700">Free</span></div>
+          <div class="summary-total"><span>Total</span><span>₹2,147</span></div>
+        </div>
+
+        <div class="card mt-3">
+          <div class="card-body">
+            <div style="font-size:.8rem;font-weight:700;margin-bottom:.5rem">Delivery Estimate</div>
+            <div style="font-size:.875rem;color:var(--gray-600)">🚚 2–4 business days<br/>📦 Ships from Bengaluru</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotation mt-4">
+      BUY-031 — Payment flow: (1) Click "Pay via Razorpay" → <code>POST /api/buyer/orders</code> with <code>{ addressId, items }</code> → returns <code>{ orderId, razorpayOrderId, amount }</code>. (2) Open Razorpay popup with <code>options.order_id = razorpayOrderId</code>. (3) On <code>payment.success</code>: <code>checkoutStore.setRazorpayOrderId(id)</code>. (4) Razorpay webhook <code>payment.captured</code> → backend updates order <code>paid=true, status=placed</code>. (5) Redirect to <code>/orders/[orderId]?success=1</code>. On <code>payment.failed</code>: show failure alert, order remains <code>pending</code>.
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LeafFlow — Order Confirmed!</title>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+  .success-hero { text-align:center;padding:3rem 2rem 2rem;max-width:520px;margin:0 auto; }
+  .success-icon { font-size:4.5rem;margin-bottom:1rem;animation:pop .4s ease; }
+  @keyframes pop { 0%{transform:scale(0)} 70%{transform:scale(1.15)} 100%{transform:scale(1)} }
+  .success-title { font-size:2rem;font-weight:900;color:var(--green-800);margin-bottom:.5rem; }
+  .success-sub { font-size:1rem;color:var(--text-muted);line-height:1.6;margin-bottom:1.5rem; }
+  .order-card { background:#fff;border:1px solid var(--border);border-radius:var(--radius-xl);padding:1.5rem;max-width:600px;margin:0 auto 1.5rem; }
+  .order-meta-row { display:flex;justify-content:space-between;align-items:center;padding:.5rem 0;border-bottom:1px solid var(--gray-100); }
+  .order-meta-row:last-child { border-bottom:none; }
+  .order-meta-label { font-size:.8rem;color:var(--text-muted); }
+  .order-meta-value { font-size:.875rem;font-weight:700; }
+  code { font-family:monospace;font-size:.8em;background:var(--gray-100);padding:.1rem .3rem;border-radius:.25rem; }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <a href="02-home.html" class="header-logo"><span class="header-logo-icon">🌿</span><div>LeafFlow<span class="header-logo-sub">Bring plants home</span></div></a>
+    <div class="header-spacer"></div>
+    <div class="header-actions"><div class="avatar-btn">AS</div></div>
+  </div>
+</header>
+
+<div class="page-wrapper">
+  <div class="page-content">
+    <div class="back-nav"><a href="index.html">← Back to Index</a></div>
+
+    <!-- SUCCESS HERO -->
+    <div class="success-hero">
+      <div class="success-icon">🌿✅</div>
+      <div class="success-title">Order Confirmed!</div>
+      <div class="success-sub">
+        Your plants are on their way! We'll send a confirmation email to <strong>ananya@gmail.com</strong> with tracking details as soon as they ship.
+      </div>
+      <div style="display:flex;gap:.875rem;justify-content:center;flex-wrap:wrap">
+        <a href="10-order-detail.html" class="btn btn-primary btn-lg">View Order Details</a>
+        <a href="03-catalog.html" class="btn btn-outline btn-lg">Continue Shopping</a>
+      </div>
+    </div>
+
+    <!-- ORDER SUMMARY CARD -->
+    <div class="order-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+        <div style="font-size:1rem;font-weight:800">Order #LF-2026-00482</div>
+        <span class="badge badge-warning">placed</span>
+      </div>
+
+      <div class="order-meta-row"><div class="order-meta-label">Order Date</div><div class="order-meta-value">23 June 2026, 4:32 PM</div></div>
+      <div class="order-meta-row"><div class="order-meta-label">Estimated Delivery</div><div class="order-meta-value">27–28 June 2026</div></div>
+      <div class="order-meta-row"><div class="order-meta-label">Payment</div><div class="order-meta-value">Paid · ₹2,147 via Razorpay</div></div>
+      <div class="order-meta-row"><div class="order-meta-label">Shipping To</div><div class="order-meta-value">42, MG Road, Indiranagar, Bengaluru 560038</div></div>
+    </div>
+
+    <!-- ITEMS ORDERED -->
+    <div class="order-card">
+      <div style="font-size:.95rem;font-weight:800;margin-bottom:1rem">Items Ordered</div>
+      <div class="cart-item" style="padding:.75rem 0;border-bottom:1px solid var(--border)">
+        <div class="cart-thumb" style="font-size:2rem">🌿</div>
+        <div class="cart-info">
+          <div class="cart-name">Monstera Deliciosa</div>
+          <div class="cart-meta">Tropical · 6 inch pot</div>
+        </div>
+        <div>
+          <div class="cart-price">₹1,798</div>
+          <div style="font-size:.75rem;color:var(--text-muted);text-align:right">Qty: 2</div>
+        </div>
+      </div>
+      <div class="cart-item" style="padding:.75rem 0">
+        <div class="cart-thumb" style="font-size:2rem">🌵</div>
+        <div class="cart-info">
+          <div class="cart-name">Golden Barrel Cactus</div>
+          <div class="cart-meta">Succulents · 4 inch pot</div>
+        </div>
+        <div>
+          <div class="cart-price">₹349</div>
+          <div style="font-size:.75rem;color:var(--text-muted);text-align:right">Qty: 1</div>
+        </div>
+      </div>
+      <div class="summary-total" style="margin-top:.75rem"><span>Total Paid</span><span>₹2,147</span></div>
+    </div>
+
+    <!-- WHAT'S NEXT -->
+    <div class="card" style="max-width:600px;margin:0 auto 2rem">
+      <div class="card-body">
+        <div style="font-size:.95rem;font-weight:800;margin-bottom:1rem">What happens next?</div>
+        <div class="stepper-list">
+          <div class="stepper-item done"><div class="stepper-dot done">✓</div><div class="stepper-text"><strong>Order Placed</strong><br/><span>Payment received</span></div></div>
+          <div class="stepper-item"><div class="stepper-dot">2</div><div class="stepper-text"><strong>Packing</strong><br/><span>We'll pack your plants with care (1–2 days)</span></div></div>
+          <div class="stepper-item"><div class="stepper-dot">3</div><div class="stepper-text"><strong>Shipped</strong><br/><span>You'll get a tracking link via email</span></div></div>
+          <div class="stepper-item"><div class="stepper-dot">4</div><div class="stepper-text"><strong>Delivered</strong><br/><span>Estimated 27–28 June 2026</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotation">
+      BUY-031/032 — Page at <code>app/(shop)/orders/[id]/page.tsx?success=1</code>. On load: <code>checkoutStore.reset()</code> + <code>cartStore.clearCart()</code>. Order data fetched via <code>useOrder(id)</code> (TanStack Query). Success banner shown only if <code>searchParams.success === '1'</code>. Stepper state derived from <code>order.status</code>.
+    </div>
+  </div>
+</div>
+</body>
+</html>

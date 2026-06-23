@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LeafFlow — Order #LF-2026-00482</title>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+  .detail-layout { display:grid;grid-template-columns:1fr 340px;gap:1.5rem;align-items:start; }
+  .sticky-aside { position:sticky;top:84px; }
+  .timeline-item { display:flex;gap:1rem;padding:.625rem 0; }
+  .timeline-dot { width:10px;height:10px;border-radius:50%;background:var(--green-400);margin-top:.3rem;flex-shrink:0; }
+  .timeline-dot.muted { background:var(--gray-300); }
+  .timeline-text { font-size:.85rem;color:var(--gray-700); }
+  .timeline-time { font-size:.75rem;color:var(--text-muted); }
+  code { font-family:monospace;font-size:.8em;background:var(--gray-100);padding:.1rem .3rem;border-radius:.25rem; }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <a href="02-home.html" class="header-logo"><span class="header-logo-icon">🌿</span><div>LeafFlow<span class="header-logo-sub">Bring plants home</span></div></a>
+    <nav class="header-nav"><a href="03-catalog.html">Shop</a></nav>
+    <div class="header-spacer"></div>
+    <div class="header-actions"><a href="05-cart.html" class="header-icon-btn">🛒<span class="cart-badge">2</span></a><div class="avatar-btn">AS</div></div>
+  </div>
+</header>
+
+<div class="page-wrapper">
+  <div class="page-content">
+    <div class="back-nav"><a href="index.html">← Back to Index</a> · <a href="09-orders-list.html">← My Orders</a></div>
+
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:.75rem">
+      <div>
+        <h1 class="page-title mb-0">Order #LF-2026-00482</h1>
+        <p style="font-size:.875rem;color:var(--text-muted);margin-top:.25rem">Placed 23 June 2026, 4:32 PM</p>
+      </div>
+      <span class="badge badge-warning" style="font-size:.875rem;padding:.4rem .875rem">placed</span>
+    </div>
+
+    <!-- STATUS STEPPER -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="stepper">
+          <div class="stepper-step done">
+            <div class="stepper-dot done">✓</div>
+            <div class="stepper-label">Placed</div>
+            <div class="stepper-sub">23 Jun, 4:32 PM</div>
+          </div>
+          <div class="stepper-line active"></div>
+          <div class="stepper-step current">
+            <div class="stepper-dot current"></div>
+            <div class="stepper-label">Packing</div>
+            <div class="stepper-sub">In progress</div>
+          </div>
+          <div class="stepper-line"></div>
+          <div class="stepper-step">
+            <div class="stepper-dot"></div>
+            <div class="stepper-label">Shipped</div>
+            <div class="stepper-sub">—</div>
+          </div>
+          <div class="stepper-line"></div>
+          <div class="stepper-step">
+            <div class="stepper-dot"></div>
+            <div class="stepper-label">Delivered</div>
+            <div class="stepper-sub">Est. 27–28 Jun</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-layout">
+      <!-- LEFT -->
+      <div>
+        <!-- ITEMS -->
+        <div class="card mb-4">
+          <div class="card-header">Items Ordered</div>
+          <div class="card-body" style="padding:0 1.5rem">
+            <div class="cart-item">
+              <a href="04-product-detail.html"><div class="cart-thumb" style="font-size:2rem">🌿</div></a>
+              <div class="cart-info">
+                <a href="04-product-detail.html" class="cart-name" style="text-decoration:none;color:inherit">Monstera Deliciosa</a>
+                <div class="cart-meta">Tropical · 6 inch pot · ₹899 each</div>
+              </div>
+              <div>
+                <div class="cart-price">₹1,798</div>
+                <div style="font-size:.75rem;color:var(--text-muted);text-align:right">Qty: 2</div>
+              </div>
+            </div>
+            <div class="cart-item">
+              <a href="04-product-detail.html"><div class="cart-thumb" style="font-size:2rem">🌵</div></a>
+              <div class="cart-info">
+                <a href="04-product-detail.html" class="cart-name" style="text-decoration:none;color:inherit">Golden Barrel Cactus</a>
+                <div class="cart-meta">Succulents · 4 inch pot · ₹349 each</div>
+              </div>
+              <div>
+                <div class="cart-price">₹349</div>
+                <div style="font-size:.75rem;color:var(--text-muted);text-align:right">Qty: 1</div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:.875rem">
+              <span style="color:var(--text-muted)">Subtotal · Free shipping</span>
+              <span style="font-weight:800;font-size:1rem">₹2,147</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- DELIVERY ADDRESS -->
+        <div class="card mb-4">
+          <div class="card-header">Delivery Address</div>
+          <div class="card-body">
+            <div style="font-size:.875rem;color:var(--gray-700);line-height:1.7">
+              <strong>Ananya Singh</strong> · Home<br/>
+              42, MG Road, Indiranagar<br/>
+              Bengaluru, Karnataka 560038<br/>
+              📞 9876543210
+            </div>
+          </div>
+        </div>
+
+        <!-- ORDER TIMELINE -->
+        <div class="card">
+          <div class="card-header">Order Timeline</div>
+          <div class="card-body">
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div><div class="timeline-text"><strong>Order placed</strong> — Payment of ₹2,147 received via Razorpay</div><div class="timeline-time">23 Jun 2026, 4:32 PM</div></div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div><div class="timeline-text"><strong>Packing started</strong> — Your plants are being prepared</div><div class="timeline-time">23 Jun 2026, 5:10 PM</div></div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot muted"></div>
+              <div style="opacity:.5"><div class="timeline-text">Shipped</div><div class="timeline-time">Estimated 24 Jun</div></div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot muted"></div>
+              <div style="opacity:.5"><div class="timeline-text">Delivered</div><div class="timeline-time">Estimated 27–28 Jun</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="sticky-aside">
+        <div class="summary-box mb-3">
+          <div style="font-size:.9rem;font-weight:800;margin-bottom:.875rem">Payment Info</div>
+          <div class="summary-row"><span>Method</span><span>Razorpay</span></div>
+          <div class="summary-row"><span>Status</span><span style="color:var(--green-600);font-weight:700">✓ Paid</span></div>
+          <div class="summary-row"><span>Amount</span><span>₹2,147</span></div>
+          <div class="summary-row" style="margin-top:.5rem;padding-top:.5rem;border-top:1px solid var(--border)">
+            <span style="font-size:.75rem;color:var(--text-muted)">Razorpay Order ID</span>
+            <span style="font-size:.72rem;font-family:monospace">order_P9bLmXkR5DqA1c</span>
+          </div>
+          <div class="summary-row">
+            <span style="font-size:.75rem;color:var(--text-muted)">Payment ID</span>
+            <span style="font-size:.72rem;font-family:monospace">pay_P9bLmXkR5DqA2d</span>
+          </div>
+        </div>
+
+        <!-- CANCEL BUTTON — only shown for placed/packed -->
+        <div class="card mb-3">
+          <div class="card-body">
+            <div style="font-size:.875rem;font-weight:700;margin-bottom:.5rem">Cancel Order</div>
+            <div style="font-size:.8rem;color:var(--text-muted);margin-bottom:.875rem">You can cancel before it ships. Refund is processed in 3–5 business days.</div>
+            <button class="btn btn-outline btn-sm" style="color:var(--red-500);border-color:var(--red-400)">Cancel Order</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <div style="font-size:.875rem;font-weight:700;margin-bottom:.5rem">Need Help?</div>
+            <div style="font-size:.8rem;color:var(--text-muted);margin-bottom:.75rem">Questions about your order? We're here to help.</div>
+            <a href="13-static-pages.html" class="btn btn-outline btn-sm btn-block">Contact Support</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotation mt-4">
+      BUY-032 — <code>app/(account)/orders/[id]/page.tsx</code>. <code>useOrder(id)</code> TanStack Query: <code>GET /api/buyer/orders/:id</code>. Status stepper derived from <code>order.status</code>. Cancel button: visible only when <code>status === 'placed'</code> (BUY-032); calls <code>DELETE /api/buyer/orders/:id</code>. Timeline built from order events array.
+    </div>
+  </div>
+</div>
+</body>
+</html>

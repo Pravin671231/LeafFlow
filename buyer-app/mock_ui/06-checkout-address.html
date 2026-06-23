@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LeafFlow — Checkout: Address</title>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+  .checkout-layout { display:grid;grid-template-columns:1fr 360px;gap:1.5rem;align-items:start; }
+  .sticky-summary { position:sticky;top:84px; }
+  .address-form-grid { display:grid;grid-template-columns:1fr 1fr;gap:.875rem; }
+  code { font-family:monospace;font-size:.8em;background:var(--gray-100);padding:.1rem .3rem;border-radius:.25rem; }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <a href="02-home.html" class="header-logo"><span class="header-logo-icon">🌿</span><div>LeafFlow<span class="header-logo-sub">Bring plants home</span></div></a>
+    <div class="header-spacer"></div>
+    <div class="header-actions"><div class="avatar-btn">AS</div></div>
+  </div>
+</header>
+
+<div class="page-wrapper">
+  <div class="page-content">
+    <div class="back-nav"><a href="index.html">← Back to Index</a> · <a href="05-cart.html">← Edit Cart</a></div>
+    <h1 class="page-title mb-1">Checkout</h1>
+
+    <!-- STEP INDICATOR -->
+    <div class="checkout-steps mb-5">
+      <div class="checkout-step active"><div class="checkout-step-dot">1</div><div class="checkout-step-label">Shipping Address</div></div>
+      <div class="checkout-step-line"></div>
+      <div class="checkout-step"><div class="checkout-step-dot">2</div><div class="checkout-step-label">Payment</div></div>
+    </div>
+
+    <div class="checkout-layout">
+      <!-- LEFT: ADDRESS -->
+      <div>
+        <!-- SAVED ADDRESSES -->
+        <div class="section-title mb-3">Select Delivery Address</div>
+
+        <!-- ADDRESS CARD — SELECTED -->
+        <div class="address-card selected">
+          <div class="address-card-select">
+            <div class="radio-dot filled"></div>
+          </div>
+          <div class="address-card-body">
+            <div class="address-label">Home <span class="badge badge-default" style="font-size:.7rem;margin-left:.25rem">Default</span></div>
+            <div class="address-text">Ananya Singh<br/>42, MG Road, Indiranagar<br/>Bengaluru, Karnataka 560038<br/>📞 9876543210</div>
+          </div>
+          <button class="btn btn-ghost btn-sm">Edit</button>
+        </div>
+
+        <!-- ADDRESS CARD — UNSELECTED -->
+        <div class="address-card">
+          <div class="address-card-select">
+            <div class="radio-dot"></div>
+          </div>
+          <div class="address-card-body">
+            <div class="address-label">Office</div>
+            <div class="address-text">Ananya Singh<br/>3rd Floor, Embassy Tech Village<br/>Outer Ring Road, Bengaluru 560103<br/>📞 9876543210</div>
+          </div>
+          <button class="btn btn-ghost btn-sm">Edit</button>
+        </div>
+
+        <!-- ADD NEW ADDRESS TOGGLE -->
+        <div class="card mt-3">
+          <div class="card-body">
+            <div style="font-size:.95rem;font-weight:700;margin-bottom:1rem">+ Add New Address</div>
+            <div class="address-form-grid">
+              <div class="form-group">
+                <label class="form-label">Full Name</label>
+                <input class="form-control" placeholder="Ananya Singh"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Phone</label>
+                <input class="form-control" placeholder="+91 98765 43210"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Address Line 1</label>
+              <input class="form-control" placeholder="Flat / House No., Building, Street"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Address Line 2 <span style="color:var(--text-muted);font-weight:400">(optional)</span></label>
+              <input class="form-control" placeholder="Area, Colony, Landmark"/>
+            </div>
+            <div class="address-form-grid">
+              <div class="form-group">
+                <label class="form-label">City</label>
+                <input class="form-control" placeholder="Bengaluru"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Pincode</label>
+                <input class="form-control" placeholder="560038"/>
+              </div>
+            </div>
+            <div class="address-form-grid">
+              <div class="form-group">
+                <label class="form-label">State</label>
+                <select class="form-control">
+                  <option>Karnataka</option>
+                  <option>Tamil Nadu</option>
+                  <option>Maharashtra</option>
+                  <option>Delhi</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Label</label>
+                <select class="form-control">
+                  <option>Home</option>
+                  <option>Office</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+            <label class="filter-item" style="gap:.5rem;cursor:pointer;margin-top:.25rem">
+              <input type="checkbox"/> <span style="font-size:.875rem">Set as default address</span>
+            </label>
+            <div style="display:flex;gap:.75rem;margin-top:1rem">
+              <button class="btn btn-primary">Save Address</button>
+              <button class="btn btn-outline">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTINUE BUTTON -->
+        <a href="07-checkout-payment.html" class="btn btn-primary btn-lg btn-block mt-4">
+          Continue to Payment →
+        </a>
+      </div>
+
+      <!-- RIGHT: ORDER SUMMARY -->
+      <div class="sticky-summary">
+        <div class="summary-box">
+          <div style="font-size:1rem;font-weight:800;color:var(--green-800);margin-bottom:1rem">Order Summary</div>
+          <div class="cart-item" style="padding:.5rem 0;border-bottom:1px solid var(--border);margin-bottom:.5rem">
+            <div class="cart-thumb" style="width:40px;height:40px;font-size:1.5rem">🌿</div>
+            <div class="cart-info"><div class="cart-name">Monstera Deliciosa × 2</div></div>
+            <div class="cart-price">₹1,798</div>
+          </div>
+          <div class="cart-item" style="padding:.5rem 0;border-bottom:1px solid var(--border);margin-bottom:.5rem">
+            <div class="cart-thumb" style="width:40px;height:40px;font-size:1.5rem">🌵</div>
+            <div class="cart-info"><div class="cart-name">Golden Barrel Cactus × 1</div></div>
+            <div class="cart-price">₹349</div>
+          </div>
+          <div class="summary-row"><span>Subtotal</span><span>₹2,147</span></div>
+          <div class="summary-row"><span>Shipping</span><span style="color:var(--green-600);font-weight:700">Free</span></div>
+          <div class="summary-total"><span>Total</span><span>₹2,147</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotation mt-4">
+      BUY-030 — <code>app/(shop)/checkout/page.tsx</code>. <code>checkoutStore.step</code> determines which step component renders. Saved addresses: <code>GET /api/buyer/profile/addresses</code> via TanStack Query. New address saved via <code>POST /api/buyer/profile/addresses</code>. On "Continue to Payment": <code>checkoutStore.setSelectedAddressId(id)</code> → advance to step 2. <code>middleware.ts</code> guards <code>/checkout</code> route.
+    </div>
+  </div>
+</div>
+</body>
+</html>

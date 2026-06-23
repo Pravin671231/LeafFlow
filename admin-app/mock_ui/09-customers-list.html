@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LeafFlow Admin — Customers</title>
+<link rel="stylesheet" href="_shared.css"/>
+</head>
+<body>
+<div class="app-shell">
+  <nav class="sidebar">
+    <div class="sidebar-logo"><span class="sidebar-logo-icon">🌿</span><div><span class="sidebar-logo-text">LeafFlow</span><span class="sidebar-logo-sub">Admin Panel</span></div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">Overview</div><div class="sidebar-nav-item"><span class="icon">📊</span> Dashboard</div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">Catalog</div><div class="sidebar-nav-item"><span class="icon">🪴</span> Products</div><div class="sidebar-nav-item"><span class="icon">🏷️</span> Categories</div><div class="sidebar-nav-item"><span class="icon">📦</span> Inventory</div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">Commerce</div><div class="sidebar-nav-item"><span class="icon">📋</span> Orders</div><div class="sidebar-nav-item active"><span class="icon">👥</span> Customers</div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">System</div><div class="sidebar-nav-item"><span class="icon">⚙️</span> Settings</div></div>
+  </nav>
+
+  <div class="page-area">
+    <div class="topbar">
+      <div class="topbar-breadcrumb"><span>Admin</span><span>›</span><span class="crumb-active">Customers</span></div>
+      <div class="topbar-spacer"></div>
+      <div class="topbar-actions"><button class="topbar-icon-btn">🔔</button><div class="admin-avatar">PK</div></div>
+    </div>
+
+    <div class="page-content">
+      <div class="back-nav"><a href="index.html">← Back to Index</a></div>
+      <div class="page-header">
+        <div><h1 class="page-title">Customers</h1><p class="page-subtitle">184 registered buyers</p></div>
+        <button class="btn btn-outline btn-sm">📤 Export CSV</button>
+      </div>
+
+      <div class="card">
+        <div class="filters-bar">
+          <div class="search-input-wrap"><span class="icon">🔍</span><input class="form-input search-input" placeholder="Search name or email…"/></div>
+          <select class="form-select" style="width:auto">
+            <option>Sort: Newest Joined</option>
+            <option>Most Orders</option>
+            <option>Highest Spend</option>
+            <option>Name A–Z</option>
+          </select>
+          <select class="form-select" style="width:auto">
+            <option>All Auth Methods</option>
+            <option>Email OTP</option>
+            <option>Google OAuth</option>
+          </select>
+          <button class="btn btn-outline btn-sm">Clear</button>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Customer</th>
+                <th>Auth Method</th>
+                <th>Orders</th>
+                <th>Total Spend</th>
+                <th>Joined</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="td-muted">1</td>
+                <td>
+                  <div class="flex items-center gap-2">
+                    <div style="width:32px;height:32px;border-radius:50%;background:var(--green-200);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;color:var(--green-800)">AS</div>
+                    <div><div style="font-weight:600;font-size:.875rem">Ananya Singh</div><div class="td-muted">ananya@gmail.com</div></div>
+                  </div>
+                </td>
+                <td><span class="badge badge-neutral">Email OTP</span></td>
+                <td><strong>12</strong></td>
+                <td><strong>₹9,820</strong></td>
+                <td class="td-muted">Feb 12, 2026</td>
+                <td><a href="10-customer-detail.html" class="btn btn-xs btn-outline">View</a></td>
+              </tr>
+              <tr>
+                <td class="td-muted">2</td>
+                <td>
+                  <div class="flex items-center gap-2">
+                    <div style="width:32px;height:32px;border-radius:50%;background:var(--blue-100);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;color:var(--blue-600)">MR</div>
+                    <div><div style="font-weight:600;font-size:.875rem">Meena Rao</div><div class="td-muted">meenar@outlook.com</div></div>
+                  </div>
+                </td>
+                <td><span class="badge badge-info">Google OAuth</span></td>
+                <td><strong>8</strong></td>
+                <td><strong>₹7,240</strong></td>
+                <td class="td-muted">Mar 5, 2026</td>
+                <td><a href="10-customer-detail.html" class="btn btn-xs btn-outline">View</a></td>
+              </tr>
+              <tr>
+                <td class="td-muted">3</td>
+                <td>
+                  <div class="flex items-center gap-2">
+                    <div style="width:32px;height:32px;border-radius:50%;background:var(--green-200);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;color:var(--green-800)">RM</div>
+                    <div><div style="font-weight:600;font-size:.875rem">Rohan Mehta</div><div class="td-muted">rohan@yahoo.in</div></div>
+                  </div>
+                </td>
+                <td><span class="badge badge-neutral">Email OTP</span></td>
+                <td><strong>5</strong></td>
+                <td><strong>₹4,100</strong></td>
+                <td class="td-muted">Apr 18, 2026</td>
+                <td><a href="10-customer-detail.html" class="btn btn-xs btn-outline">View</a></td>
+              </tr>
+              <tr>
+                <td class="td-muted">4</td>
+                <td>
+                  <div class="flex items-center gap-2">
+                    <div style="width:32px;height:32px;border-radius:50%;background:var(--amber-100);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;color:#92400e">PK</div>
+                    <div><div style="font-weight:600;font-size:.875rem">Priya Krishnan</div><div class="td-muted">priya.k@hotmail.com</div></div>
+                  </div>
+                </td>
+                <td><span class="badge badge-info">Google OAuth</span></td>
+                <td><strong>3</strong></td>
+                <td><strong>₹2,700</strong></td>
+                <td class="td-muted">May 2, 2026</td>
+                <td><a href="10-customer-detail.html" class="btn btn-xs btn-outline">View</a></td>
+              </tr>
+              <tr>
+                <td class="td-muted">5</td>
+                <td>
+                  <div class="flex items-center gap-2">
+                    <div style="width:32px;height:32px;border-radius:50%;background:var(--green-200);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;color:var(--green-800)">AT</div>
+                    <div><div style="font-weight:600;font-size:.875rem">Arjun Thakur</div><div class="td-muted">arjunt@gmail.com</div></div>
+                  </div>
+                </td>
+                <td><span class="badge badge-neutral">Email OTP</span></td>
+                <td><strong>1</strong></td>
+                <td><strong>₹540</strong></td>
+                <td class="td-muted">Jun 20, 2026</td>
+                <td><a href="10-customer-detail.html" class="btn btn-xs btn-outline">View</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer flex items-center justify-between">
+          <span>Showing 1–20 of 184 customers</span>
+          <div class="pagination">
+            <button class="page-btn">‹</button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <button class="page-btn">…</button>
+            <button class="page-btn">10</button>
+            <button class="page-btn">›</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="annotation mt-3">
+        ADM-042 — <code>customersApi.listCustomers({ page, search, sort })</code>. Read-only list; no admin can edit buyer data. Auth method badge derived from whether <code>googleId</code> is set. Spend and order count are aggregated fields from the API.
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

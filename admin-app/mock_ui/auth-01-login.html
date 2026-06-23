@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LeafFlow Admin — Login</title>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+  body { background:var(--green-50); display:flex; align-items:center; justify-content:center; min-height:100vh; padding:1.5rem; }
+  .auth-wrap { width:100%; max-width:420px; }
+  .auth-logo { text-align:center; margin-bottom:2rem; }
+  .auth-logo-icon { font-size:2.5rem; }
+  .auth-logo-name { font-size:1.5rem; font-weight:800; color:var(--green-800); margin:.25rem 0 .1rem; }
+  .auth-logo-sub { font-size:.825rem; color:var(--text-muted); }
+  .auth-card { background:#fff; border-radius:var(--radius-xl); border:1px solid var(--border); box-shadow:var(--shadow-lg); overflow:hidden; }
+  .auth-card-header { background:var(--green-800); color:#fff; padding:1.25rem 1.5rem; }
+  .auth-card-title { font-size:1rem; font-weight:700; }
+  .auth-card-sub { font-size:.8rem; opacity:.7; margin-top:.2rem; }
+  .auth-card-body { padding:1.5rem; }
+  .auth-footer { text-align:center; font-size:.8rem; color:var(--text-muted); margin-top:1rem; }
+  .rate-limit-note { font-size:.72rem; color:var(--text-muted); text-align:center; margin-top:.5rem; }
+  .show-pwd-btn { position:absolute; right:.65rem; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:var(--gray-400); font-size:.85rem; }
+  .input-wrap { position:relative; }
+</style>
+</head>
+<body>
+<div style="position:fixed;top:1rem;right:1rem"><a href="index.html" class="btn btn-outline btn-sm">← Index</a></div>
+
+<div class="auth-wrap">
+  <div class="auth-logo">
+    <div class="auth-logo-icon">🌿</div>
+    <div class="auth-logo-name">LeafFlow</div>
+    <div class="auth-logo-sub">Admin Panel</div>
+  </div>
+
+  <div class="auth-card">
+    <div class="auth-card-header">
+      <div class="auth-card-title">🔐 Admin Sign In</div>
+      <div class="auth-card-sub">Enter your credentials. You'll receive an OTP to complete login.</div>
+    </div>
+    <div class="auth-card-body">
+      <!-- ERROR BANNER (shown on bad credentials) -->
+      <div class="alert alert-error mb-3" style="display:none">
+        <span class="alert-icon">❌</span>
+        <span>Invalid email or password. 2 attempts remaining before account lock.</span>
+      </div>
+
+      <!-- LOCKOUT BANNER -->
+      <div class="alert alert-warning mb-3">
+        <span class="alert-icon">🔒</span>
+        <span>Account is locked for <strong>13 minutes</strong> due to too many failed attempts.</span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Login Email <span class="required">*</span></label>
+        <input class="form-input" type="email" value="admin@leafflow.com" placeholder="admin@leafflow.com" />
+        <div class="form-hint">This is your store admin email, not your personal inbox.</div>
+      </div>
+
+      <div class="form-group mb-0">
+        <label class="form-label">Password <span class="required">*</span></label>
+        <div class="input-wrap">
+          <input class="form-input" type="password" placeholder="••••••••" style="padding-right:2.5rem"/>
+          <button class="show-pwd-btn" type="button">👁</button>
+        </div>
+        <div class="flex justify-between mt-1">
+          <div></div>
+          <a href="auth-03-forgot-password.html" style="font-size:.78rem;color:var(--primary)">Forgot password?</a>
+        </div>
+      </div>
+
+      <button class="btn btn-primary mt-4" style="width:100%;justify-content:center;padding:.65rem">
+        Continue →
+      </button>
+      <div class="rate-limit-note">Max 5 failed attempts · 15-minute lockout · SEC-06</div>
+    </div>
+  </div>
+
+  <!-- ANNOTATIONS BELOW -->
+  <div style="margin-top:1.5rem;display:flex;flex-direction:column;gap:.75rem">
+    <div class="annotation">
+      ADM-001 + SEC-06 — <code>POST /api/admin/auth/login</code> with <code>{ loginEmail, password }</code>. On success returns <code>otpSessionId</code> and navigates to <a href="auth-02-verify-otp.html">OTP verify page</a>. On 401: show attempt count. On 423: show lockout banner with time remaining.
+    </div>
+    <div class="wireframe-note">
+      📋 Form state managed by <code>react-hook-form</code> + Zod schema <code>loginSchema.ts</code>. Mutation: <code>authApi.useLoginMutation()</code>. Store <code>otpSessionId</code> in Redux <code>auth.pendingOtpSession</code> before navigating.
+    </div>
+  </div>
+</div>
+</body>
+</html>

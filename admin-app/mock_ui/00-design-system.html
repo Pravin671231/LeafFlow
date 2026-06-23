@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LeafFlow Admin — Design System</title>
+<link rel="stylesheet" href="_shared.css" />
+<style>
+  body { background: var(--gray-100); padding: 2rem; }
+  .ds-section { max-width: 960px; margin: 0 auto 3rem; }
+  .ds-title { font-size: 1.5rem; font-weight: 800; color: var(--green-800); margin-bottom: .25rem; }
+  .ds-sub { color: var(--text-muted); font-size: .875rem; margin-bottom: 2rem; }
+  h2 { font-size: 1.1rem; font-weight: 700; color: var(--gray-700); border-bottom: 2px solid var(--green-200); padding-bottom: .4rem; margin: 2rem 0 1rem; }
+  h3 { font-size: .875rem; font-weight: 700; color: var(--gray-600); margin: 1rem 0 .5rem; }
+
+  /* Color swatches */
+  .swatch-row { display: flex; gap: .5rem; flex-wrap: wrap; }
+  .swatch { width: 72px; text-align: center; }
+  .swatch-box { width: 72px; height: 48px; border-radius: .5rem; border: 1px solid rgba(0,0,0,.08); margin-bottom: .3rem; }
+  .swatch-name { font-size: .65rem; font-weight: 600; color: var(--gray-600); }
+  .swatch-hex  { font-size: .6rem; color: var(--gray-400); font-family: monospace; }
+
+  /* Type scale */
+  .type-row { display: flex; flex-direction: column; gap: .75rem; background: #fff; border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; }
+  .type-specimen { display: flex; align-items: baseline; gap: 1.5rem; }
+  .type-meta { font-size: .7rem; color: var(--text-muted); font-family: monospace; min-width: 120px; }
+
+  /* Component grid */
+  .comp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+  .comp-card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; }
+  .comp-card h4 { font-size: .8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: .875rem; }
+  .comp-demo { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
+
+  /* Spacing scale */
+  .space-row { display: flex; align-items: flex-end; gap: 1rem; }
+  .space-item { text-align: center; }
+  .space-box { background: var(--green-300); border-radius: 3px; margin: 0 auto .3rem; }
+  .space-label { font-size: .65rem; color: var(--text-muted); font-family: monospace; }
+
+  /* Icon list */
+  .icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: .5rem; }
+  .icon-item { display: flex; flex-direction: column; align-items: center; gap: .3rem; padding: .75rem .5rem; background: #fff; border: 1px solid var(--border); border-radius: var(--radius-md); font-size: .7rem; color: var(--text-muted); }
+  .icon-item span:first-child { font-size: 1.4rem; }
+</style>
+</head>
+<body>
+<div class="ds-section">
+  <div class="back-nav"><a href="index.html">← Back to Index</a></div>
+
+  <p class="ds-title">🌿 LeafFlow Admin — Design System</p>
+  <p class="ds-sub">Token reference, typography scale, component library and brand guidelines for admin-app implementation.</p>
+
+  <!-- COLOR PALETTE -->
+  <h2>🎨 Color Palette</h2>
+
+  <h3>Primary — Green (Brand)</h3>
+  <div class="swatch-row">
+    <div class="swatch"><div class="swatch-box" style="background:#f0fdf4"></div><p class="swatch-name">green-50</p><p class="swatch-hex">#f0fdf4</p></div>
+    <div class="swatch"><div class="swatch-box" style="background:#dcfce7"></div><p class="swatch-name">green-100</p><p class="swatch-hex">#dcfce7</p></div>
+    <div class="swatch"><div class="swatch-box" style="background:#bbf7d0"></div><p class="swatch-name">green-200</p><p class="swatch-hex">#bbf7d0</p></div>
+    <div class="swatch"><div class="swatch-box" style="background:#86efac"></div><p class="swatch-name">green-300</p><p class="swatch-hex">#86efac</p></div>
+    <div class="swatch"><div class="swatch-box" style="background:#22c55e"></div><p class="swatch-name">green-500</p><p class="swatch-hex">#22c55e</p></div>
+    <div class="swatch"><div class="swatch-box" style="background:#16a34a;border:none"></div><p class="swatch-name" style="color:var(--green-700)">green-600 ★</p><p class="swatch-hex">#16a34a</p></div>
+    <div class="swatch"><div class="swatch-box" style="background:#15803d;border:none"></div><p class="swatch-name">green-700</p><p class="swatch-hex">#15803d</p></div>
+    <div class="swatch"><div class="swatch-box" style="background:#166534;border:none"></div><p class="swatch-name">green-800</p><p class="swatch-hex">#166534</p></div>
+  </div>
+
+  <h3 style="margin-top:1rem">Accent — Lime</h3>
+  <div class="swatch-row">
+    <div class="swatch"><div class="swatch-box" style="background:#ecfccb"></div><p class="swatch-name">lime-100</p><p class="swatch-hex">#ecfccb</p></div>
+    <div class="swatch"><div class="swatch-box" style="background:#a3e635"></div><p class="swatch-name">lime-400 ★</p><p class="swatch-hex">#a3e635</p></div>
+    <div class="swatch"><div class="swatch-box" style="background:#84cc16"></div><p class="swatch-name">lime-500</p><p class="swatch-hex">#84cc16</p></div>
+  </div>
+
+  <h3 style="margin-top:1rem">Status Colors</h3>
+  <div class="swatch-row">
+    <div class="swatch"><div class="swatch-box" style="background:#fef3c7"></div><p class="swatch-name">amber-100</p></div>
+    <div class="swatch"><div class="swatch-box" style="background:#f59e0b"></div><p class="swatch-name">amber-500</p></div>
+    <div class="swatch"><div class="swatch-box" style="background:#fee2e2"></div><p class="swatch-name">red-100</p></div>
+    <div class="swatch"><div class="swatch-box" style="background:#ef4444"></div><p class="swatch-name">red-500</p></div>
+    <div class="swatch"><div class="swatch-box" style="background:#dbeafe"></div><p class="swatch-name">blue-100</p></div>
+    <div class="swatch"><div class="swatch-box" style="background:#2563eb"></div><p class="swatch-name">blue-600</p></div>
+  </div>
+
+  <h3 style="margin-top:1rem">Neutral — Gray</h3>
+  <div class="swatch-row">
+    <div class="swatch"><div class="swatch-box" style="background:#f9fafb"></div><p class="swatch-name">gray-50</p></div>
+    <div class="swatch"><div class="swatch-box" style="background:#f3f4f6"></div><p class="swatch-name">gray-100</p></div>
+    <div class="swatch"><div class="swatch-box" style="background:#e5e7eb"></div><p class="swatch-name">gray-200</p></div>
+    <div class="swatch"><div class="swatch-box" style="background:#9ca3af"></div><p class="swatch-name">gray-400</p></div>
+    <div class="swatch"><div class="swatch-box" style="background:#6b7280"></div><p class="swatch-name">gray-500</p></div>
+    <div class="swatch"><div class="swatch-box" style="background:#374151;border:none"></div><p class="swatch-name">gray-700</p></div>
+    <div class="swatch"><div class="swatch-box" style="background:#1f2937;border:none"></div><p class="swatch-name">gray-800</p></div>
+  </div>
+
+  <div class="annotation" style="margin-top:1rem">DaisyUI theme mapping — use <code>data-theme="leafflow"</code> with <code>primary:#16a34a</code>, <code>secondary:#a3e635</code>. Override accent in <code>tailwind.config.ts</code>.</div>
+
+  <!-- TYPOGRAPHY -->
+  <h2>📝 Typography Scale</h2>
+  <div class="type-row">
+    <div class="type-specimen"><span class="type-meta">2xl / 700 / -0.02em</span><span style="font-size:1.75rem;font-weight:800">Page Title</span></div>
+    <div class="type-specimen"><span class="type-meta">xl / 700</span><span style="font-size:1.375rem;font-weight:700">Section Heading</span></div>
+    <div class="type-specimen"><span class="type-meta">lg / 600</span><span style="font-size:1.125rem;font-weight:600">Card Title</span></div>
+    <div class="type-specimen"><span class="type-meta">base / 400</span><span style="font-size:1rem">Body text — product descriptions, order notes.</span></div>
+    <div class="type-specimen"><span class="type-meta">sm / 400</span><span style="font-size:.875rem">Table cells, form inputs, general UI text.</span></div>
+    <div class="type-specimen"><span class="type-meta">xs / 700 / uppercase</span><span style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted)">Table Headers / Labels</span></div>
+    <div class="type-specimen"><span class="type-meta">.7rem / 600 / mono</span><span style="font-size:.7rem;font-family:monospace;font-weight:600;color:var(--text-muted)">Badge text, meta info</span></div>
+  </div>
+  <div class="annotation">Font family: <code>'Segoe UI', system-ui, -apple-system, sans-serif</code> — no custom font import needed for MVP. Monospace for codes/IDs: <code>'Fira Code', monospace</code>.</div>
+
+  <!-- SPACING -->
+  <h2>📐 Spacing Scale</h2>
+  <div class="space-row">
+    <div class="space-item"><div class="space-box" style="width:4px;height:4px"></div><span class="space-label">1 / 4px</span></div>
+    <div class="space-item"><div class="space-box" style="width:8px;height:8px"></div><span class="space-label">2 / 8px</span></div>
+    <div class="space-item"><div class="space-box" style="width:12px;height:12px"></div><span class="space-label">3 / 12px</span></div>
+    <div class="space-item"><div class="space-box" style="width:16px;height:16px"></div><span class="space-label">4 / 16px</span></div>
+    <div class="space-item"><div class="space-box" style="width:20px;height:20px"></div><span class="space-label">5 / 20px</span></div>
+    <div class="space-item"><div class="space-box" style="width:24px;height:24px"></div><span class="space-label">6 / 24px</span></div>
+    <div class="space-item"><div class="space-box" style="width:32px;height:32px"></div><span class="space-label">8 / 32px</span></div>
+    <div class="space-item"><div class="space-box" style="width:48px;height:48px"></div><span class="space-label">12 / 48px</span></div>
+    <div class="space-item"><div class="space-box" style="width:64px;height:64px"></div><span class="space-label">16 / 64px</span></div>
+  </div>
+
+  <!-- COMPONENTS -->
+  <h2>🧩 Component Library</h2>
+  <div class="comp-grid">
+
+    <div class="comp-card">
+      <h4>Buttons</h4>
+      <div class="comp-demo">
+        <button class="btn btn-primary">Primary</button>
+        <button class="btn btn-outline">Outline</button>
+        <button class="btn btn-danger">Danger</button>
+        <button class="btn btn-primary btn-sm">Small</button>
+        <button class="btn btn-outline btn-xs">XS</button>
+      </div>
+      <div class="annotation" style="margin-top:.6rem">RTK Query: disable + show spinner while mutation is pending. Use <code>isLoading</code> from mutation hook.</div>
+    </div>
+
+    <div class="comp-card">
+      <h4>Status Badges</h4>
+      <div class="comp-demo">
+        <span class="badge badge-success">Delivered</span>
+        <span class="badge badge-warning">Pending</span>
+        <span class="badge badge-error">Cancelled</span>
+        <span class="badge badge-info">Shipped</span>
+        <span class="badge badge-neutral">Draft</span>
+        <span class="badge badge-success badge-outline">Active</span>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <h4>Form Inputs</h4>
+      <div class="comp-demo flex-col gap-2" style="width:100%">
+        <input class="form-input" placeholder="Product name" />
+        <select class="form-select"><option>Select category</option><option>Succulents</option></select>
+        <textarea class="form-textarea" rows="2" placeholder="Description…" style="min-height:60px"></textarea>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <h4>Toggles</h4>
+      <div class="comp-demo flex-col gap-2">
+        <label class="toggle-wrap"><div class="toggle on"></div><span class="toggle-label">Published</span></label>
+        <label class="toggle-wrap"><div class="toggle"></div><span class="toggle-label">In Stock</span></label>
+        <label class="toggle-wrap"><div class="toggle on"></div><span class="toggle-label">Active</span></label>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <h4>Alerts / Banners</h4>
+      <div class="comp-demo flex-col gap-2" style="width:100%">
+        <div class="alert alert-warning"><span class="alert-icon">⚠️</span><span>3 products are below low-stock threshold.</span></div>
+        <div class="alert alert-success"><span class="alert-icon">✅</span><span>Order #LF-0042 status updated.</span></div>
+        <div class="alert alert-error"><span class="alert-icon">❌</span><span>Image upload failed. Max size 5 MB.</span></div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <h4>Table Row Anatomy</h4>
+      <div class="table-wrap" style="border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden">
+        <table>
+          <thead><tr><th>Name</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>Monstera</strong><div class="td-muted">monstera-deliciosa</div></td>
+              <td><div class="stock-bar-wrap stock-ok"><div class="stock-bar-bg"><div class="stock-bar-fill" style="width:70%"></div></div><span>14</span></div></td>
+              <td><span class="badge badge-success">Active</span></td>
+              <td><div class="flex gap-1"><button class="btn btn-sm btn-outline">Edit</button><button class="btn btn-sm btn-danger">Del</button></div></td>
+            </tr>
+            <tr>
+              <td><strong>Cactus</strong><div class="td-muted">echinopsis</div></td>
+              <td><div class="stock-bar-wrap stock-low"><div class="stock-bar-bg"><div class="stock-bar-fill" style="width:20%"></div></div><span>3</span></div></td>
+              <td><span class="badge badge-neutral">Draft</span></td>
+              <td><div class="flex gap-1"><button class="btn btn-sm btn-outline">Edit</button><button class="btn btn-sm btn-danger">Del</button></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <h4>Order Status Stepper</h4>
+      <div class="stepper">
+        <div class="step done"><div class="step-dot">✓</div><div class="step-label">Placed</div></div>
+        <div class="step done"><div class="step-dot">✓</div><div class="step-label">Packed</div></div>
+        <div class="step active"><div class="step-dot">3</div><div class="step-label">Shipped</div></div>
+        <div class="step"><div class="step-dot">4</div><div class="step-label">Delivered</div></div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <h4>Image Upload Zone</h4>
+      <div class="upload-zone" style="padding:1.25rem">
+        <div class="upload-zone-icon">🖼️</div>
+        <p><strong>Click to upload</strong> or drag & drop</p>
+        <p style="font-size:.72rem;margin-top:.2rem">JPEG · PNG · WebP — max 5 MB each</p>
+      </div>
+      <div class="thumb-grid" style="margin-top:.5rem">
+        <div class="thumb" style="background:var(--green-100);display:flex;align-items:center;justify-content:center;font-size:1.5rem">🌿</div>
+        <div class="thumb" style="background:var(--green-200);display:flex;align-items:center;justify-content:center;font-size:1.5rem">🪴</div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <h4>Pagination</h4>
+      <div class="comp-demo flex-col gap-2" style="width:100%">
+        <div class="flex items-center justify-between">
+          <span class="text-xs text-muted">Showing 1–20 of 148 products</span>
+          <div class="pagination">
+            <button class="page-btn">‹</button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <button class="page-btn">…</button>
+            <button class="page-btn">8</button>
+            <button class="page-btn">›</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <h4>Modal (Confirm Delete)</h4>
+      <div style="border:1.5px dashed var(--border);border-radius:var(--radius-lg);overflow:hidden">
+        <div class="modal-header">
+          <span class="modal-title">Delete Product?</span>
+          <button class="modal-close">✕</button>
+        </div>
+        <div class="modal-body">
+          <p class="text-sm">This will permanently remove <strong>Monstera Deliciosa</strong> and its images from Cloudinary. This action cannot be undone.</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline btn-sm">Cancel</button>
+          <button class="btn btn-danger btn-sm">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <h4>Stock Indicator Variants</h4>
+      <div class="comp-demo flex-col gap-2">
+        <div class="stock-bar-wrap stock-ok"><div class="stock-bar-bg"><div class="stock-bar-fill" style="width:80%"></div></div><span class="text-sm">24 in stock</span></div>
+        <div class="stock-bar-wrap stock-low"><div class="stock-bar-bg"><div class="stock-bar-fill" style="width:20%"></div></div><span class="text-sm">3 in stock <span class="badge badge-warning" style="font-size:.6rem">Low</span></span></div>
+        <div class="stock-bar-wrap stock-zero"><div class="stock-bar-bg"><div class="stock-bar-fill" style="width:2%"></div></div><span class="text-sm"><span class="badge badge-error" style="font-size:.6rem">Out of stock</span></span></div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <h4>Tabs</h4>
+      <div class="tabs" style="margin-bottom:.5rem">
+        <div class="tab active">All <span class="tab-count">148</span></div>
+        <div class="tab">Active <span class="tab-count">132</span></div>
+        <div class="tab">Draft <span class="tab-count">16</span></div>
+        <div class="tab">Low Stock <span class="tab-count">7</span></div>
+      </div>
+      <p class="text-xs text-muted">Tab selection updates RTK Query arg via Redux state; avoids full re-fetch of unrelated data.</p>
+    </div>
+
+  </div>
+
+  <!-- ICON MAP -->
+  <h2>🔣 Icon Map (Emoji → replace with react-icons/lucide-react)</h2>
+  <div class="icon-grid">
+    <div class="icon-item"><span>📊</span><span>dashboard</span></div>
+    <div class="icon-item"><span>🪴</span><span>products</span></div>
+    <div class="icon-item"><span>🏷️</span><span>categories</span></div>
+    <div class="icon-item"><span>📦</span><span>inventory</span></div>
+    <div class="icon-item"><span>📋</span><span>orders</span></div>
+    <div class="icon-item"><span>👥</span><span>customers</span></div>
+    <div class="icon-item"><span>⚙️</span><span>settings</span></div>
+    <div class="icon-item"><span>🔔</span><span>notif</span></div>
+    <div class="icon-item"><span>✏️</span><span>edit</span></div>
+    <div class="icon-item"><span>🗑️</span><span>delete</span></div>
+    <div class="icon-item"><span>🔍</span><span>search</span></div>
+    <div class="icon-item"><span>➕</span><span>add</span></div>
+    <div class="icon-item"><span>📤</span><span>upload</span></div>
+    <div class="icon-item"><span>🔄</span><span>refresh</span></div>
+    <div class="icon-item"><span>❌</span><span>close</span></div>
+    <div class="icon-item"><span>✅</span><span>success</span></div>
+    <div class="icon-item"><span>⚠️</span><span>warning</span></div>
+    <div class="icon-item"><span>💰</span><span>revenue</span></div>
+    <div class="icon-item"><span>🔐</span><span>security</span></div>
+    <div class="icon-item"><span>📨</span><span>email/otp</span></div>
+  </div>
+  <div class="annotation">Recommend <code>lucide-react</code> (tree-shakeable, consistent stroke width). Map: LayoutDashboard, Leaf, Tag, Package, ClipboardList, Users, Settings, Bell, Pencil, Trash2, Search, Plus, Upload, RefreshCcw, X, CheckCircle2, AlertTriangle, BadgeDollarSign, Shield, Mail.</div>
+
+  <!-- RTK QUERY SLICE MAP -->
+  <h2>🔌 RTK Query Slice Map</h2>
+  <div class="card">
+    <div class="card-body">
+      <table>
+        <thead><tr><th>Slice / API</th><th>Endpoints</th><th>Cache Tag</th></tr></thead>
+        <tbody>
+          <tr><td><code>authApi</code></td><td>login, verifyOtp, refresh, logout, me</td><td>Admin</td></tr>
+          <tr><td><code>dashboardApi</code></td><td>getDashboardStats</td><td>Dashboard</td></tr>
+          <tr><td><code>productsApi</code></td><td>listProducts, getProduct, createProduct, updateProduct, deleteProduct, toggleActive</td><td>Product, Products</td></tr>
+          <tr><td><code>categoriesApi</code></td><td>listCategories, createCategory, updateCategory, deleteCategory</td><td>Category</td></tr>
+          <tr><td><code>inventoryApi</code></td><td>listInventory, adjustStock, setThreshold</td><td>Inventory, Product</td></tr>
+          <tr><td><code>ordersApi</code></td><td>listOrders, getOrder, updateStatus, initiateRefund</td><td>Order, Orders</td></tr>
+          <tr><td><code>customersApi</code></td><td>listCustomers, getCustomer, getCustomerOrders</td><td>Customer</td></tr>
+          <tr><td><code>uploadsApi</code></td><td>uploadImage</td><td>—</td></tr>
+          <tr><td><code>settingsApi</code></td><td>getSettings, updateSettings</td><td>Settings</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card-footer">All APIs live in <code>admin-app/src/api/</code>. Inject into RTK store in <code>src/app/store.ts</code>. Each slice uses <code>providesTags</code> / <code>invalidatesTags</code> for optimistic cache invalidation.</div>
+  </div>
+
+  <!-- DESIGN PRINCIPLES -->
+  <h2>💡 Design Principles & Best Practices</h2>
+  <div class="card">
+    <div class="card-body" style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem">
+      <div>
+        <h3 style="margin:0 0 .5rem">Performance</h3>
+        <ul style="list-style:disc;margin-left:1.25rem;font-size:.85rem;line-height:1.8;color:var(--gray-600)">
+          <li>Paginate all list APIs (20 items default)</li>
+          <li>RTK Query auto-caches; avoid manual <code>useEffect</code> fetches</li>
+          <li>Debounce search input 300 ms before triggering query</li>
+          <li>Lazy-load product images with <code>loading="lazy"</code></li>
+          <li>Code-split each route with React lazy + Suspense</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="margin:0 0 .5rem">Accessibility (WCAG 2.1 AA)</h3>
+        <ul style="list-style:disc;margin-left:1.25rem;font-size:.85rem;line-height:1.8;color:var(--gray-600)">
+          <li>All form inputs have associated <code>&lt;label&gt;</code></li>
+          <li>Error messages linked via <code>aria-describedby</code></li>
+          <li>Modals trap focus; <kbd>Esc</kbd> closes them</li>
+          <li>Color contrast ratio ≥ 4.5:1 for text on white</li>
+          <li>Tables include <code>scope="col"</code> on <code>&lt;th&gt;</code></li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="margin:0 0 .5rem">Error States</h3>
+        <ul style="list-style:disc;margin-left:1.25rem;font-size:.85rem;line-height:1.8;color:var(--gray-600)">
+          <li>Every RTK Query hook checks <code>isError</code> → show inline alert</li>
+          <li>Form field errors display below input (not toast)</li>
+          <li>Network errors show a retry button</li>
+          <li>404 / empty states always show a helpful call-to-action</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="margin:0 0 .5rem">Scalability</h3>
+        <ul style="list-style:disc;margin-left:1.25rem;font-size:.85rem;line-height:1.8;color:var(--gray-600)">
+          <li>Feature-folder structure: <code>features/products/</code>, <code>features/orders/</code></li>
+          <li>Shared components in <code>components/ui/</code> — never duplicate</li>
+          <li>Route constants in <code>routes/routes.ts</code> — single source of truth</li>
+          <li>All env vars via <code>import.meta.env.VITE_*</code></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LeafFlow Buyer — Design System</title>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+  body { padding: 2rem; }
+  .ds-wrap { max-width: 960px; margin: 0 auto; }
+  h2 { font-size: 1.1rem; font-weight: 700; color: var(--gray-700); border-bottom: 2px solid var(--green-200); padding-bottom: .4rem; margin: 2rem 0 1rem; }
+  h3 { font-size: .875rem; font-weight: 700; color: var(--gray-500); margin: 1rem 0 .5rem; }
+  .swatch-row { display: flex; gap: .5rem; flex-wrap: wrap; }
+  .swatch { width: 72px; text-align: center; }
+  .swatch-box { width: 72px; height: 48px; border-radius: .5rem; border: 1px solid rgba(0,0,0,.08); margin-bottom: .3rem; }
+  .swatch-name { font-size: .65rem; font-weight: 600; color: var(--gray-600); }
+  .swatch-hex  { font-size: .6rem; color: var(--gray-400); font-family: monospace; }
+  .type-row { background: #fff; border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; display: flex; flex-direction: column; gap: .875rem; }
+  .type-specimen { display: flex; align-items: baseline; gap: 1.5rem; }
+  .type-meta { font-size: .7rem; color: var(--text-muted); font-family: monospace; min-width: 140px; }
+  .comp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+  .comp-card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; }
+  .comp-card h4 { font-size: .75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: .875rem; }
+  .comp-demo { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
+  code { font-family: monospace; font-size: .8em; background: var(--gray-100); padding: .1rem .3rem; border-radius: .25rem; }
+  .icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: .5rem; }
+  .icon-item { display: flex; flex-direction: column; align-items: center; gap: .3rem; padding: .75rem .5rem; background: #fff; border: 1px solid var(--border); border-radius: var(--radius-md); font-size: .68rem; color: var(--text-muted); text-align: center; }
+  .icon-item span:first-child { font-size: 1.4rem; }
+  .tq-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border); }
+  .tq-table th, .tq-table td { padding: .55rem .875rem; font-size: .82rem; border-bottom: 1px solid var(--border); text-align: left; }
+  .tq-table th { background: var(--gray-50); font-weight: 700; color: var(--text-muted); font-size: .75rem; text-transform: uppercase; }
+  .tq-table tr:last-child td { border-bottom: none; }
+</style>
+</head>
+<body>
+<div class="ds-wrap">
+  <div class="back-nav"><a href="index.html">← Back to Index</a></div>
+  <h1 style="font-size:1.5rem;font-weight:800;color:var(--green-800);margin-bottom:.25rem">🌿 LeafFlow Buyer App — Design System</h1>
+  <p style="color:var(--text-muted);font-size:.875rem;margin-bottom:2rem">Token reference, typography, component library and implementation notes for buyer-app.</p>
+
+  <h2>🎨 Color Palette</h2>
+  <h3>Primary — Green (Brand)</h3>
+  <div class="swatch-row">
+    <div class="swatch"><div class="swatch-box" style="background:#f0fdf4"></div><p class="swatch-name">green-50</p><p class="swatch-hex">#f0fdf4</p></div>
+    <div class="swatch"><div class="swatch-box" style="background:#dcfce7"></div><p class="swatch-name">green-100</p><p class="swatch-hex">#dcfce7</p></div>
+    <div class="swatch"><div class="swatch-box" style="background:#86efac"></div><p class="swatch-name">green-300</p><p class="swatch-hex">#86efac</p></div>
+    <div class="swatch"><div class="swatch-box" style="background:#16a34a;border:none"></div><p class="swatch-name" style="color:var(--green-700)">green-600 ★</p><p class="swatch-hex">#16a34a</p></div>
+    <div class="swatch"><div class="swatch-box" style="background:#15803d;border:none"></div><p class="swatch-name">green-700</p><p class="swatch-hex">#15803d</p></div>
+    <div class="swatch"><div class="swatch-box" style="background:#166534;border:none"></div><p class="swatch-name">green-800</p><p class="swatch-hex">#166534</p></div>
+    <div class="swatch"><div class="swatch-box" style="background:#14532d;border:none"></div><p class="swatch-name">green-900</p><p class="swatch-hex">#14532d</p></div>
+  </div>
+  <h3 style="margin-top:1rem">Lime Accent + Status</h3>
+  <div class="swatch-row">
+    <div class="swatch"><div class="swatch-box" style="background:#a3e635"></div><p class="swatch-name">lime-400</p></div>
+    <div class="swatch"><div class="swatch-box" style="background:#fef3c7"></div><p class="swatch-name">amber-100</p></div>
+    <div class="swatch"><div class="swatch-box" style="background:#f59e0b"></div><p class="swatch-name">amber-500</p></div>
+    <div class="swatch"><div class="swatch-box" style="background:#fee2e2"></div><p class="swatch-name">red-100</p></div>
+    <div class="swatch"><div class="swatch-box" style="background:#ef4444"></div><p class="swatch-name">red-500</p></div>
+    <div class="swatch"><div class="swatch-box" style="background:#dbeafe"></div><p class="swatch-name">blue-100</p></div>
+    <div class="swatch"><div class="swatch-box" style="background:#2563eb"></div><p class="swatch-name">blue-600</p></div>
+  </div>
+
+  <h2>📝 Typography Scale</h2>
+  <div class="type-row">
+    <div class="type-specimen"><span class="type-meta">3xl / 900</span><span style="font-size:2.25rem;font-weight:900;line-height:1.1">Hero Headline</span></div>
+    <div class="type-specimen"><span class="type-meta">2xl / 800</span><span style="font-size:1.75rem;font-weight:800">Page Title</span></div>
+    <div class="type-specimen"><span class="type-meta">xl / 800</span><span style="font-size:1.375rem;font-weight:800">Section Heading</span></div>
+    <div class="type-specimen"><span class="type-meta">lg / 700</span><span style="font-size:1.125rem;font-weight:700">Product Name</span></div>
+    <div class="type-specimen"><span class="type-meta">base / 400</span><span>Body text — care instructions, product descriptions, checkout copy.</span></div>
+    <div class="type-specimen"><span class="type-meta">sm / 400</span><span style="font-size:.875rem">Meta info, shipping copy, category labels.</span></div>
+    <div class="type-specimen"><span class="type-meta">.7rem / 700 / CAPS</span><span style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted)">Category Label / Attribute Name</span></div>
+  </div>
+
+  <h2>🧩 Component Library</h2>
+  <div class="comp-grid">
+    <div class="comp-card">
+      <h4>Buttons</h4>
+      <div class="comp-demo flex-col gap-2" style="width:100%">
+        <button class="btn btn-primary btn-block">Add to Cart</button>
+        <button class="btn btn-outline btn-block">Continue Shopping</button>
+        <div class="flex gap-2">
+          <button class="btn btn-primary btn-sm">Buy Now</button>
+          <button class="btn btn-outline btn-sm">Save</button>
+          <button class="btn btn-danger btn-sm">Remove</button>
+        </div>
+        <button class="btn btn-google btn-block">
+          <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTE3LjY0IDkuMjA0YTEwLjIzIDEwLjIzIDAgMCAwLS4xNjQtMS44NGgtOC40OHYzLjQ3OGg0Ljg0NGExNC4xOCAxNC4xOCAwIDAgMS0uNjIzIDEuNzhoLS4wMDN2MS40OThoMi4wMTNhOS43OCA5Ljc4IDAgMCAwIDIuNDE0LTYuOTE2eiIgZmlsbD0iIzQyODVGNCI+PC9wYXRoPjxwYXRoIGQ9Ik05IDMuNjFhOS4yNyA5LjI3IDAgMCAxIDYuMTA3IDIuMjI1bDIuMDctMi4wN0E5Ljk2OSA5Ljk2OSAwIDAgMCA5IDBhOS45NiA5Ljk2IDAgMCAwLTguOTQ5IDUuNTNsMi40MTMgMS44NTJBNi40NSA2LjQ1IDAgMCAxIDkgMy42MXoiIGZpbGw9IiNFQTQzMzUiPjwvcGF0aD48cGF0aCBkPSJNOS4wMDMgMTguMDI0YTkuOTcgOS45NyAwIDAgMCA2Ljc1OS0yLjYwM2wtMi4wMy0xLjY4Mkg5LjAwM2E2LjQ0IDYuNDQgMCAwIDEtMi41MjEtMS4zMjNMNC4wNSAxNC4yNkE5Ljk2NiA5Ljk2NiAwIDAgMCA5LjAwMyAxOC4wMjR6IiBmaWxsPSIjMzRBODUzIj48L3BhdGg+PHBhdGggZD0iTTIuNDYyIDUuNTMzQTkuOTU3IDkuOTU3IDAgMCAwIC4wMDMgMTBjMCAxLjY0My4zOTcgMy4xOTUgMS4xIDQuNTU1bDIuMzMtMS44NzVBNi40NzIgNi40NzIgMCAwIDEgMi41NiAxMGMwLS44MDcuMTQtMS41NzYuNC0yLjI5ek0iIGZpbGw9IiNGQkJDMDUiPjwvcGF0aD48L3N2Zz4=" style="width:18px;height:18px" /> Continue with Google
+        </button>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <h4>Product Card</h4>
+      <a href="04-product-detail.html" class="product-card" style="display:block">
+        <div class="product-card-img">
+          🌿
+          <span class="pet-badge">🐾 Pet Safe</span>
+        </div>
+        <div class="product-card-body">
+          <div class="product-card-category">Tropical</div>
+          <div class="product-card-name">Monstera Deliciosa</div>
+          <div class="product-card-sci">Monstera deliciosa</div>
+          <div class="product-card-attrs">
+            <span class="attr-chip green">☀️ Bright Indirect</span>
+            <span class="attr-chip">💧 Twice weekly</span>
+          </div>
+          <div class="product-card-footer">
+            <span><span class="product-price">₹899</span><span class="product-compare">₹1,199</span></span>
+            <button class="product-card-add">+</button>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <div class="comp-card">
+      <h4>Status Badges</h4>
+      <div class="comp-demo flex-col gap-2">
+        <div class="flex gap-2 flex-wrap">
+          <span class="badge badge-warning">Placed</span>
+          <span class="badge badge-neutral">Packed</span>
+          <span class="badge badge-info">Shipped</span>
+          <span class="badge badge-success">Delivered</span>
+          <span class="badge badge-error">Cancelled</span>
+        </div>
+        <div class="flex gap-2 flex-wrap mt-1">
+          <span class="badge badge-success">Paid</span>
+          <span class="badge badge-warning">Pending</span>
+          <span class="badge badge-error">Failed</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <h4>Cart Item</h4>
+      <div class="cart-item" style="padding:.75rem 0">
+        <div class="cart-thumb">🌿</div>
+        <div class="cart-info">
+          <div class="cart-name">Monstera Deliciosa</div>
+          <div class="cart-meta">6 inch pot · Tropical</div>
+          <div class="qty-stepper">
+            <button class="qty-btn">−</button>
+            <span class="qty-val">2</span>
+            <button class="qty-btn">+</button>
+            <button class="cart-remove">🗑️ Remove</button>
+          </div>
+        </div>
+        <div class="cart-price">₹1,798</div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <h4>Order Stepper</h4>
+      <div class="stepper mt-2">
+        <div class="step done"><div class="step-dot">✓</div><div class="step-label">Placed</div></div>
+        <div class="step done"><div class="step-dot">✓</div><div class="step-label">Packed</div></div>
+        <div class="step active"><div class="step-dot">3</div><div class="step-label">Shipped</div></div>
+        <div class="step"><div class="step-dot">4</div><div class="step-label">Delivered</div></div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <h4>Address Card</h4>
+      <div class="address-card selected mt-1">
+        <div class="address-name">Ananya Singh</div>
+        <div class="address-text">Flat 4B, Lotus Apartment<br/>MG Road, Bengaluru 560001<br/>Karnataka</div>
+        <div class="address-default">⭐ Default</div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <h4>Plant Attributes</h4>
+      <div class="attr-grid">
+        <div class="attr-item"><div class="attr-item-icon">☀️</div><div class="attr-item-label">Light</div><div class="attr-item-value">Bright Indirect</div></div>
+        <div class="attr-item"><div class="attr-item-icon">💧</div><div class="attr-item-label">Water</div><div class="attr-item-value">Twice weekly</div></div>
+        <div class="attr-item"><div class="attr-item-icon">💨</div><div class="attr-item-label">Humidity</div><div class="attr-item-value">High</div></div>
+        <div class="attr-item"><div class="attr-item-icon">🐾</div><div class="attr-item-label">Pet Safe</div><div class="attr-item-value">Yes</div></div>
+        <div class="attr-item"><div class="attr-item-icon">📏</div><div class="attr-item-label">Height</div><div class="attr-item-value">40–60 cm</div></div>
+        <div class="attr-item"><div class="attr-item-icon">🪣</div><div class="attr-item-label">Pot Size</div><div class="attr-item-value">6 inch</div></div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <h4>Summary Box</h4>
+      <div class="summary-box">
+        <div class="summary-row"><span>Subtotal (3 items)</span><span>₹2,047</span></div>
+        <div class="summary-row"><span>Shipping</span><span class="text-bold" style="color:var(--green-600)">Free</span></div>
+        <div class="summary-total"><span>Total</span><span>₹2,047</span></div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <h4>Alerts</h4>
+      <div class="flex flex-col gap-2" style="width:100%">
+        <div class="alert alert-success"><span class="alert-icon">✅</span><span>Order placed successfully!</span></div>
+        <div class="alert alert-warning"><span class="alert-icon">⚠️</span><span>Only 2 units left in stock.</span></div>
+        <div class="alert alert-error"><span class="alert-icon">❌</span><span>Payment failed. Please retry.</span></div>
+        <div class="alert alert-info"><span class="alert-icon">ℹ️</span><span>Free shipping on orders above ₹999.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <h2>🔣 Icon Map</h2>
+  <div class="icon-grid">
+    <div class="icon-item"><span>🌿</span><span>logo/brand</span></div>
+    <div class="icon-item"><span>🛒</span><span>cart</span></div>
+    <div class="icon-item"><span>🔍</span><span>search</span></div>
+    <div class="icon-item"><span>👤</span><span>profile</span></div>
+    <div class="icon-item"><span>📋</span><span>orders</span></div>
+    <div class="icon-item"><span>📍</span><span>address</span></div>
+    <div class="icon-item"><span>💳</span><span>payment</span></div>
+    <div class="icon-item"><span>☀️</span><span>light req</span></div>
+    <div class="icon-item"><span>💧</span><span>water</span></div>
+    <div class="icon-item"><span>💨</span><span>humidity</span></div>
+    <div class="icon-item"><span>🐾</span><span>pet safe</span></div>
+    <div class="icon-item"><span>📏</span><span>height</span></div>
+    <div class="icon-item"><span>🎉</span><span>success</span></div>
+    <div class="icon-item"><span>➕</span><span>add</span></div>
+    <div class="icon-item"><span>🗑️</span><span>remove</span></div>
+    <div class="icon-item"><span>✉️</span><span>email</span></div>
+  </div>
+  <div class="annotation mt-3">Use <code>lucide-react</code>: ShoppingCart, Search, User, Package, MapPin, CreditCard, Sun, Droplets, Wind, PawPrint, Ruler, Plus, Trash2, Mail, Check, AlertTriangle, X.</div>
+
+  <h2>🔌 TanStack Query Hook Map</h2>
+  <table class="tq-table">
+    <thead><tr><th>Hook</th><th>API Call</th><th>Used In</th><th>Zustand Integration</th></tr></thead>
+    <tbody>
+      <tr><td><code>useProducts(params)</code></td><td>GET /api/products</td><td>Catalog, Homepage featured</td><td>Reads filter state from URL params</td></tr>
+      <tr><td><code>useProduct(slug)</code></td><td>GET /api/products/:slug</td><td>Product Detail (RSC or client)</td><td>Checks cart Zustand for current qty</td></tr>
+      <tr><td><code>useCategories()</code></td><td>GET /api/categories</td><td>Catalog sidebar, Homepage pills</td><td>—</td></tr>
+      <tr><td><code>useCart()</code></td><td>GET /api/buyer/cart</td><td>Cart page (sync from server)</td><td>Merges with Zustand cart on hydration</td></tr>
+      <tr><td><code>useOrders()</code></td><td>GET /api/buyer/orders</td><td>Order history page</td><td>—</td></tr>
+      <tr><td><code>useOrder(id)</code></td><td>GET /api/buyer/orders/:id</td><td>Order detail page</td><td>—</td></tr>
+      <tr><td><code>useMe()</code></td><td>GET /api/buyer/auth/me</td><td>Header, Profile</td><td>Hydrates auth Zustand slice</td></tr>
+      <tr><td><code>useCreateOrder()</code></td><td>POST /api/buyer/orders</td><td>Checkout payment step</td><td>Clears cart Zustand on success</td></tr>
+    </tbody>
+  </table>
+
+  <h2>🗃️ Zustand Store Design</h2>
+  <div class="card mt-2">
+    <div class="card-body">
+      <div class="grid-2 gap-4">
+        <div>
+          <div style="font-weight:700;font-size:.875rem;margin-bottom:.5rem;color:var(--gray-700)">cartStore.ts</div>
+          <pre style="background:var(--gray-800);color:#e5e7eb;padding:1rem;border-radius:var(--radius-lg);font-size:.75rem;line-height:1.7;overflow-x:auto">interface CartStore {
+  items: CartItem[]          // { productId, name, price, qty, stock }
+  addItem(product, qty)
+  removeItem(productId)
+  updateQty(productId, qty)  // capped at product.stock
+  clearCart()
+  totalItems: number         // derived
+  subtotal: number           // derived
+}</pre>
+          <p class="text-xs text-muted mt-2">Persisted to <code>localStorage</code> via <code>zustand/middleware/persist</code>. Synced to server cart on login.</p>
+        </div>
+        <div>
+          <div style="font-weight:700;font-size:.875rem;margin-bottom:.5rem;color:var(--gray-700)">checkoutStore.ts</div>
+          <pre style="background:var(--gray-800);color:#e5e7eb;padding:1rem;border-radius:var(--radius-lg);font-size:.75rem;line-height:1.7;overflow-x:auto">interface CheckoutStore {
+  step: 'address' | 'payment'
+  selectedAddressId: string
+  newAddress: AddressForm | null
+  razorpayOrderId: string
+  setStep(step)
+  setAddress(id)
+  setNewAddress(form)
+  setRazorpayOrder(id)
+  reset()
+}</pre>
+          <p class="text-xs text-muted mt-2">Not persisted. Reset after successful order. Step drives checkout route rendering.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>💡 Design Principles</h2>
+  <div class="card">
+    <div class="card-body grid-2 gap-4">
+      <div>
+        <div style="font-weight:700;margin-bottom:.5rem">Mobile-First</div>
+        <ul style="list-style:disc;margin-left:1.2rem;font-size:.875rem;line-height:1.8;color:var(--gray-600)">
+          <li>All grids collapse to 1-col below 640 px</li>
+          <li>Touch targets ≥ 44 × 44 px (WCAG 2.5.5)</li>
+          <li>Sticky header + floating cart button on mobile</li>
+          <li>Bottom sheet for filters on mobile</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-weight:700;margin-bottom:.5rem">Next.js App Router Patterns</div>
+        <ul style="list-style:disc;margin-left:1.2rem;font-size:.875rem;line-height:1.8;color:var(--gray-600)">
+          <li>Catalog + Product Detail: Server Components + <code>generateStaticParams</code></li>
+          <li>Cart, Checkout, Orders: Client Components (<code>'use client'</code>)</li>
+          <li>Homepage: <code>ISR</code> with <code>revalidate: 3600</code></li>
+          <li>Auth routes in <code>(auth)/</code> route group with own layout</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-weight:700;margin-bottom:.5rem">SEO & Performance</div>
+        <ul style="list-style:disc;margin-left:1.2rem;font-size:.875rem;line-height:1.8;color:var(--gray-600)">
+          <li>Product detail pages: <code>generateMetadata()</code> per slug</li>
+          <li>Images via Next.js <code>&lt;Image /&gt;</code> from Cloudinary</li>
+          <li>Catalog: URL search params for shareable filter state</li>
+          <li>Structured data (JSON-LD Product schema) on detail page</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-weight:700;margin-bottom:.5rem">Auth Guard</div>
+        <ul style="list-style:disc;margin-left:1.2rem;font-size:.875rem;line-height:1.8;color:var(--gray-600)">
+          <li>Cart: local Zustand only (no auth required)</li>
+          <li>Checkout: redirect to <code>/login?redirect=/checkout</code></li>
+          <li>Orders + Profile: middleware-level redirect</li>
+          <li>Google One Tap: shown on any public page, dismissed if logged in</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

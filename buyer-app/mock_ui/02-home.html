@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LeafFlow — Homepage</title>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+  .care-card { background:#fff;border:1px solid var(--border);border-radius:var(--radius-xl);padding:1.5rem;text-align:center; }
+  .care-card-icon { font-size:2.5rem;margin-bottom:.5rem; }
+  .care-card-title { font-size:1rem;font-weight:700;margin-bottom:.25rem; }
+  .care-card-desc { font-size:.825rem;color:var(--text-muted);line-height:1.5; }
+  .trust-strip { display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;padding:1.5rem;background:#fff;border-radius:var(--radius-xl);border:1px solid var(--border);margin-bottom:3rem; }
+  .trust-item { display:flex;align-items:center;gap:.5rem;font-size:.875rem;font-weight:500;color:var(--gray-600); }
+  .trust-item span:first-child { font-size:1.25rem; }
+  .newsletter { background:linear-gradient(135deg,var(--green-800),var(--green-600));color:#fff;border-radius:var(--radius-2xl);padding:3rem;text-align:center; }
+  .newsletter h2 { font-size:1.75rem;font-weight:800;margin-bottom:.5rem; }
+  .newsletter p { opacity:.8;margin-bottom:1.5rem; }
+  .newsletter-form { display:flex;gap:.75rem;max-width:440px;margin:0 auto; }
+  .newsletter-input { flex:1;padding:.65rem 1rem;border-radius:var(--radius-lg);border:none;font-size:.9rem;outline:none; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="02-home.html" class="header-logo"><span class="header-logo-icon">🌿</span><div>LeafFlow<span class="header-logo-sub">Bring plants home</span></div></a>
+    <nav class="header-nav"><a href="03-catalog.html">Shop</a><a href="03-catalog.html?cat=succulents">Succulents</a><a href="03-catalog.html?cat=tropical">Tropical</a><a href="13-static-pages.html">About</a></nav>
+    <div class="header-spacer"></div>
+    <div class="header-search"><span class="icon">🔍</span><input placeholder="Search plants…"/></div>
+    <div class="header-actions">
+      <a href="05-cart.html" class="header-icon-btn">🛒<span class="cart-badge">2</span></a>
+      <a href="auth-01-login.html" class="btn btn-outline btn-sm">Sign in</a>
+    </div>
+  </div>
+</header>
+
+<div class="page-wrapper">
+  <div class="page-content">
+    <div class="back-nav"><a href="index.html">← Back to Index</a></div>
+
+    <!-- HERO -->
+    <div class="hero">
+      <div>
+        <div class="hero-eyebrow">🌿 Free shipping above ₹999</div>
+        <div class="hero-title">Bring Nature<br/>Home</div>
+        <div class="hero-sub">Curated ornamental plants, delivered fresh to your door. Over 100+ varieties for every corner of your home.</div>
+        <div class="hero-actions">
+          <a href="03-catalog.html" class="btn btn-white btn-lg">Shop All Plants</a>
+          <a href="03-catalog.html?cat=succulents" class="btn btn-lg" style="background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.3)">Easy Care Picks →</a>
+        </div>
+      </div>
+      <div class="hero-img">🌿</div>
+    </div>
+
+    <!-- TRUST STRIP -->
+    <div class="trust-strip">
+      <div class="trust-item"><span>🚚</span><span>Free delivery above ₹999</span></div>
+      <div class="trust-item"><span>🌱</span><span>Healthy plants guaranteed</span></div>
+      <div class="trust-item"><span>📦</span><span>Eco-friendly packaging</span></div>
+      <div class="trust-item"><span>🔄</span><span>Easy 7-day returns</span></div>
+      <div class="trust-item"><span>☎️</span><span>Plant care support</span></div>
+    </div>
+
+    <!-- CATEGORY PILLS -->
+    <div class="section">
+      <div class="section-header">
+        <h2 class="section-title-lg">Shop by Category</h2>
+        <a href="03-catalog.html" class="section-link">View all →</a>
+      </div>
+      <div class="category-strip">
+        <a href="03-catalog.html" class="category-pill active"><span class="pill-icon">🪴</span> All Plants</a>
+        <a href="03-catalog.html?cat=succulents" class="category-pill"><span class="pill-icon">🌵</span> Succulents</a>
+        <a href="03-catalog.html?cat=tropical" class="category-pill"><span class="pill-icon">🌿</span> Tropical</a>
+        <a href="03-catalog.html?cat=air-purifying" class="category-pill"><span class="pill-icon">💨</span> Air Purifying</a>
+        <a href="03-catalog.html?cat=pet-friendly" class="category-pill"><span class="pill-icon">🐾</span> Pet Friendly</a>
+        <a href="03-catalog.html?cat=low-light" class="category-pill"><span class="pill-icon">🌑</span> Low Light</a>
+        <a href="03-catalog.html?cat=hanging" class="category-pill"><span class="pill-icon">🪢</span> Hanging Plants</a>
+      </div>
+    </div>
+
+    <!-- FEATURED PRODUCTS -->
+    <div class="section">
+      <div class="section-header">
+        <h2 class="section-title-lg">🌟 Featured Plants</h2>
+        <a href="03-catalog.html" class="section-link">See all 148 →</a>
+      </div>
+      <div class="products-grid">
+        <a href="04-product-detail.html" class="product-card">
+          <div class="product-card-img">🌿<span class="sale-badge">SALE</span><span class="pet-badge">🐾 Safe</span></div>
+          <div class="product-card-body">
+            <div class="product-card-category">Tropical</div>
+            <div class="product-card-name">Monstera Deliciosa</div>
+            <div class="product-card-sci">Monstera deliciosa</div>
+            <div class="product-card-attrs"><span class="attr-chip green">☀️ Bright Indirect</span><span class="attr-chip">💧 Twice weekly</span></div>
+            <div class="product-card-footer"><span><span class="product-price">₹899</span><span class="product-compare">₹1,199</span></span><button class="product-card-add" onclick="event.preventDefault()">+</button></div>
+          </div>
+        </a>
+        <a href="04-product-detail.html" class="product-card">
+          <div class="product-card-img">🌵</div>
+          <div class="product-card-body">
+            <div class="product-card-category">Succulents</div>
+            <div class="product-card-name">Golden Barrel Cactus</div>
+            <div class="product-card-sci">Echinocactus grusonii</div>
+            <div class="product-card-attrs"><span class="attr-chip green">☀️ Bright Indirect</span><span class="attr-chip">💧 Monthly</span></div>
+            <div class="product-card-footer"><span class="product-price">₹349</span><button class="product-card-add" onclick="event.preventDefault()">+</button></div>
+          </div>
+        </a>
+        <a href="04-product-detail.html" class="product-card">
+          <div class="product-card-img">🌺</div>
+          <div class="product-card-body">
+            <div class="product-card-category">Air Purifying</div>
+            <div class="product-card-name">Peace Lily</div>
+            <div class="product-card-sci">Spathiphyllum wallisii</div>
+            <div class="product-card-attrs"><span class="attr-chip green">🌑 Low Light</span><span class="attr-chip">💧 Weekly</span></div>
+            <div class="product-card-footer"><span class="product-price">₹549</span><button class="product-card-add" onclick="event.preventDefault()">+</button></div>
+          </div>
+        </a>
+        <a href="04-product-detail.html" class="product-card">
+          <div class="product-card-img">🌱<span class="pet-badge">🐾 Safe</span></div>
+          <div class="product-card-body">
+            <div class="product-card-category">Low Light</div>
+            <div class="product-card-name">Pothos (Golden)</div>
+            <div class="product-card-sci">Epipremnum aureum</div>
+            <div class="product-card-attrs"><span class="attr-chip green">🌑 Low Light</span><span class="attr-chip">💧 Twice weekly</span></div>
+            <div class="product-card-footer"><span class="product-price">₹249</span><button class="product-card-add" onclick="event.preventDefault()">+</button></div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- PLANT CARE GUIDE STRIP -->
+    <div class="section">
+      <div class="section-header"><h2 class="section-title-lg">🌱 Why LeafFlow?</h2></div>
+      <div class="grid-3 gap-4">
+        <div class="care-card"><div class="care-card-icon">🌿</div><div class="care-card-title">Hand-picked Varieties</div><div class="care-card-desc">Every plant is selected by our botanists for health, beauty and ease of care.</div></div>
+        <div class="care-card"><div class="care-card-icon">📦</div><div class="care-card-title">Protective Packaging</div><div class="care-card-desc">Custom eco-pots and shredded paper keep your plants safe in transit.</div></div>
+        <div class="care-card"><div class="care-card-icon">🌡️</div><div class="care-card-title">Care Card Included</div><div class="care-card-desc">Every order ships with a personalised care guide for your specific plants.</div></div>
+      </div>
+    </div>
+
+    <!-- NEWSLETTER -->
+    <div class="newsletter mb-6">
+      <h2>Get Plant Care Tips 🌿</h2>
+      <p>Join 12,000+ plant parents. Weekly tips, new arrivals and exclusive offers.</p>
+      <div class="newsletter-form">
+        <input class="newsletter-input" type="email" placeholder="your@email.com"/>
+        <button class="btn btn-white">Subscribe</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div><div class="footer-brand-name">🌿 LeafFlow</div><div class="footer-brand-desc">Bringing the beauty of plants to every home. Curated, healthy plants shipped across India.</div></div>
+    <div class="footer-col"><div class="footer-col-title">Shop</div><ul><li><a href="03-catalog.html">All Plants</a></li><li><a>Succulents</a></li><li><a>Tropical</a></li><li><a>Air Purifying</a></li></ul></div>
+    <div class="footer-col"><div class="footer-col-title">Account</div><ul><li><a href="09-orders-list.html">My Orders</a></li><li><a href="11-profile.html">Profile</a></li><li><a href="auth-01-login.html">Sign In</a></li></ul></div>
+    <div class="footer-col"><div class="footer-col-title">Info</div><ul><li><a href="13-static-pages.html">About Us</a></li><li><a href="13-static-pages.html">Shipping</a></li><li><a href="13-static-pages.html">Returns</a></li><li><a href="13-static-pages.html">Contact</a></li></ul></div>
+  </div>
+  <div class="footer-bottom">© 2026 LeafFlow · Made with 🌿 in Bengaluru, India</div>
+</footer>
+
+<div class="page-wrapper">
+  <div class="annotation mt-3">
+    Homepage is a Next.js <strong>Server Component</strong> with <code>export const revalidate = 3600</code> (ISR). Featured products fetched server-side via <code>fetch('/api/products?featured=true&limit=8')</code>. Categories fetched server-side for category strip. Hero and newsletter are static. Cart badge hydrated client-side from Zustand.
+  </div>
+</div>
+</body>
+</html>

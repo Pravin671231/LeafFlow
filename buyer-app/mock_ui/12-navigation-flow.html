@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LeafFlow Buyer — Navigation Flow</title>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+  .flow-section { margin-bottom:3rem; }
+  .flow-title { font-size:1.1rem;font-weight:800;color:var(--green-800);margin-bottom:1.25rem;padding-bottom:.5rem;border-bottom:2px solid var(--green-200); }
+  .flow-row { display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.875rem; }
+  .flow-node { padding:.45rem .875rem;border-radius:var(--radius-lg);font-size:.825rem;font-weight:700;white-space:nowrap; }
+  .flow-node.page { background:var(--green-100);color:var(--green-800);border:1.5px solid var(--green-300); }
+  .flow-node.action { background:var(--gray-100);color:var(--gray-700);border:1.5px solid var(--border); }
+  .flow-node.api { background:#f0f7ff;color:#1d4ed8;border:1.5px solid #bfdbfe;font-family:monospace;font-size:.75rem; }
+  .flow-node.gate { background:#fefce8;color:#92400e;border:1.5px solid #fde68a; }
+  .flow-node.external { background:#fdf2f8;color:#701a75;border:1.5px solid #f5d0fe; }
+  .flow-arrow { color:var(--gray-400);font-size:1.1rem;font-weight:700; }
+  .route-table { width:100%;border-collapse:collapse;font-size:.85rem; }
+  .route-table th { background:var(--green-800);color:#fff;padding:.625rem .875rem;text-align:left;font-size:.78rem;font-weight:700;letter-spacing:.05em; }
+  .route-table td { padding:.625rem .875rem;border-bottom:1px solid var(--gray-100);vertical-align:top; }
+  .route-table tr:hover td { background:var(--gray-50); }
+  .route-table code { font-size:.78rem;background:var(--gray-100);padding:.1rem .3rem;border-radius:.25rem; }
+  .guard-badge { font-size:.7rem;font-weight:700;padding:.15rem .45rem;border-radius:9999px; }
+  .guard-public { background:var(--green-100);color:var(--green-700); }
+  .guard-auth { background:#dbeafe;color:#1d4ed8; }
+  .guard-guest { background:#fef3c7;color:#92400e; }
+  .code-block { background:var(--gray-800);color:#e2e8f0;border-radius:var(--radius-xl);padding:1.25rem;font-family:monospace;font-size:.8rem;line-height:1.7;overflow-x:auto;margin:.5rem 0; }
+  .code-comment { color:#94a3b8; }
+  .code-keyword { color:#7dd3fc; }
+  .code-string { color:#86efac; }
+  .code-type { color:#fde68a; }
+</style>
+</head>
+<body>
+
+<div class="page-wrapper">
+  <div class="page-content">
+    <div class="back-nav"><a href="index.html">← Back to Index</a></div>
+    <h1 class="page-title">Buyer App — Navigation &amp; Routing Reference</h1>
+    <p class="page-subtitle mb-5">App Router layout nesting, auth guards, checkout step machine, and inter-page navigation</p>
+
+    <!-- COMPLETE ROUTE TABLE -->
+    <div class="flow-section">
+      <div class="flow-title">Complete Route Table</div>
+      <div class="table-wrap">
+        <table class="route-table">
+          <thead>
+            <tr><th>Route</th><th>File</th><th>Guard</th><th>Notes</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>/</code></td><td><code>app/(shop)/page.tsx</code></td><td><span class="guard-badge guard-public">public</span></td><td>Homepage, ISR revalidate=3600</td></tr>
+            <tr><td><code>/shop</code></td><td><code>app/(shop)/shop/page.tsx</code></td><td><span class="guard-badge guard-public">public</span></td><td>Catalog, filter state in URL params</td></tr>
+            <tr><td><code>/shop/[slug]</code></td><td><code>app/(shop)/shop/[slug]/page.tsx</code></td><td><span class="guard-badge guard-public">public</span></td><td>SSG via generateStaticParams</td></tr>
+            <tr><td><code>/cart</code></td><td><code>app/(shop)/cart/page.tsx</code></td><td><span class="guard-badge guard-public">public</span></td><td>Zustand cart, no auth needed to view</td></tr>
+            <tr><td><code>/checkout</code></td><td><code>app/(shop)/checkout/page.tsx</code></td><td><span class="guard-badge guard-auth">auth required</span></td><td>middleware.ts redirects to /login?redirect=/checkout</td></tr>
+            <tr><td><code>/login</code></td><td><code>app/(auth)/login/page.tsx</code></td><td><span class="guard-badge guard-guest">guest only</span></td><td>Redirect to ?redirect= param if already authed</td></tr>
+            <tr><td><code>/login/verify</code></td><td><code>app/(auth)/login/verify/page.tsx</code></td><td><span class="guard-badge guard-guest">guest only</span></td><td>Email from query param (or sessionStorage)</td></tr>
+            <tr><td><code>/orders</code></td><td><code>app/(account)/orders/page.tsx</code></td><td><span class="guard-badge guard-auth">auth required</span></td><td>TanStack Query useOrders()</td></tr>
+            <tr><td><code>/orders/[id]</code></td><td><code>app/(account)/orders/[id]/page.tsx</code></td><td><span class="guard-badge guard-auth">auth required</span></td><td>Success banner if ?success=1</td></tr>
+            <tr><td><code>/profile</code></td><td><code>app/(account)/profile/page.tsx</code></td><td><span class="guard-badge guard-auth">auth required</span></td><td>PATCH /api/buyer/profile</td></tr>
+            <tr><td><code>/about</code></td><td><code>app/(static)/about/page.tsx</code></td><td><span class="guard-badge guard-public">public</span></td><td>Static, no fetch</td></tr>
+            <tr><td><code>/shipping</code></td><td><code>app/(static)/shipping/page.tsx</code></td><td><span class="guard-badge guard-public">public</span></td><td>Static</td></tr>
+            <tr><td><code>/returns</code></td><td><code>app/(static)/returns/page.tsx</code></td><td><span class="guard-badge guard-public">public</span></td><td>Static</td></tr>
+            <tr><td><code>/contact</code></td><td><code>app/(static)/contact/page.tsx</code></td><td><span class="guard-badge guard-public">public</span></td><td>Contact form → email</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- AUTH FLOW -->
+    <div class="flow-section">
+      <div class="flow-title">Email OTP Auth Flow (BUY-001/002)</div>
+      <div class="flow-row">
+        <div class="flow-node page"><a href="auth-01-login.html">/login</a></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node action">Enter email</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node api">POST /api/buyer/auth/send-otp</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node page"><a href="auth-02-verify-otp.html">/login/verify</a></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node action">Enter OTP</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node api">POST /api/buyer/auth/verify-otp</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node action">Set JWT cookie</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node page">?redirect= or /</div>
+      </div>
+
+      <div class="flow-title" style="margin-top:2rem">Google OAuth Flow (BUY-003)</div>
+      <div class="flow-row">
+        <div class="flow-node page"><a href="auth-01-login.html">/login</a></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node action">Click "Continue with Google"</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node external">Google OAuth redirect</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node api">GET /api/buyer/auth/google/callback</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node action">Set JWT cookie</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node page">/ (homepage)</div>
+      </div>
+
+      <div class="flow-title" style="margin-top:2rem">Google One Tap Flow (BUY-003)</div>
+      <div class="flow-row">
+        <div class="flow-node page">Any page (not authed)</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node external">Google prompt()</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node action">User clicks "Continue as X"</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node api">POST /api/buyer/auth/google/one-tap</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node action">Set JWT cookie</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node action">Prompt dismissed, page refreshes auth</div>
+      </div>
+    </div>
+
+    <!-- CHECKOUT STEP MACHINE -->
+    <div class="flow-section">
+      <div class="flow-title">Checkout Step Machine (Zustand checkoutStore)</div>
+      <div class="flow-row">
+        <div class="flow-node page"><a href="05-cart.html">/cart</a></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node gate">middleware.ts: auth check</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node page"><a href="06-checkout-address.html">/checkout [step: address]</a></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node action">setSelectedAddressId</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node page"><a href="07-checkout-payment.html">/checkout [step: payment]</a></div>
+      </div>
+      <div class="flow-row" style="margin-top:.75rem">
+        <div class="flow-node page">/checkout [step: payment]</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node api">POST /api/buyer/orders</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node external">Razorpay popup</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node gate">payment.captured webhook</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node action">clearCart + reset checkout</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node page"><a href="08-order-success.html">/orders/[id]?success=1</a></div>
+      </div>
+    </div>
+
+    <!-- APP ROUTER LAYOUT NESTING -->
+    <div class="flow-section">
+      <div class="flow-title">App Router Layout Nesting</div>
+      <div class="code-block">
+<span class="code-comment">// app/layout.tsx — root layout (html, body, providers)</span>
+<span class="code-type">RootLayout</span>
+  ├── <span class="code-type">(shop)/layout.tsx</span>   <span class="code-comment">← SiteHeader + SiteFooter</span>
+  │    ├── page.tsx               <span class="code-comment">← / homepage</span>
+  │    ├── shop/page.tsx          <span class="code-comment">← /shop catalog</span>
+  │    ├── shop/[slug]/page.tsx   <span class="code-comment">← /shop/monstera-deliciosa</span>
+  │    ├── cart/page.tsx          <span class="code-comment">← /cart</span>
+  │    └── checkout/page.tsx      <span class="code-comment">← /checkout (auth-guarded by middleware.ts)</span>
+  │
+  ├── <span class="code-type">(auth)/layout.tsx</span>    <span class="code-comment">← centered card layout, no nav</span>
+  │    ├── login/page.tsx         <span class="code-comment">← /login</span>
+  │    └── login/verify/page.tsx  <span class="code-comment">← /login/verify</span>
+  │
+  ├── <span class="code-type">(account)/layout.tsx</span> <span class="code-comment">← SiteHeader + profile sidebar nav</span>
+  │    ├── orders/page.tsx        <span class="code-comment">← /orders</span>
+  │    ├── orders/[id]/page.tsx   <span class="code-comment">← /orders/:id</span>
+  │    └── profile/page.tsx       <span class="code-comment">← /profile</span>
+  │
+  └── <span class="code-type">(static)/layout.tsx</span>  <span class="code-comment">← SiteHeader + SiteFooter</span>
+       ├── about/page.tsx
+       ├── shipping/page.tsx
+       ├── returns/page.tsx
+       └── contact/page.tsx
+      </div>
+    </div>
+
+    <!-- MIDDLEWARE.TS -->
+    <div class="flow-section">
+      <div class="flow-title">middleware.ts Auth Guard Logic</div>
+      <div class="code-block">
+<span class="code-keyword">export function</span> middleware(request: NextRequest) {
+  <span class="code-keyword">const</span> token = request.cookies.get(<span class="code-string">'buyer_token'</span>)
+  <span class="code-keyword">const</span> { pathname } = request.nextUrl
+
+  <span class="code-comment">// Guest-only: redirect authed users away from /login</span>
+  <span class="code-keyword">if</span> (pathname.startsWith(<span class="code-string">'/login'</span>) &amp;&amp; token) {
+    <span class="code-keyword">return</span> NextResponse.redirect(<span class="code-string">'/'</span>)
+  }
+
+  <span class="code-comment">// Auth-required: redirect unauthenticated users to /login</span>
+  <span class="code-keyword">const</span> protectedPaths = [<span class="code-string">'/checkout'</span>, <span class="code-string">'/orders'</span>, <span class="code-string">'/profile'</span>]
+  <span class="code-keyword">if</span> (protectedPaths.some(p =&gt; pathname.startsWith(p)) &amp;&amp; !token) {
+    <span class="code-keyword">const</span> url = request.nextUrl.clone()
+    url.pathname = <span class="code-string">'/login'</span>
+    url.searchParams.set(<span class="code-string">'redirect'</span>, pathname)
+    <span class="code-keyword">return</span> NextResponse.redirect(url)
+  }
+}
+      </div>
+    </div>
+
+    <!-- ZUSTAND STORES -->
+    <div class="flow-section">
+      <div class="flow-title">Zustand Store Design</div>
+      <div class="code-block">
+<span class="code-comment">// stores/cartStore.ts</span>
+<span class="code-keyword">interface</span> <span class="code-type">CartItem</span> { productId: string; name: string; price: number; qty: number; stock: number; image: string }
+<span class="code-keyword">interface</span> <span class="code-type">CartStore</span> {
+  items: <span class="code-type">CartItem</span>[]
+  addItem: (product: <span class="code-type">Product</span>, qty: number) =&gt; void
+  removeItem: (productId: string) =&gt; void
+  updateQty: (productId: string, qty: number) =&gt; void   <span class="code-comment">// capped at stock</span>
+  clearCart: () =&gt; void
+  totalItems: number   <span class="code-comment">// derived</span>
+  subtotal: number     <span class="code-comment">// derived</span>
+}
+<span class="code-comment">// persisted via zustand/middleware/persist (localStorage key: "leafflow-cart")</span>
+
+<span class="code-comment">// stores/checkoutStore.ts — NOT persisted, reset after order</span>
+<span class="code-keyword">interface</span> <span class="code-type">CheckoutStore</span> {
+  step: <span class="code-string">'address'</span> | <span class="code-string">'payment'</span>
+  selectedAddressId: string | null
+  newAddress: <span class="code-type">AddressInput</span> | null
+  razorpayOrderId: string | null
+  setStep: (step) =&gt; void
+  setSelectedAddressId: (id) =&gt; void
+  setRazorpayOrderId: (id) =&gt; void
+  reset: () =&gt; void   <span class="code-comment">// called after successful order</span>
+}
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

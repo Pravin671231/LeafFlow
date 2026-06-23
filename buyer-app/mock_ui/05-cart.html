@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LeafFlow — Cart</title>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+  .cart-layout { display:grid;grid-template-columns:1fr 360px;gap:1.5rem;align-items:start; }
+  .sticky-summary { position:sticky;top:84px; }
+  code { font-family:monospace;font-size:.8em;background:var(--gray-100);padding:.1rem .3rem;border-radius:.25rem; }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <a href="02-home.html" class="header-logo"><span class="header-logo-icon">🌿</span><div>LeafFlow<span class="header-logo-sub">Bring plants home</span></div></a>
+    <nav class="header-nav"><a href="03-catalog.html">Shop</a></nav>
+    <div class="header-spacer"></div>
+    <div class="header-search"><span class="icon">🔍</span><input placeholder="Search plants…"/></div>
+    <div class="header-actions"><a href="05-cart.html" class="header-icon-btn" style="background:var(--green-100);border:2px solid var(--green-300)">🛒<span class="cart-badge">3</span></a><div class="avatar-btn">AS</div></div>
+  </div>
+</header>
+
+<div class="page-wrapper">
+  <div class="page-content">
+    <div class="back-nav"><a href="index.html">← Back to Index</a> &nbsp;·&nbsp; <a href="03-catalog.html">← Continue shopping</a></div>
+    <h1 class="page-title mb-4">Your Cart <span style="font-size:1rem;font-weight:500;color:var(--text-muted)">(3 items)</span></h1>
+
+    <!-- EMPTY STATE (shown when no items) -->
+    <div style="display:none;text-align:center;padding:4rem 2rem">
+      <div style="font-size:4rem;margin-bottom:1rem">🛒</div>
+      <h2 style="font-size:1.25rem;font-weight:700;margin-bottom:.5rem">Your cart is empty</h2>
+      <p style="color:var(--text-muted);margin-bottom:1.5rem">Discover our curated selection of plants and find your perfect green companion.</p>
+      <a href="03-catalog.html" class="btn btn-primary btn-lg">Shop All Plants</a>
+    </div>
+
+    <div class="cart-layout">
+      <!-- CART ITEMS -->
+      <div class="card">
+        <div class="card-body" style="padding:0 1.5rem">
+          <!-- ITEM 1 -->
+          <div class="cart-item">
+            <a href="04-product-detail.html"><div class="cart-thumb">🌿</div></a>
+            <div class="cart-info">
+              <a href="04-product-detail.html" class="cart-name" style="text-decoration:none;color:inherit">Monstera Deliciosa</a>
+              <div class="cart-meta">Tropical · 6 inch pot · ₹899 each</div>
+              <div class="qty-stepper">
+                <button class="qty-btn">−</button>
+                <span class="qty-val">2</span>
+                <button class="qty-btn">+</button>
+                <button class="cart-remove">🗑️ Remove</button>
+              </div>
+              <div style="font-size:.72rem;color:var(--amber-500);margin-top:.25rem;font-weight:600">⚠️ Only 14 in stock</div>
+            </div>
+            <div class="cart-price">₹1,798</div>
+          </div>
+
+          <!-- ITEM 2 -->
+          <div class="cart-item">
+            <a href="04-product-detail.html"><div class="cart-thumb">🌵</div></a>
+            <div class="cart-info">
+              <a href="04-product-detail.html" class="cart-name" style="text-decoration:none;color:inherit">Golden Barrel Cactus</a>
+              <div class="cart-meta">Succulents · 4 inch pot · ₹349 each</div>
+              <div class="qty-stepper">
+                <button class="qty-btn">−</button>
+                <span class="qty-val">1</span>
+                <button class="qty-btn">+</button>
+                <button class="cart-remove">🗑️ Remove</button>
+              </div>
+            </div>
+            <div class="cart-price">₹349</div>
+          </div>
+
+          <!-- ITEM 3 — OUT OF STOCK WARNING -->
+          <div class="cart-item" style="background:var(--red-100);margin:0 -1.5rem;padding:1.25rem 1.5rem;border-radius:0">
+            <div><div class="cart-thumb" style="opacity:.5">🌾</div></div>
+            <div class="cart-info">
+              <div class="cart-name" style="opacity:.6">Boston Fern</div>
+              <div class="cart-meta" style="opacity:.6">Tropical · 6 inch pot</div>
+              <div style="font-size:.8rem;color:var(--red-600);font-weight:700;margin-top:.4rem">❌ Out of stock — remove to continue</div>
+              <button class="cart-remove" style="color:var(--red-600);margin-top:.4rem">🗑️ Remove</button>
+            </div>
+            <div class="cart-price" style="opacity:.4">₹699</div>
+          </div>
+        </div>
+
+        <div class="card-footer flex items-center justify-between">
+          <button class="btn btn-ghost btn-sm" style="color:var(--red-500)">🗑️ Clear cart</button>
+          <a href="03-catalog.html" class="btn btn-outline btn-sm">← Continue Shopping</a>
+        </div>
+      </div>
+
+      <!-- ORDER SUMMARY -->
+      <div class="sticky-summary">
+        <div class="summary-box mb-3">
+          <div style="font-size:1rem;font-weight:800;color:var(--green-800);margin-bottom:1rem">Order Summary</div>
+          <div class="summary-row"><span>Monstera Deliciosa × 2</span><span>₹1,798</span></div>
+          <div class="summary-row"><span>Golden Barrel Cactus × 1</span><span>₹349</span></div>
+          <div class="summary-row"><span>Subtotal</span><span>₹2,147</span></div>
+          <div class="summary-row"><span>Shipping</span><span class="text-bold" style="color:var(--green-600)">Free 🎉</span></div>
+          <div class="summary-total"><span>Total</span><span>₹2,147</span></div>
+        </div>
+
+        <div class="alert alert-success mb-3">
+          <span class="alert-icon">🎉</span>
+          <span>You're getting <strong>free delivery</strong> on this order (above ₹999).</span>
+        </div>
+
+        <div class="alert alert-error mb-3">
+          <span class="alert-icon">❌</span>
+          <span>Remove <strong>Boston Fern</strong> (out of stock) before checking out.</span>
+        </div>
+
+        <button class="btn btn-primary btn-block btn-lg" disabled style="opacity:.5;cursor:not-allowed">
+          Proceed to Checkout →
+        </button>
+        <p style="font-size:.75rem;color:var(--text-muted);text-align:center;margin-top:.75rem">Remove out-of-stock items to continue</p>
+
+        <div style="margin-top:1.25rem;text-align:center">
+          <div style="font-size:.78rem;color:var(--text-muted);margin-bottom:.5rem">Secure checkout</div>
+          <div style="display:flex;gap:.5rem;justify-content:center;font-size:1.25rem">💳 🔒 ✅</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotation mt-4">
+      BUY-020/021 — Cart state lives in Zustand <code>cartStore</code>. Qty stepper calls <code>cartStore.updateQty(id, qty)</code>, capped at <code>item.stock</code>. Remove calls <code>cartStore.removeItem(id)</code>. If logged in: sync via <code>PUT /api/buyer/cart</code> on change (debounced 500 ms). Out of stock items shown with red background + proceed blocked. Checkout → requires auth → <code>middleware.ts</code> redirects unauthenticated users to <code>/login?redirect=/checkout</code>.
+    </div>
+  </div>
+</div>
+</body>
+</html>

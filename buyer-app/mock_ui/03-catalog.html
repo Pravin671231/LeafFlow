@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LeafFlow — Shop All Plants</title>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+  .catalog-layout { display:grid;grid-template-columns:240px 1fr;gap:1.5rem;align-items:start; }
+  .filter-panel { background:#fff;border:1px solid var(--border);border-radius:var(--radius-xl);padding:1.25rem;position:sticky;top:84px; }
+  .filter-section { margin-bottom:1.25rem;padding-bottom:1.25rem;border-bottom:1px solid var(--gray-100); }
+  .filter-section:last-child { border-bottom:none;margin-bottom:0;padding-bottom:0; }
+  .filter-title { font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);margin-bottom:.75rem; }
+  .filter-item { display:flex;align-items:center;gap:.5rem;padding:.3rem 0;cursor:pointer;font-size:.875rem; }
+  .filter-checkbox { width:16px;height:16px;border:1.5px solid var(--border);border-radius:.25rem;flex-shrink:0;background:#fff;display:flex;align-items:center;justify-content:center; }
+  .filter-checkbox.checked { background:var(--primary);border-color:var(--primary);color:#fff;font-size:.65rem; }
+  .price-slider { margin:.5rem 0; }
+  .price-range { display:flex;justify-content:space-between;font-size:.78rem;color:var(--text-muted);margin-top:.25rem; }
+  .sort-bar { display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem; }
+  .results-count { font-size:.875rem;color:var(--text-muted); }
+  .page-btns { display:flex;gap:.375rem;justify-content:center;margin-top:2rem; }
+  .page-btn { width:2rem;height:2rem;border-radius:.5rem;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-size:.825rem;font-weight:500;display:flex;align-items:center;justify-content:center; }
+  .page-btn.active { background:var(--primary);color:#fff;border-color:var(--primary); }
+  .page-btn:hover:not(.active) { background:var(--gray-100); }
+  .active-filter { display:inline-flex;align-items:center;gap:.3rem;padding:.25rem .625rem;border-radius:9999px;background:var(--green-100);color:var(--green-700);font-size:.75rem;font-weight:600; }
+  .active-filter button { background:none;border:none;cursor:pointer;color:var(--green-600);font-size:.85rem;line-height:1; }
+  code { font-family:monospace;font-size:.8em;background:var(--gray-100);padding:.1rem .3rem;border-radius:.25rem; }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <a href="02-home.html" class="header-logo"><span class="header-logo-icon">🌿</span><div>LeafFlow<span class="header-logo-sub">Bring plants home</span></div></a>
+    <nav class="header-nav"><a href="03-catalog.html" class="active">Shop</a><a>Succulents</a><a>Tropical</a><a>About</a></nav>
+    <div class="header-spacer"></div>
+    <div class="header-search"><span class="icon">🔍</span><input placeholder="Search plants…" value="monstera"/></div>
+    <div class="header-actions"><a href="05-cart.html" class="header-icon-btn">🛒<span class="cart-badge">2</span></a><div class="avatar-btn">AS</div></div>
+  </div>
+</header>
+
+<div class="page-wrapper">
+  <div class="page-content">
+    <div class="back-nav"><a href="index.html">← Back to Index</a></div>
+    <h1 class="page-title">Shop All Plants</h1>
+    <p class="page-subtitle mb-4">148 varieties for every home, skill level and budget</p>
+
+    <!-- CATEGORY STRIP -->
+    <div class="category-strip mb-4">
+      <a href="#" class="category-pill active"><span class="pill-icon">🪴</span> All</a>
+      <a href="#" class="category-pill"><span class="pill-icon">🌵</span> Succulents</a>
+      <a href="#" class="category-pill"><span class="pill-icon">🌿</span> Tropical</a>
+      <a href="#" class="category-pill"><span class="pill-icon">💨</span> Air Purifying</a>
+      <a href="#" class="category-pill"><span class="pill-icon">🐾</span> Pet Friendly</a>
+      <a href="#" class="category-pill"><span class="pill-icon">🌑</span> Low Light</a>
+    </div>
+
+    <div class="catalog-layout">
+
+      <!-- FILTER PANEL -->
+      <div class="filter-panel">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+          <span style="font-size:.95rem;font-weight:700">Filters</span>
+          <button style="background:none;border:none;cursor:pointer;font-size:.78rem;color:var(--primary);font-weight:600">Clear all</button>
+        </div>
+
+        <div class="filter-section">
+          <div class="filter-title">Category</div>
+          <div class="filter-item"><div class="filter-checkbox checked">✓</div><span>All Plants (148)</span></div>
+          <div class="filter-item"><div class="filter-checkbox"></div><span>Succulents (28)</span></div>
+          <div class="filter-item"><div class="filter-checkbox"></div><span>Tropical (34)</span></div>
+          <div class="filter-item"><div class="filter-checkbox"></div><span>Air Purifying (22)</span></div>
+          <div class="filter-item"><div class="filter-checkbox"></div><span>Pet Friendly (19)</span></div>
+          <div class="filter-item"><div class="filter-checkbox"></div><span>Low Light (15)</span></div>
+        </div>
+
+        <div class="filter-section">
+          <div class="filter-title">Price Range</div>
+          <input type="range" min="0" max="3000" value="1500" class="price-slider" style="width:100%;accent-color:var(--primary)"/>
+          <div class="price-range"><span>₹0</span><span>₹1,500</span><span>₹3,000</span></div>
+        </div>
+
+        <div class="filter-section">
+          <div class="filter-title">Light Requirement</div>
+          <div class="filter-item"><div class="filter-checkbox"></div><span>🌑 Low Light</span></div>
+          <div class="filter-item"><div class="filter-checkbox checked">✓</div><span>🌤️ Medium</span></div>
+          <div class="filter-item"><div class="filter-checkbox"></div><span>☀️ Bright Indirect</span></div>
+        </div>
+
+        <div class="filter-section">
+          <div class="filter-title">Availability</div>
+          <label class="filter-item">
+            <div style="width:30px;height:18px;border-radius:9999px;background:var(--primary);position:relative;cursor:pointer"><div style="width:14px;height:14px;border-radius:50%;background:#fff;position:absolute;top:2px;right:2px;box-shadow:var(--shadow-sm)"></div></div>
+            <span>In Stock Only</span>
+          </label>
+        </div>
+
+        <div class="filter-section">
+          <div class="filter-title">Pet Friendly</div>
+          <div class="filter-item"><div class="filter-checkbox"></div><span>🐾 Pet Safe Only</span></div>
+        </div>
+      </div>
+
+      <!-- PRODUCT GRID -->
+      <div>
+        <!-- SORT + ACTIVE FILTERS -->
+        <div class="sort-bar">
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center">
+            <span class="results-count"><strong>42</strong> plants found</span>
+            <div class="active-filter">Medium Light <button>×</button></div>
+            <div class="active-filter">In Stock <button>×</button></div>
+          </div>
+          <select style="border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:.45rem .75rem;font-size:.875rem;outline:none;background:#fff">
+            <option>Sort: Recommended</option>
+            <option>Price: Low to High</option>
+            <option>Price: High to Low</option>
+            <option>Name A–Z</option>
+            <option>Newest First</option>
+          </select>
+        </div>
+
+        <!-- GRID -->
+        <div class="products-grid">
+          <a href="04-product-detail.html" class="product-card">
+            <div class="product-card-img">🌿<span class="sale-badge">SALE</span><span class="pet-badge">🐾 Safe</span></div>
+            <div class="product-card-body">
+              <div class="product-card-category">Tropical</div>
+              <div class="product-card-name">Monstera Deliciosa</div>
+              <div class="product-card-sci">Monstera deliciosa</div>
+              <div class="product-card-attrs"><span class="attr-chip green">☀️ Bright Indirect</span><span class="attr-chip">💧 Twice weekly</span></div>
+              <div class="product-card-footer"><span><span class="product-price">₹899</span><span class="product-compare">₹1,199</span></span><button class="product-card-add" onclick="event.preventDefault()">+</button></div>
+            </div>
+          </a>
+          <a href="04-product-detail.html" class="product-card">
+            <div class="product-card-img">🌵</div>
+            <div class="product-card-body">
+              <div class="product-card-category">Succulents</div>
+              <div class="product-card-name">Golden Barrel Cactus</div>
+              <div class="product-card-sci">Echinocactus grusonii</div>
+              <div class="product-card-attrs"><span class="attr-chip green">☀️ Bright</span><span class="attr-chip">💧 Monthly</span></div>
+              <div class="product-card-footer"><span class="product-price">₹349</span><button class="product-card-add" onclick="event.preventDefault()">+</button></div>
+            </div>
+          </a>
+          <a href="04-product-detail.html" class="product-card">
+            <div class="product-card-img">🌺</div>
+            <div class="product-card-body">
+              <div class="product-card-category">Air Purifying</div>
+              <div class="product-card-name">Peace Lily</div>
+              <div class="product-card-sci">Spathiphyllum wallisii</div>
+              <div class="product-card-attrs"><span class="attr-chip green">🌑 Low Light</span><span class="attr-chip">💧 Weekly</span></div>
+              <div class="product-card-footer"><span class="product-price">₹549</span><button class="product-card-add" onclick="event.preventDefault()">+</button></div>
+            </div>
+          </a>
+          <a href="04-product-detail.html" class="product-card">
+            <div class="product-card-img">🌱<span class="pet-badge">🐾 Safe</span></div>
+            <div class="product-card-body">
+              <div class="product-card-category">Low Light</div>
+              <div class="product-card-name">Pothos (Golden)</div>
+              <div class="product-card-sci">Epipremnum aureum</div>
+              <div class="product-card-attrs"><span class="attr-chip green">🌑 Low</span><span class="attr-chip">💧 Twice weekly</span></div>
+              <div class="product-card-footer"><span class="product-price">₹249</span><button class="product-card-add" onclick="event.preventDefault()">+</button></div>
+            </div>
+          </a>
+          <a href="04-product-detail.html" class="product-card">
+            <div class="product-card-img">🪻</div>
+            <div class="product-card-body">
+              <div class="product-card-category">Air Purifying</div>
+              <div class="product-card-name">Snake Plant</div>
+              <div class="product-card-sci">Sansevieria trifasciata</div>
+              <div class="product-card-attrs"><span class="attr-chip green">🌑 Low Light</span><span class="attr-chip">💧 Fortnightly</span></div>
+              <div class="product-card-footer"><span class="product-price">₹449</span><button class="product-card-add" onclick="event.preventDefault()">+</button></div>
+            </div>
+          </a>
+          <a href="04-product-detail.html" class="product-card">
+            <div class="product-card-img">🌾<span class="out-badge">Out of Stock</span></div>
+            <div class="product-card-body">
+              <div class="product-card-category">Tropical</div>
+              <div class="product-card-name">Boston Fern</div>
+              <div class="product-card-sci">Nephrolepis exaltata</div>
+              <div class="product-card-attrs"><span class="attr-chip green">🌤️ Medium</span><span class="attr-chip">💧 Keep moist</span></div>
+              <div class="product-card-footer"><span class="product-price">₹699</span><button class="product-card-add" onclick="event.preventDefault()" disabled style="opacity:.4;cursor:not-allowed">+</button></div>
+            </div>
+          </a>
+        </div>
+
+        <!-- PAGINATION -->
+        <div class="page-btns">
+          <button class="page-btn">‹</button>
+          <button class="page-btn active">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn">3</button>
+          <button class="page-btn">…</button>
+          <button class="page-btn">8</button>
+          <button class="page-btn">›</button>
+        </div>
+        <div style="text-align:center;font-size:.78rem;color:var(--text-muted);margin-top:.5rem">Showing 1–20 of 42 plants</div>
+      </div>
+    </div>
+
+    <div class="annotation mt-4">
+      BUY-010/011/012 — Next.js page at <code>app/(shop)/shop/page.tsx</code>. Filter state in URL search params (<code>?cat=tropical&light=medium&instock=1&minPrice=0&maxPrice=1500&sort=rec&page=1</code>). TanStack Query: <code>useProducts(params)</code> re-fetches on param change. Out of stock: "+" disabled. Active filter chips read from params and update via <code>router.replace()</code>.
+    </div>
+  </div>
+</div>
+</body>
+</html>

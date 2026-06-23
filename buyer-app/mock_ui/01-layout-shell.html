@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LeafFlow Buyer — Layout Shell</title>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+  .zone-note { background:#dbeafe;border:1.5px dashed #2563eb;border-radius:.375rem;padding:.4rem .75rem;font-size:.72rem;color:#1d4ed8;margin:.25rem; }
+  .spec-table { width:100%;border-collapse:collapse;margin-top:.75rem; }
+  .spec-table th,.spec-table td { padding:.5rem .75rem;font-size:.82rem;border-bottom:1px solid var(--border);text-align:left; }
+  .spec-table th { background:var(--gray-50);font-weight:700;color:var(--text-muted);font-size:.75rem;text-transform:uppercase; }
+  .annot-grid { display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.5rem; }
+  .annot-card { background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:1rem; }
+  .annot-card h4 { font-size:.8rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem; }
+  .annot-card ul { list-style:disc;margin-left:1.2rem;font-size:.82rem;color:var(--gray-600);line-height:1.7; }
+  code { font-family:monospace;font-size:.8em;background:var(--gray-100);padding:.1rem .3rem;border-radius:.25rem; }
+</style>
+</head>
+<body>
+<div style="max-width:1100px;margin:0 auto;padding:2rem 1.5rem">
+  <div class="back-nav"><a href="index.html">← Back to Index</a></div>
+  <h1 style="font-size:1.375rem;font-weight:800;margin-bottom:.25rem">Layout Shell</h1>
+  <p style="color:var(--text-muted);font-size:.875rem;margin-bottom:1.25rem">Sticky header + full-width content + footer. Next.js <code>app/layout.tsx</code> root layout.</p>
+  <div class="wireframe-note">📐 Wireframe — blue dashed boxes mark annotated zones. Real implementation: Tailwind classes inside <code>app/layout.tsx</code>.</div>
+
+  <!-- SHELL MOCK -->
+  <div style="border:2px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;box-shadow:var(--shadow-lg)">
+
+    <!-- HEADER -->
+    <header class="site-header" style="position:relative">
+      <div class="header-inner">
+        <a class="header-logo"><span class="header-logo-icon">🌿</span><div>LeafFlow<span class="header-logo-sub">Bring plants home</span></div></a>
+        <nav class="header-nav">
+          <a href="#" class="active">Shop</a>
+          <a href="#">Succulents</a>
+          <a href="#">Tropical</a>
+          <a href="#">About</a>
+        </nav>
+        <div class="header-spacer"></div>
+        <div class="header-search">
+          <span class="icon">🔍</span>
+          <input placeholder="Search plants, e.g. Monstera…"/>
+        </div>
+        <div class="header-actions">
+          <button class="header-icon-btn">🛒<span class="cart-badge">3</span></button>
+          <div class="avatar-btn">AS</div>
+        </div>
+      </div>
+      <div class="zone-note" style="position:absolute;top:100%;left:0;margin:0;border-radius:0;border-top:none;width:100%">
+        ① Header — <code>components/layout/Header.tsx</code> · sticky top-0 z-50 · Client Component (cart badge reads Zustand)
+      </div>
+    </header>
+
+    <!-- CONTENT AREA -->
+    <div style="min-height:300px;background:var(--gray-50);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.75rem;margin-top:32px">
+      <div style="font-size:3rem">📄</div>
+      <div style="font-weight:700;color:var(--gray-600)">② Page Content (<code>&lt;main&gt;</code> / <code>&lt;Outlet&gt;</code>)</div>
+      <div style="font-size:.825rem;color:var(--text-muted);text-align:center;max-width:400px">Each page renders here. Max width 1180 px, centered, with page-level padding. Server or Client Component depending on page type.</div>
+      <div class="zone-note">② <code>app/(shop)/layout.tsx</code> wraps all storefront pages with <code>&lt;main className="flex-1"&gt;&lt;/main&gt;</code></div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="site-footer" style="padding:2rem 1.5rem 1rem">
+      <div class="footer-inner" style="max-width:100%">
+        <div>
+          <div class="footer-brand-name">🌿 LeafFlow</div>
+          <div class="footer-brand-desc">Bringing the beauty of plants to every home. Curated, healthy plants shipped across India.</div>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Shop</div>
+          <ul><li><a>All Plants</a></li><li><a>Succulents</a></li><li><a>Tropical</a></li><li><a>Air Purifying</a></li></ul>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Account</div>
+          <ul><li><a>My Orders</a></li><li><a>Profile</a></li><li><a>Login / Register</a></li></ul>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Info</div>
+          <ul><li><a>About Us</a></li><li><a>Shipping Policy</a></li><li><a>Returns</a></li><li><a>Contact</a></li></ul>
+        </div>
+      </div>
+      <div class="footer-bottom" style="max-width:100%">© 2026 LeafFlow · Made with 🌿 in Bengaluru</div>
+      <div class="zone-note" style="margin-top:.5rem">③ Footer — <code>components/layout/Footer.tsx</code> · Server Component · Static links + social icons</div>
+    </footer>
+  </div>
+
+  <!-- SPEC TABLE -->
+  <h2 style="font-size:1rem;font-weight:700;margin:2rem 0 .75rem;color:var(--gray-700)">Layout Specifications</h2>
+  <table class="spec-table">
+    <thead><tr><th>Zone</th><th>Implementation</th><th>Height / Width</th><th>Behaviour</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Header</strong></td><td><code>components/layout/Header.tsx</code> — Client</td><td>68 px tall, 100% wide</td><td>Sticky top-0 z-50; cart badge reads <code>cartStore.totalItems</code>; avatar shows initials from <code>useMe()</code></td></tr>
+      <tr><td><strong>Logo</strong></td><td>Inline in Header</td><td>auto</td><td>Links to <code>/</code>; shows 🌿 icon + "LeafFlow" wordmark</td></tr>
+      <tr><td><strong>Search Bar</strong></td><td><code>components/search/SearchBar.tsx</code></td><td>flex-1, max 380 px</td><td>Debounce 300 ms → update URL param <code>?q=</code>; on Enter navigate to <code>/shop?q=</code></td></tr>
+      <tr><td><strong>Cart Icon</strong></td><td>Inline in Header</td><td>40 × 40 px</td><td>Badge = <code>cartStore.totalItems</code>; click → navigate to <code>/cart</code></td></tr>
+      <tr><td><strong>Avatar / Account</strong></td><td><code>components/layout/AccountMenu.tsx</code></td><td>40 × 40 px</td><td>If logged in: initials + dropdown (Orders, Profile, Logout). If guest: "Sign in" text link → <code>/login</code></td></tr>
+      <tr><td><strong>Main Content</strong></td><td><code>app/(shop)/layout.tsx → &lt;main&gt;</code></td><td>flex-1, min-height 100vh</td><td>Each child page provides its own max-width container and padding</td></tr>
+      <tr><td><strong>Footer</strong></td><td><code>components/layout/Footer.tsx</code> — Server</td><td>auto, green-900 bg</td><td>Static; 4-column grid; links to shop, account, static pages</td></tr>
+    </tbody>
+  </table>
+
+  <div class="annot-grid">
+    <div class="annot-card">
+      <h4>Next.js App Router Nesting</h4>
+      <ul>
+        <li><code>app/layout.tsx</code> — root: fonts, metadata, providers</li>
+        <li><code>app/(shop)/layout.tsx</code> — Header + Footer shell</li>
+        <li><code>app/(auth)/layout.tsx</code> — centered auth card, no footer nav</li>
+        <li><code>app/(account)/layout.tsx</code> — account sidebar + content</li>
+        <li>Each route segment has its own <code>page.tsx</code></li>
+      </ul>
+    </div>
+    <div class="annot-card">
+      <h4>Google One Tap Integration</h4>
+      <ul>
+        <li>Mount <code>&lt;GoogleOneTap /&gt;</code> inside root layout</li>
+        <li>Shows floating credential prompt on any page</li>
+        <li>On credential: <code>POST /api/buyer/auth/google/one-tap</code></li>
+        <li>If <code>useMe()</code> returns data → suppress One Tap</li>
+        <li>Dismiss: user clicks × or logs in via another method</li>
+      </ul>
+    </div>
+    <div class="annot-card">
+      <h4>Cart Badge (Zustand ↔ Header)</h4>
+      <ul>
+        <li>Header is a Client Component that subscribes to <code>useCartStore(s =&gt; s.totalItems)</code></li>
+        <li>Zustand store persisted to <code>localStorage</code> via <code>persist</code> middleware</li>
+        <li>On login: call <code>GET /api/buyer/cart</code> → merge server cart into Zustand</li>
+        <li>Badge animates on add via CSS keyframe (scale 1 → 1.3 → 1)</li>
+      </ul>
+    </div>
+    <div class="annot-card">
+      <h4>Auth Middleware (Next.js)</h4>
+      <ul>
+        <li><code>middleware.ts</code> at repo root</li>
+        <li>Protected matchers: <code>/checkout</code>, <code>/orders</code>, <code>/profile</code></li>
+        <li>Reads access token from httpOnly cookie</li>
+        <li>On missing/expired: redirect to <code>/login?redirect=&lt;path&gt;</code></li>
+        <li>After login, redirect back to <code>redirect</code> param value</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</body>
+</html>

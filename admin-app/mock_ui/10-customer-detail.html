@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LeafFlow Admin — Customer Detail</title>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+  .detail-layout { display:grid;grid-template-columns:280px 1fr;gap:1.25rem;align-items:start; }
+  .profile-card { position:sticky;top:80px; }
+  .stat-mini { background:var(--green-50);border-radius:var(--radius-md);padding:.75rem;text-align:center; }
+  .stat-mini-val { font-size:1.25rem;font-weight:800;color:var(--green-700); }
+  .stat-mini-label { font-size:.7rem;color:var(--text-muted);margin-top:.15rem; }
+  .info-row { display:flex;justify-content:space-between;padding:.45rem 0;border-bottom:1px solid var(--gray-100);font-size:.85rem; }
+  .info-row:last-child { border-bottom:none; }
+  .info-label { color:var(--text-muted); }
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <nav class="sidebar">
+    <div class="sidebar-logo"><span class="sidebar-logo-icon">🌿</span><div><span class="sidebar-logo-text">LeafFlow</span><span class="sidebar-logo-sub">Admin Panel</span></div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">Overview</div><div class="sidebar-nav-item"><span class="icon">📊</span> Dashboard</div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">Catalog</div><div class="sidebar-nav-item"><span class="icon">🪴</span> Products</div><div class="sidebar-nav-item"><span class="icon">🏷️</span> Categories</div><div class="sidebar-nav-item"><span class="icon">📦</span> Inventory</div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">Commerce</div><div class="sidebar-nav-item"><span class="icon">📋</span> Orders</div><div class="sidebar-nav-item active"><span class="icon">👥</span> Customers</div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">System</div><div class="sidebar-nav-item"><span class="icon">⚙️</span> Settings</div></div>
+  </nav>
+
+  <div class="page-area">
+    <div class="topbar">
+      <div class="topbar-breadcrumb"><span>Admin</span><span>›</span><a href="09-customers-list.html">Customers</a><span>›</span><span class="crumb-active">Ananya Singh</span></div>
+      <div class="topbar-spacer"></div>
+      <div class="topbar-actions"><button class="topbar-icon-btn">🔔</button><div class="admin-avatar">PK</div></div>
+    </div>
+
+    <div class="page-content">
+      <div class="back-nav"><a href="index.html">← Back to Index</a></div>
+      <div class="page-header">
+        <div><h1 class="page-title">Customer Profile</h1><p class="page-subtitle">View buyer details and full order history</p></div>
+        <a href="09-customers-list.html" class="btn btn-outline btn-sm">← Back to Customers</a>
+      </div>
+
+      <div class="detail-layout">
+
+        <!-- PROFILE SIDEBAR -->
+        <div class="profile-card" style="display:flex;flex-direction:column;gap:1.25rem">
+          <div class="card">
+            <div class="card-body" style="text-align:center;padding:1.5rem">
+              <div style="width:64px;height:64px;border-radius:50%;background:var(--green-200);display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:800;color:var(--green-800);margin:0 auto .75rem">AS</div>
+              <div style="font-size:1.1rem;font-weight:700">Ananya Singh</div>
+              <div class="text-muted text-sm" style="margin-top:.2rem">ananya@gmail.com</div>
+              <div style="margin-top:.5rem"><span class="badge badge-neutral">Email OTP</span></div>
+            </div>
+            <div style="padding:0 1.25rem 1.25rem">
+              <div class="grid-2" style="gap:.5rem">
+                <div class="stat-mini"><div class="stat-mini-val">12</div><div class="stat-mini-label">Orders</div></div>
+                <div class="stat-mini"><div class="stat-mini-val">₹9,820</div><div class="stat-mini-label">Lifetime Spend</div></div>
+              </div>
+            </div>
+            <div style="border-top:1px solid var(--border);padding:1rem 1.25rem">
+              <div class="info-row"><span class="info-label">Phone</span><span>+91 98765 43210</span></div>
+              <div class="info-row"><span class="info-label">Verified</span><span class="badge badge-success">Yes</span></div>
+              <div class="info-row"><span class="info-label">Joined</span><span>Feb 12, 2026</span></div>
+              <div class="info-row"><span class="info-label">Google Linked</span><span class="badge badge-neutral">No</span></div>
+            </div>
+          </div>
+
+          <!-- SAVED ADDRESSES -->
+          <div class="card">
+            <div class="card-header"><span class="card-title">📍 Saved Addresses</span></div>
+            <div class="card-body" style="padding:.75rem 1.25rem">
+              <div style="background:var(--green-50);border:1px solid var(--green-200);border-radius:var(--radius-md);padding:.75rem;margin-bottom:.5rem">
+                <div class="flex items-center justify-between mb-1">
+                  <span style="font-size:.75rem;font-weight:700;color:var(--green-700)">DEFAULT</span>
+                </div>
+                <p class="text-sm">Flat 4B, Lotus Apartment<br/>MG Road, Bengaluru 560001<br/>Karnataka, India</p>
+              </div>
+              <div style="border:1px solid var(--border);border-radius:var(--radius-md);padding:.75rem">
+                <p class="text-sm">12, Park View Colony<br/>HSR Layout, Bengaluru 560102<br/>Karnataka, India</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ORDER HISTORY -->
+        <div>
+          <div class="tabs">
+            <div class="tab active">Order History <span class="tab-count">12</span></div>
+          </div>
+          <div class="card">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Order #</th>
+                    <th>Items</th>
+                    <th>Amount</th>
+                    <th>Payment</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><a href="08-order-detail.html" style="font-family:monospace;font-weight:700;font-size:.85rem">LF-0248</a></td>
+                    <td>Monstera, Cactus</td>
+                    <td>₹1,248</td>
+                    <td><span class="badge badge-success">Paid</span></td>
+                    <td><span class="badge badge-warning">Placed</span></td>
+                    <td class="td-muted">Jun 23, 2026</td>
+                    <td><a href="08-order-detail.html" class="btn btn-xs btn-outline">View</a></td>
+                  </tr>
+                  <tr>
+                    <td><a href="08-order-detail.html" style="font-family:monospace;font-weight:700;font-size:.85rem">LF-0219</a></td>
+                    <td>Peace Lily</td>
+                    <td>₹549</td>
+                    <td><span class="badge badge-success">Paid</span></td>
+                    <td><span class="badge badge-success">Delivered</span></td>
+                    <td class="td-muted">Jun 10, 2026</td>
+                    <td><a href="08-order-detail.html" class="btn btn-xs btn-outline">View</a></td>
+                  </tr>
+                  <tr>
+                    <td><a href="08-order-detail.html" style="font-family:monospace;font-weight:700;font-size:.85rem">LF-0198</a></td>
+                    <td>Pothos, Snake Plant × 2</td>
+                    <td>₹1,147</td>
+                    <td><span class="badge badge-success">Paid</span></td>
+                    <td><span class="badge badge-success">Delivered</span></td>
+                    <td class="td-muted">May 28, 2026</td>
+                    <td><a href="08-order-detail.html" class="btn btn-xs btn-outline">View</a></td>
+                  </tr>
+                  <tr>
+                    <td><a href="08-order-detail.html" style="font-family:monospace;font-weight:700;font-size:.85rem">LF-0154</a></td>
+                    <td>Boston Fern</td>
+                    <td>₹699</td>
+                    <td><span class="badge badge-warning">Refunded</span></td>
+                    <td><span class="badge badge-error">Cancelled</span></td>
+                    <td class="td-muted">May 5, 2026</td>
+                    <td><a href="08-order-detail.html" class="btn btn-xs btn-outline">View</a></td>
+                  </tr>
+                  <tr>
+                    <td><a href="08-order-detail.html" style="font-family:monospace;font-weight:700;font-size:.85rem">LF-0102</a></td>
+                    <td>Monstera, Fern, Cactus</td>
+                    <td>₹2,247</td>
+                    <td><span class="badge badge-success">Paid</span></td>
+                    <td><span class="badge badge-success">Delivered</span></td>
+                    <td class="td-muted">Apr 12, 2026</td>
+                    <td><a href="08-order-detail.html" class="btn btn-xs btn-outline">View</a></td>
+                  </tr>
+                  <tr>
+                    <td colspan="7" style="text-align:center;padding:1rem;color:var(--text-muted);font-size:.825rem">+ 7 more orders · <a href="#">Load all</a></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="card-footer">12 total orders · ₹9,820 lifetime spend</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="annotation mt-3">
+        ADM-042 — <code>customersApi.getCustomer(id)</code> for profile; <code>customersApi.getCustomerOrders(id)</code> for order history. Read-only view — admin cannot modify buyer data. Refund actions are on the order detail page, not here.
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LeafFlow Admin — Navigation Flow</title>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+  body { background:var(--gray-100); padding:2rem; }
+  .flow-wrap { max-width:1000px; margin:0 auto; }
+  h2 { font-size:1.1rem; font-weight:700; color:var(--gray-700); margin:2rem 0 1rem; border-bottom:2px solid var(--green-200); padding-bottom:.4rem; }
+  /* Node styles */
+  .node {
+    display:inline-flex; align-items:center; gap:.4rem;
+    padding:.45rem .875rem; border-radius:var(--radius-md);
+    font-size:.82rem; font-weight:600; white-space:nowrap; cursor:default;
+  }
+  .node-page    { background:var(--green-100);  color:var(--green-800);  border:1.5px solid var(--green-400); }
+  .node-guard   { background:var(--amber-100);  color:#92400e;           border:1.5px solid var(--amber-400); }
+  .node-decision{ background:var(--blue-100);   color:var(--blue-600);   border:1.5px solid var(--blue-600);  border-radius:50%; width:72px;height:72px;justify-content:center;text-align:center;flex-direction:column; }
+  .node-action  { background:var(--gray-100);   color:var(--gray-700);   border:1.5px dashed var(--gray-400); }
+  .node-api     { background:#fff;              color:var(--gray-800);   border:1.5px solid var(--gray-300);  font-family:monospace; }
+  /* Arrow */
+  .arrow { display:inline-flex;align-items:center;gap:.2rem;font-size:.75rem;color:var(--gray-400); }
+  .arrow-right::after { content:'→'; }
+  .arrow-down::after  { content:'↓'; }
+  /* Flow rows */
+  .flow-row { display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.625rem; }
+  .flow-label { font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);min-width:80px; }
+  /* Route table */
+  .route-table { width:100%;border-collapse:collapse;background:#fff;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border); }
+  .route-table th,.route-table td { padding:.55rem .875rem;font-size:.82rem;border-bottom:1px solid var(--border);text-align:left; }
+  .route-table th { background:var(--gray-50);font-weight:700;color:var(--text-muted);font-size:.75rem;text-transform:uppercase; }
+  .route-table tr:last-child td { border-bottom:none; }
+  code { font-family:monospace;font-size:.8em;background:var(--gray-100);padding:.1rem .3rem;border-radius:.25rem; }
+</style>
+</head>
+<body>
+<div class="flow-wrap">
+  <div class="back-nav"><a href="index.html">← Back to Index</a></div>
+  <h1 style="font-size:1.5rem;font-weight:800;color:var(--green-800)">🗺️ Navigation Flow — LeafFlow Admin App</h1>
+  <p style="color:var(--text-muted);font-size:.875rem;margin-bottom:2rem">Complete routing graph: auth guards, redirect rules, deep links, and page relationships.</p>
+
+  <!-- AUTH FLOW -->
+  <h2>🔐 Authentication Flow</h2>
+
+  <div class="flow-row">
+    <span class="flow-label">Step 1</span>
+    <div class="node node-page">🌐 <code>/login</code></div>
+    <span class="arrow arrow-right"></span>
+    <div class="node node-api">POST /api/admin/auth/login</div>
+    <span class="arrow arrow-right"></span>
+    <div class="node node-guard">✅ 200 — otpSessionId</div>
+    <span class="arrow arrow-right"></span>
+    <div class="node node-page">→ <code>/login/verify-otp</code></div>
+  </div>
+  <div class="flow-row">
+    <span class="flow-label">Step 1 ✗</span>
+    <div class="node node-api">POST /api/admin/auth/login</div>
+    <span class="arrow arrow-right"></span>
+    <div class="node node-guard" style="background:var(--red-100);color:var(--red-600);border-color:var(--red-400)">❌ 401/423</div>
+    <span class="arrow arrow-right"></span>
+    <div class="node node-action">Show error + attempt count on <code>/login</code></div>
+  </div>
+  <div class="flow-row">
+    <span class="flow-label">Step 2</span>
+    <div class="node node-page">📨 <code>/login/verify-otp</code></div>
+    <span class="arrow arrow-right"></span>
+    <div class="node node-api">POST /api/admin/auth/login/verify-otp</div>
+    <span class="arrow arrow-right"></span>
+    <div class="node node-guard">✅ tokens issued</div>
+    <span class="arrow arrow-right"></span>
+    <div class="node node-page">🏠 <code>/dashboard</code></div>
+  </div>
+  <div class="flow-row">
+    <span class="flow-label">Logout</span>
+    <div class="node node-action">Any protected page</div>
+    <span class="arrow arrow-right"></span>
+    <div class="node node-api">POST /api/admin/auth/logout</div>
+    <span class="arrow arrow-right"></span>
+    <div class="node node-action">Clear Redux auth state + cookie</div>
+    <span class="arrow arrow-right"></span>
+    <div class="node node-page"><code>/login</code></div>
+  </div>
+  <div class="flow-row">
+    <span class="flow-label">Forgot Pwd</span>
+    <div class="node node-page"><code>/forgot-password</code></div>
+    <span class="arrow arrow-right"></span>
+    <div class="node node-action">3-step inline: send → verify → reset</div>
+    <span class="arrow arrow-right"></span>
+    <div class="node node-page"><code>/login</code> + toast</div>
+  </div>
+  <div class="flow-row">
+    <span class="flow-label">Reset Pwd</span>
+    <div class="node node-page"><code>/settings/security</code> or <code>/reset-password</code></div>
+    <span class="arrow arrow-right"></span>
+    <div class="node node-action">Send OTP → Verify → Confirm new password</div>
+    <span class="arrow arrow-right"></span>
+    <div class="node node-page"><code>/login</code></div>
+  </div>
+
+  <!-- AUTH GUARD -->
+  <h2>🛡️ Auth Guard Logic (ProtectedRoute)</h2>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;margin-bottom:1rem">
+    <div style="display:flex;flex-direction:column;gap:.75rem">
+      <div class="flow-row" style="margin:0">
+        <div class="node node-action">App loads</div>
+        <span class="arrow arrow-right"></span>
+        <div class="node node-action">AuthInitializer runs <code>GET /api/admin/auth/me</code></div>
+        <span class="arrow arrow-right"></span>
+        <div class="node node-guard">loading state → full-page spinner</div>
+      </div>
+      <div class="flow-row" style="margin:0">
+        <div class="node node-guard">200 → admin data</div>
+        <span class="arrow arrow-right"></span>
+        <div class="node node-action">Set <code>auth.status = "authenticated"</code></div>
+        <span class="arrow arrow-right"></span>
+        <div class="node node-page">Render shell + <code>&lt;Outlet /&gt;</code></div>
+      </div>
+      <div class="flow-row" style="margin:0">
+        <div class="node node-guard" style="background:var(--red-100);color:var(--red-600);border-color:var(--red-400)">401 → not authenticated</div>
+        <span class="arrow arrow-right"></span>
+        <div class="node node-action">Set <code>auth.status = "unauthenticated"</code></div>
+        <span class="arrow arrow-right"></span>
+        <div class="node node-page"><code>/login</code> (replace history)</div>
+      </div>
+      <div class="flow-row" style="margin:0">
+        <div class="node node-guard" style="background:var(--amber-100);color:#92400e;border-color:var(--amber-400)">401 on any API call mid-session</div>
+        <span class="arrow arrow-right"></span>
+        <div class="node node-action">RTK Query <code>baseQuery</code> refresh interceptor attempts token refresh</div>
+        <span class="arrow arrow-right"></span>
+        <div class="node node-page">Retry OR redirect to <code>/login</code></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE ROUTE MAP -->
+  <h2>📋 Complete Route Table</h2>
+  <table class="route-table">
+    <thead><tr><th>Path</th><th>Component</th><th>Guard</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><code>/</code></td><td>Redirect</td><td>—</td><td>Redirects to <code>/dashboard</code> (ProtectedRoute handles re-redirect to <code>/login</code> if unauthenticated)</td></tr>
+      <tr><td><code>/login</code></td><td><code>Login.tsx</code></td><td>Public</td><td>Redirects to <code>/dashboard</code> if already authenticated</td></tr>
+      <tr><td><code>/login/verify-otp</code></td><td><code>LoginVerifyOtp.tsx</code></td><td>Public</td><td>Requires <code>auth.pendingOtpSession</code> in Redux; else redirect to <code>/login</code></td></tr>
+      <tr><td><code>/forgot-password</code></td><td><code>ForgotPassword.tsx</code></td><td>Public</td><td>3-step inline flow</td></tr>
+      <tr><td><code>/dashboard</code></td><td><code>Dashboard.tsx</code></td><td>Protected</td><td>Main dashboard with stats</td></tr>
+      <tr><td><code>/products</code></td><td><code>ProductsList.tsx</code></td><td>Protected</td><td>Paginated product table</td></tr>
+      <tr><td><code>/products/new</code></td><td><code>ProductForm.tsx</code></td><td>Protected</td><td>Create product form</td></tr>
+      <tr><td><code>/products/:id/edit</code></td><td><code>ProductForm.tsx</code></td><td>Protected</td><td>Edit form, pre-filled from RTK Query</td></tr>
+      <tr><td><code>/categories</code></td><td><code>Categories.tsx</code></td><td>Protected</td><td>Table + inline modal</td></tr>
+      <tr><td><code>/inventory</code></td><td><code>Inventory.tsx</code></td><td>Protected</td><td>Stock levels + inline edit</td></tr>
+      <tr><td><code>/orders</code></td><td><code>OrdersList.tsx</code></td><td>Protected</td><td>Tabbed order list</td></tr>
+      <tr><td><code>/orders/:id</code></td><td><code>OrderDetail.tsx</code></td><td>Protected</td><td>Single order with status update + refund</td></tr>
+      <tr><td><code>/customers</code></td><td><code>CustomersList.tsx</code></td><td>Protected</td><td>Buyer directory</td></tr>
+      <tr><td><code>/customers/:id</code></td><td><code>CustomerDetail.tsx</code></td><td>Protected</td><td>Profile + order history</td></tr>
+      <tr><td><code>/settings</code></td><td><code>Settings.tsx</code></td><td>Protected</td><td>Store info, delivery, email, security tabs</td></tr>
+      <tr><td><code>/settings/security</code></td><td><code>ResetPassword.tsx</code></td><td>Protected</td><td>OTP-gated password reset for logged-in admin</td></tr>
+    </tbody>
+  </table>
+
+  <!-- INTER-PAGE LINKS -->
+  <h2>🔗 Key Inter-Page Navigation Links</h2>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;display:flex;flex-direction:column;gap:.6rem">
+    <div class="flow-row" style="margin:0"><span class="node node-page" style="font-size:.75rem">Dashboard</span><span class="arrow arrow-right"></span><span style="font-size:.8rem;color:var(--text-muted)">"View all" link</span><span class="arrow arrow-right"></span><span class="node node-page" style="font-size:.75rem">Orders List</span></div>
+    <div class="flow-row" style="margin:0"><span class="node node-page" style="font-size:.75rem">Dashboard</span><span class="arrow arrow-right"></span><span style="font-size:.8rem;color:var(--text-muted)">Low stock "Manage"</span><span class="arrow arrow-right"></span><span class="node node-page" style="font-size:.75rem">Inventory</span></div>
+    <div class="flow-row" style="margin:0"><span class="node node-page" style="font-size:.75rem">Products List</span><span class="arrow arrow-right"></span><span style="font-size:.8rem;color:var(--text-muted)">"Add Product" button</span><span class="arrow arrow-right"></span><span class="node node-page" style="font-size:.75rem">Product Form (new)</span></div>
+    <div class="flow-row" style="margin:0"><span class="node node-page" style="font-size:.75rem">Products List</span><span class="arrow arrow-right"></span><span style="font-size:.8rem;color:var(--text-muted)">"Edit" row button</span><span class="arrow arrow-right"></span><span class="node node-page" style="font-size:.75rem">Product Form (edit)</span></div>
+    <div class="flow-row" style="margin:0"><span class="node node-page" style="font-size:.75rem">Orders List</span><span class="arrow arrow-right"></span><span style="font-size:.8rem;color:var(--text-muted)">Order # link or "View"</span><span class="arrow arrow-right"></span><span class="node node-page" style="font-size:.75rem">Order Detail</span></div>
+    <div class="flow-row" style="margin:0"><span class="node node-page" style="font-size:.75rem">Order Detail</span><span class="arrow arrow-right"></span><span style="font-size:.8rem;color:var(--text-muted)">"View Customer Profile"</span><span class="arrow arrow-right"></span><span class="node node-page" style="font-size:.75rem">Customer Detail</span></div>
+    <div class="flow-row" style="margin:0"><span class="node node-page" style="font-size:.75rem">Customers List</span><span class="arrow arrow-right"></span><span style="font-size:.8rem;color:var(--text-muted)">"View" row button</span><span class="arrow arrow-right"></span><span class="node node-page" style="font-size:.75rem">Customer Detail</span></div>
+    <div class="flow-row" style="margin:0"><span class="node node-page" style="font-size:.75rem">Settings</span><span class="arrow arrow-right"></span><span style="font-size:.8rem;color:var(--text-muted)">"Send OTP" security section</span><span class="arrow arrow-right"></span><span class="node node-page" style="font-size:.75rem">Reset Password</span></div>
+    <div class="flow-row" style="margin:0"><span class="node node-page" style="font-size:.75rem">Admin Avatar Menu</span><span class="arrow arrow-right"></span><span style="font-size:.8rem;color:var(--text-muted)">dropdown options</span><span class="arrow arrow-right"></span><span class="node node-page" style="font-size:.75rem">Settings / Reset Pwd / Logout</span></div>
+  </div>
+
+  <!-- SIDEBAR BADGE SOURCES -->
+  <h2>🔴 Sidebar Badge Count Sources</h2>
+  <table class="route-table">
+    <thead><tr><th>Sidebar Item</th><th>Badge Value</th><th>API Source</th><th>Refresh Trigger</th></tr></thead>
+    <tbody>
+      <tr><td>📋 Orders</td><td>Count of <code>placed</code> status orders</td><td><code>dashboardApi.getDashboardStats()</code></td><td>On <code>Orders</code> tag invalidation (status update)</td></tr>
+      <tr><td>📦 Inventory</td><td>Count of products below threshold</td><td><code>dashboardApi.getDashboardStats()</code></td><td>On <code>Inventory</code> or <code>Product</code> tag invalidation</td></tr>
+      <tr><td>🔔 Bell</td><td>Total of orders + inventory alerts</td><td>Derived client-side from above</td><td>Same as above</td></tr>
+    </tbody>
+  </table>
+
+  <!-- FOLDER STRUCTURE -->
+  <h2>📁 Recommended Feature-Folder Structure</h2>
+  <div style="background:#1f2937;color:#e5e7eb;border-radius:var(--radius-lg);padding:1.25rem;font-family:monospace;font-size:.8rem;line-height:1.8">
+    <span style="color:#86efac">admin-app/src/</span><br/>
+    ├── <span style="color:#fde68a">app/</span>            provider.tsx · store.ts · hooks.ts · rootReducer.ts<br/>
+    ├── <span style="color:#fde68a">api/</span>            authApi · dashboardApi · productsApi · categoriesApi<br/>
+    │   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inventoryApi · ordersApi · customersApi · uploadsApi · settingsApi<br/>
+    ├── <span style="color:#fde68a">features/</span><br/>
+    │   ├── <span style="color:#a5f3fc">auth/</span>       authSlice · authTypes · useAuth<br/>
+    │   ├── <span style="color:#a5f3fc">products/</span>   productsSlice (filters, sort, tab state)<br/>
+    │   ├── <span style="color:#a5f3fc">orders/</span>     ordersSlice (tab, date range)<br/>
+    │   ├── <span style="color:#a5f3fc">inventory/</span>  inventorySlice (pending edits)<br/>
+    │   └── <span style="color:#a5f3fc">ui/</span>         uiSlice (sidebarOpen, toasts, modals)<br/>
+    ├── <span style="color:#fde68a">components/</span><br/>
+    │   ├── <span style="color:#a5f3fc">common/</span>     AuthInitializer · ProtectedRoute · ConfirmModal · Toast<br/>
+    │   ├── <span style="color:#a5f3fc">layout/</span>     Sidebar · Topbar · AdminMenu<br/>
+    │   └── <span style="color:#a5f3fc">ui/</span>         Button · Input · Select · Toggle · Badge · Loader · EmptyState<br/>
+    ├── <span style="color:#fde68a">pages/</span>          Login · LoginVerifyOtp · ForgotPassword · Dashboard<br/>
+    │   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ProductsList · ProductForm · Categories · Inventory<br/>
+    │   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OrdersList · OrderDetail · CustomersList · CustomerDetail<br/>
+    │   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Settings · ResetPassword<br/>
+    ├── <span style="color:#fde68a">routes/</span>         AppRoutes.tsx · routes.ts (constants)<br/>
+    ├── <span style="color:#fde68a">forms/</span>          auth/* · product/* · category/* · inventory/* · settings/*<br/>
+    ├── <span style="color:#fde68a">hooks/</span>          useCountdown · useOtpInput · useConfirm · useToast<br/>
+    └── <span style="color:#fde68a">mocks/</span>          server.ts · handlers.ts
+  </div>
+</div>
+</body>
+</html>

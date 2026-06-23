@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LeafFlow — Login / Register</title>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+  body { background:var(--green-50); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:2rem; }
+  .auth-page { width:100%; max-width:440px; }
+  .auth-logo { text-align:center; margin-bottom:1.75rem; }
+  .auth-card { background:#fff; border-radius:var(--radius-2xl); box-shadow:var(--shadow-xl); overflow:hidden; }
+  .auth-card-header { background:linear-gradient(135deg,var(--green-800),var(--green-600)); color:#fff; padding:1.5rem 2rem; }
+  .auth-card-title { font-size:1.25rem; font-weight:800; margin-bottom:.2rem; }
+  .auth-card-sub { font-size:.85rem; opacity:.75; }
+  .auth-card-body { padding:2rem; }
+  .account-link-note { background:var(--amber-50);border:1px solid #fde68a;border-radius:var(--radius-lg);padding:.875rem 1rem;font-size:.825rem;color:#78350f;margin-bottom:1.25rem; }
+</style>
+</head>
+<body>
+<div style="position:fixed;top:1rem;right:1rem"><a href="index.html" class="btn btn-outline btn-sm">← Index</a></div>
+
+<div class="auth-page">
+  <div class="auth-logo">
+    <div style="font-size:2.75rem;margin-bottom:.3rem">🌿</div>
+    <div style="font-size:1.5rem;font-weight:800;color:var(--green-800)">LeafFlow</div>
+    <div style="font-size:.85rem;color:var(--text-muted)">Bring plants home</div>
+  </div>
+
+  <div class="auth-card">
+    <div class="auth-card-header">
+      <div class="auth-card-title">✉️ Sign In or Create Account</div>
+      <div class="auth-card-sub">No password needed — we'll send a one-time code to your email.</div>
+    </div>
+    <div class="auth-card-body">
+
+      <!-- ACCOUNT LINKING NOTE (shown when returning via Google with existing email OTP account) -->
+      <div class="account-link-note" style="display:none">
+        🔗 <strong>Looks like you have an existing account</strong> with this email. We'll link your Google account automatically (BUY-004).
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Email address <span class="req">*</span></label>
+        <input class="form-input" type="email" placeholder="you@example.com" />
+        <div class="form-hint">We'll send a 6-digit code. No spam, ever.</div>
+      </div>
+
+      <button class="btn btn-primary btn-block btn-lg mt-2">
+        Continue with Email →
+      </button>
+
+      <div class="divider-text">or</div>
+
+      <button class="btn btn-google btn-block btn-lg">
+        <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+          <path d="M17.64 9.2a10.23 10.23 0 0 0-.164-1.84H9v3.478h4.844a4.14 4.14 0 0 1-1.796 2.717v2.258h2.909a8.777 8.777 0 0 0 2.687-6.613z" fill="#4285F4"/>
+          <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.909-2.259c-.806.54-1.837.86-3.047.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/>
+          <path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/>
+          <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+        </svg>
+        Continue with Google
+      </button>
+
+      <div style="text-align:center;margin-top:1.25rem;font-size:.8rem;color:var(--text-muted)">
+        By continuing you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+      </div>
+    </div>
+  </div>
+
+  <!-- GOOGLE ONE TAP PREVIEW -->
+  <div style="margin-top:1.5rem">
+    <div style="font-size:.8rem;font-weight:700;color:var(--gray-500);text-align:center;margin-bottom:.75rem;text-transform:uppercase;letter-spacing:.06em">Google One Tap (floating, shown on any page)</div>
+    <div style="background:#fff;border-radius:var(--radius-xl);box-shadow:var(--shadow-xl);padding:1.25rem;max-width:380px;margin:0 auto;border:1px solid var(--border)">
+      <div class="flex items-center gap-2 mb-3">
+        <svg width="20" height="20" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path d="M17.64 9.2a10.23 10.23 0 0 0-.164-1.84H9v3.478h4.844a4.14 4.14 0 0 1-1.796 2.717v2.258h2.909A8.777 8.777 0 0 0 17.64 9.2z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.909-2.259c-.806.54-1.837.86-3.047.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/><path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
+        <span style="font-size:.8rem;font-weight:700;color:var(--gray-600)">Sign in with Google</span>
+        <button style="margin-left:auto;background:none;border:none;cursor:pointer;color:var(--gray-400);font-size:1rem">✕</button>
+      </div>
+      <div class="flex items-center gap-3">
+        <div style="width:40px;height:40px;border-radius:50%;background:var(--green-200);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--green-800);font-size:.9rem">AS</div>
+        <div>
+          <div style="font-size:.9rem;font-weight:700">Ananya Singh</div>
+          <div style="font-size:.78rem;color:var(--text-muted)">ananya@gmail.com</div>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-block mt-3" style="font-size:.85rem">Continue as Ananya</button>
+    </div>
+  </div>
+
+  <div class="annotation mt-4">
+    BUY-001/002/003 — Email OTP: <code>POST /api/buyer/auth/email/send-otp → /login/verify-otp</code>. Google OAuth: redirect to <code>/api/buyer/auth/google</code>. One Tap: <code>POST /api/buyer/auth/google/one-tap</code> with credential JWT. BUY-004: backend merges <code>googleId</code> onto existing user if emails match — no duplicate accounts.
+  </div>
+</div>
+</body>
+</html>

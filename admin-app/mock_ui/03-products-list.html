@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LeafFlow Admin — Products List</title>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+  .product-thumb { width:40px;height:40px;border-radius:var(--radius-md);background:var(--green-100);display:flex;align-items:center;justify-content:center;font-size:1.25rem;flex-shrink:0; }
+  .product-name-cell { display:flex;align-items:center;gap:.75rem; }
+  .bulk-bar { display:flex;align-items:center;gap:.75rem;padding:.65rem 1.25rem;background:var(--green-50);border-bottom:1px solid var(--border);font-size:.825rem;color:var(--green-800); }
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <nav class="sidebar">
+    <div class="sidebar-logo"><span class="sidebar-logo-icon">🌿</span><div><span class="sidebar-logo-text">LeafFlow</span><span class="sidebar-logo-sub">Admin Panel</span></div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">Overview</div><div class="sidebar-nav-item"><span class="icon">📊</span> Dashboard</div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">Catalog</div><div class="sidebar-nav-item active"><span class="icon">🪴</span> Products</div><div class="sidebar-nav-item"><span class="icon">🏷️</span> Categories</div><div class="sidebar-nav-item"><span class="icon">📦</span> Inventory <span class="badge-count">3</span></div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">Commerce</div><div class="sidebar-nav-item"><span class="icon">📋</span> Orders <span class="badge-count">7</span></div><div class="sidebar-nav-item"><span class="icon">👥</span> Customers</div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">System</div><div class="sidebar-nav-item"><span class="icon">⚙️</span> Settings</div></div>
+  </nav>
+
+  <div class="page-area">
+    <div class="topbar">
+      <div class="topbar-breadcrumb"><span>Admin</span><span>›</span><span class="crumb-active">Products</span></div>
+      <div class="topbar-spacer"></div>
+      <div class="topbar-actions"><button class="topbar-icon-btn">🔔<span class="notif-dot"></span></button><div class="admin-avatar">PK</div></div>
+    </div>
+
+    <div class="page-content">
+      <div class="back-nav"><a href="index.html">← Back to Index</a></div>
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Products</h1>
+          <p class="page-subtitle">148 products · 132 active · 16 draft</p>
+        </div>
+        <a href="04-product-form.html" class="btn btn-primary">➕ Add Product</a>
+      </div>
+
+      <!-- TABS -->
+      <div class="tabs">
+        <div class="tab active">All <span class="tab-count">148</span></div>
+        <div class="tab">Active <span class="tab-count">132</span></div>
+        <div class="tab">Draft <span class="tab-count">16</span></div>
+        <div class="tab">Low Stock <span class="tab-count">3</span></div>
+        <div class="tab">Out of Stock <span class="tab-count">1</span></div>
+      </div>
+
+      <div class="card">
+        <!-- FILTERS BAR -->
+        <div class="filters-bar">
+          <div class="search-input-wrap">
+            <span class="icon">🔍</span>
+            <input class="form-input search-input" placeholder="Search name, scientific name…" />
+          </div>
+          <select class="form-select" style="width:auto">
+            <option>All Categories</option>
+            <option>Succulents</option><option>Tropical</option><option>Air Purifying</option><option>Pet Friendly</option><option>Low Light</option>
+          </select>
+          <select class="form-select" style="width:auto">
+            <option>All Light Needs</option>
+            <option>Low</option><option>Medium</option><option>Bright Indirect</option>
+          </select>
+          <select class="form-select" style="width:auto">
+            <option>Sort: Newest First</option>
+            <option>Name A–Z</option><option>Price Low–High</option><option>Stock Low–High</option>
+          </select>
+          <div style="margin-left:auto;display:flex;gap:.5rem">
+            <button class="btn btn-outline btn-sm">Clear</button>
+          </div>
+        </div>
+
+        <!-- BULK ACTION BAR (shown when rows checked) -->
+        <div class="bulk-bar">
+          <input type="checkbox" style="width:14px;height:14px" checked />
+          <strong>3 selected</strong>
+          <button class="btn btn-outline btn-sm">Set Active</button>
+          <button class="btn btn-outline btn-sm">Set Draft</button>
+          <button class="btn btn-danger btn-sm">Delete</button>
+          <div style="margin-left:auto;font-size:.75rem">Bulk actions apply to checked rows only.</div>
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:32px"><input type="checkbox" style="width:14px;height:14px"/></th>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Light</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="checkbox" checked style="width:14px;height:14px"/></td>
+                <td>
+                  <div class="product-name-cell">
+                    <div class="product-thumb">🌿</div>
+                    <div>
+                      <div style="font-weight:600;font-size:.875rem">Monstera Deliciosa</div>
+                      <div class="td-muted">Swiss Cheese Plant</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge-neutral">Tropical</span></td>
+                <td>₹899</td>
+                <td>
+                  <div class="stock-bar-wrap stock-ok">
+                    <div class="stock-bar-bg"><div class="stock-bar-fill" style="width:70%"></div></div>
+                    <span>14</span>
+                  </div>
+                </td>
+                <td class="td-muted">Bright Indirect</td>
+                <td><label class="toggle-wrap"><div class="toggle on"></div></label></td>
+                <td>
+                  <div class="flex gap-1">
+                    <a href="04-product-form.html" class="btn btn-sm btn-outline">Edit</a>
+                    <button class="btn btn-sm btn-danger">Del</button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" checked style="width:14px;height:14px"/></td>
+                <td>
+                  <div class="product-name-cell">
+                    <div class="product-thumb">🌵</div>
+                    <div>
+                      <div style="font-weight:600;font-size:.875rem">Golden Barrel Cactus</div>
+                      <div class="td-muted">Echinocactus grusonii</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge-neutral">Succulents</span></td>
+                <td>₹349</td>
+                <td>
+                  <div class="stock-bar-wrap stock-low">
+                    <div class="stock-bar-bg"><div class="stock-bar-fill" style="width:20%"></div></div>
+                    <span>2 <span class="badge badge-warning" style="font-size:.6rem;margin-left:.25rem">Low</span></span>
+                  </div>
+                </td>
+                <td class="td-muted">Bright Indirect</td>
+                <td><label class="toggle-wrap"><div class="toggle on"></div></label></td>
+                <td><div class="flex gap-1"><a href="04-product-form.html" class="btn btn-sm btn-outline">Edit</a><button class="btn btn-sm btn-danger">Del</button></div></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" checked style="width:14px;height:14px"/></td>
+                <td>
+                  <div class="product-name-cell">
+                    <div class="product-thumb">🌺</div>
+                    <div>
+                      <div style="font-weight:600;font-size:.875rem">Peace Lily</div>
+                      <div class="td-muted">Spathiphyllum wallisii</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge-neutral">Air Purifying</span></td>
+                <td>₹549</td>
+                <td>
+                  <div class="stock-bar-wrap stock-low">
+                    <div class="stock-bar-bg"><div class="stock-bar-fill" style="width:30%"></div></div>
+                    <span>3 <span class="badge badge-warning" style="font-size:.6rem;margin-left:.25rem">Low</span></span>
+                  </div>
+                </td>
+                <td class="td-muted">Low</td>
+                <td><label class="toggle-wrap"><div class="toggle on"></div></label></td>
+                <td><div class="flex gap-1"><a href="04-product-form.html" class="btn btn-sm btn-outline">Edit</a><button class="btn btn-sm btn-danger">Del</button></div></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" style="width:14px;height:14px"/></td>
+                <td>
+                  <div class="product-name-cell">
+                    <div class="product-thumb">🌱</div>
+                    <div>
+                      <div style="font-weight:600;font-size:.875rem">Pothos (Golden)</div>
+                      <div class="td-muted">Epipremnum aureum</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge-neutral">Low Light</span></td>
+                <td>₹249</td>
+                <td>
+                  <div class="stock-bar-wrap stock-ok">
+                    <div class="stock-bar-bg"><div class="stock-bar-fill" style="width:90%"></div></div>
+                    <span>32</span>
+                  </div>
+                </td>
+                <td class="td-muted">Low</td>
+                <td><label class="toggle-wrap"><div class="toggle on"></div></label></td>
+                <td><div class="flex gap-1"><a href="04-product-form.html" class="btn btn-sm btn-outline">Edit</a><button class="btn btn-sm btn-danger">Del</button></div></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" style="width:14px;height:14px"/></td>
+                <td>
+                  <div class="product-name-cell">
+                    <div class="product-thumb">🌾</div>
+                    <div>
+                      <div style="font-weight:600;font-size:.875rem">Boston Fern</div>
+                      <div class="td-muted">Nephrolepis exaltata</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge-neutral">Tropical</span></td>
+                <td>₹699</td>
+                <td>
+                  <div class="stock-bar-wrap stock-zero">
+                    <div class="stock-bar-bg"><div class="stock-bar-fill" style="width:1%"></div></div>
+                    <span><span class="badge badge-error" style="font-size:.6rem">Out</span></span>
+                  </div>
+                </td>
+                <td class="td-muted">Medium</td>
+                <td><label class="toggle-wrap"><div class="toggle"></div></label></td>
+                <td><div class="flex gap-1"><a href="04-product-form.html" class="btn btn-sm btn-outline">Edit</a><button class="btn btn-sm btn-danger">Del</button></div></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" style="width:14px;height:14px"/></td>
+                <td>
+                  <div class="product-name-cell">
+                    <div class="product-thumb">🪻</div>
+                    <div>
+                      <div style="font-weight:600;font-size:.875rem">Snake Plant</div>
+                      <div class="td-muted">Sansevieria trifasciata</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge-neutral">Air Purifying</span></td>
+                <td>₹449</td>
+                <td>
+                  <div class="stock-bar-wrap stock-ok">
+                    <div class="stock-bar-bg"><div class="stock-bar-fill" style="width:55%"></div></div>
+                    <span>22</span>
+                  </div>
+                </td>
+                <td class="td-muted">Low</td>
+                <td><label class="toggle-wrap"><div class="toggle on"></div></label></td>
+                <td><div class="flex gap-1"><a href="04-product-form.html" class="btn btn-sm btn-outline">Edit</a><button class="btn btn-sm btn-danger">Del</button></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- FOOTER / PAGINATION -->
+        <div class="card-footer flex items-center justify-between">
+          <span>Showing 1–20 of 148 products</span>
+          <div class="pagination">
+            <button class="page-btn">‹</button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <button class="page-btn">…</button>
+            <button class="page-btn">8</button>
+            <button class="page-btn">›</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="annotation mt-3">
+        ADM-020 — <code>productsApi.listProducts({ page, limit:20, tab, category, light, sort })</code>. Toggle switch calls <code>toggleActive({ id, isActive })</code> mutation with optimistic update via <code>updateQueryData</code>. Confirm modal before delete. Bulk action sends array of IDs.
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

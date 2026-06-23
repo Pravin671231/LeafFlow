@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LeafFlow — My Profile</title>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+  .profile-layout { display:grid;grid-template-columns:240px 1fr;gap:1.5rem;align-items:start; }
+  .profile-nav { background:#fff;border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;position:sticky;top:84px; }
+  .profile-nav-item { display:flex;align-items:center;gap:.75rem;padding:.875rem 1.25rem;font-size:.9rem;cursor:pointer;color:var(--gray-700);border-left:3px solid transparent;transition:all .15s; }
+  .profile-nav-item:hover { background:var(--green-50);color:var(--primary); }
+  .profile-nav-item.active { background:var(--green-50);color:var(--primary);border-left-color:var(--primary);font-weight:700; }
+  .profile-nav-item .icon { font-size:1.1rem;width:1.25rem;text-align:center; }
+  .profile-avatar-section { display:flex;align-items:center;gap:1.25rem;margin-bottom:2rem; }
+  .profile-avatar-lg { width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--green-400),var(--green-600));display:flex;align-items:center;justify-content:center;font-size:1.75rem;font-weight:800;color:#fff;flex-shrink:0; }
+  .profile-form-grid { display:grid;grid-template-columns:1fr 1fr;gap:.875rem; }
+  .auth-method-badge { display:inline-flex;align-items:center;gap:.5rem;padding:.5rem .875rem;border-radius:var(--radius-lg);border:1.5px solid var(--border);background:#fff;font-size:.825rem;font-weight:600; }
+  code { font-family:monospace;font-size:.8em;background:var(--gray-100);padding:.1rem .3rem;border-radius:.25rem; }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <a href="02-home.html" class="header-logo"><span class="header-logo-icon">🌿</span><div>LeafFlow<span class="header-logo-sub">Bring plants home</span></div></a>
+    <nav class="header-nav"><a href="03-catalog.html">Shop</a></nav>
+    <div class="header-spacer"></div>
+    <div class="header-actions"><a href="05-cart.html" class="header-icon-btn">🛒<span class="cart-badge">2</span></a><div class="avatar-btn">AS</div></div>
+  </div>
+</header>
+
+<div class="page-wrapper">
+  <div class="page-content">
+    <div class="back-nav"><a href="index.html">← Back to Index</a></div>
+    <h1 class="page-title mb-4">My Account</h1>
+
+    <div class="profile-layout">
+      <!-- LEFT NAV -->
+      <div class="profile-nav">
+        <div class="profile-nav-item active"><span class="icon">👤</span> Personal Info</div>
+        <div class="profile-nav-item"><span class="icon">📦</span> My Orders</div>
+        <div class="profile-nav-item"><span class="icon">📍</span> Saved Addresses</div>
+        <div class="profile-nav-item"><span class="icon">🔐</span> Login & Security</div>
+        <div class="profile-nav-item" style="color:var(--red-500);border-top:1px solid var(--gray-100)"><span class="icon">🚪</span> Sign Out</div>
+      </div>
+
+      <!-- RIGHT CONTENT: tabs switch section -->
+      <div>
+
+        <!-- PERSONAL INFO -->
+        <div class="card mb-4">
+          <div class="card-header">Personal Information</div>
+          <div class="card-body">
+            <div class="profile-avatar-section">
+              <div class="profile-avatar-lg">AS</div>
+              <div>
+                <div style="font-size:1.1rem;font-weight:800">Ananya Singh</div>
+                <div style="font-size:.875rem;color:var(--text-muted)">ananya@gmail.com</div>
+                <div style="font-size:.78rem;color:var(--text-muted);margin-top:.2rem">Member since January 2026</div>
+              </div>
+            </div>
+
+            <div class="profile-form-grid">
+              <div class="form-group">
+                <label class="form-label">First Name</label>
+                <input class="form-control" value="Ananya"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Last Name</label>
+                <input class="form-control" value="Singh"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone Number</label>
+              <input class="form-control" value="+91 9876543210" placeholder="Enter phone number"/>
+            </div>
+            <div style="display:flex;gap:.75rem;margin-top.5rem">
+              <button class="btn btn-primary">Save Changes</button>
+              <button class="btn btn-outline">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- SAVED ADDRESSES -->
+        <div class="card mb-4">
+          <div class="card-header" style="display:flex;align-items:center;justify-content:space-between">
+            Saved Addresses
+            <button class="btn btn-outline btn-sm">+ Add New</button>
+          </div>
+          <div class="card-body" style="padding:0 1.5rem">
+            <div class="address-card selected" style="margin:0;border-radius:0;border-left:none;border-right:none;border-top:none">
+              <div class="address-card-body">
+                <div class="address-label">Home <span class="badge badge-default" style="font-size:.7rem;margin-left:.25rem">Default</span></div>
+                <div class="address-text">Ananya Singh · 42, MG Road, Indiranagar, Bengaluru, Karnataka 560038 · 📞 9876543210</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:.375rem">
+                <button class="btn btn-ghost btn-sm">Edit</button>
+                <button class="btn btn-ghost btn-sm" style="color:var(--red-500)">Delete</button>
+              </div>
+            </div>
+
+            <div class="address-card" style="margin:0;border-radius:0;border-left:none;border-right:none;border-top:none;border-bottom:none">
+              <div class="address-card-body">
+                <div class="address-label">Office</div>
+                <div class="address-text">Ananya Singh · 3rd Floor, Embassy Tech Village, Outer Ring Road, Bengaluru 560103 · 📞 9876543210</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:.375rem">
+                <button class="btn btn-ghost btn-sm">Edit</button>
+                <button class="btn btn-ghost btn-sm" style="color:var(--text-muted)">Set Default</button>
+                <button class="btn btn-ghost btn-sm" style="color:var(--red-500)">Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LOGIN & SECURITY -->
+        <div class="card mb-4">
+          <div class="card-header">Login &amp; Security</div>
+          <div class="card-body">
+            <div style="font-size:.875rem;font-weight:700;margin-bottom:.875rem">Linked Sign-in Methods</div>
+            <div style="display:flex;flex-wrap:wrap;gap:.75rem;margin-bottom:1.5rem">
+              <div class="auth-method-badge" style="border-color:var(--green-300);background:var(--green-50)">
+                ✉️ Email OTP <span style="font-size:.72rem;color:var(--green-700);margin-left:.25rem">(primary)</span>
+              </div>
+              <div class="auth-method-badge" style="border-color:var(--blue-200);background:#f0f7ff">
+                <svg width="14" height="14" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path d="M17.64 9.2a10.23 10.23 0 0 0-.164-1.84H9v3.478h4.844a4.14 4.14 0 0 1-1.796 2.717v2.258h2.909A8.777 8.777 0 0 0 17.64 9.2z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.909-2.259c-.806.54-1.837.86-3.047.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/><path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
+                Google (ananya@gmail.com)
+              </div>
+            </div>
+
+            <div class="alert alert-info" style="margin-bottom:1rem">
+              <span class="alert-icon">🔗</span>
+              <span><strong>Account linked!</strong> BUY-004: both email OTP and Google sign-in are linked to the same account.</span>
+            </div>
+
+            <div style="font-size:.875rem;font-weight:700;margin-bottom:.5rem">Email Address</div>
+            <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem">
+              <input class="form-control" value="ananya@gmail.com" readonly style="background:var(--gray-50)"/>
+              <span style="font-size:.75rem;color:var(--text-muted);white-space:nowrap">(linked to Google)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SIGN OUT -->
+        <div class="card">
+          <div class="card-body" style="display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="font-size:.9rem;font-weight:700">Sign Out</div>
+              <div style="font-size:.8rem;color:var(--text-muted)">You'll need to verify your email next time you sign in</div>
+            </div>
+            <button class="btn btn-outline" style="color:var(--red-500);border-color:var(--red-300)">Sign Out</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotation mt-4">
+      BUY-005/006/004 — <code>app/(account)/profile/page.tsx</code>. <code>useMe()</code> TanStack Query: <code>GET /api/buyer/auth/me</code>. Update name/phone: <code>PATCH /api/buyer/profile</code>. Addresses: <code>GET/POST/PUT/DELETE /api/buyer/profile/addresses</code>. Auth methods derived from <code>user.googleId</code> presence (BUY-004). Sign Out: delete JWT cookie via <code>POST /api/buyer/auth/logout</code> then redirect to homepage.
+    </div>
+  </div>
+</div>
+</body>
+</html>

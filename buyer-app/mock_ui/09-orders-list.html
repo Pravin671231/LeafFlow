@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LeafFlow — My Orders</title>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+  .order-row { background:#fff;border:1px solid var(--border);border-radius:var(--radius-xl);padding:1.25rem 1.5rem;margin-bottom:.875rem;display:flex;align-items:center;gap:1.25rem; }
+  .order-row:hover { border-color:var(--green-300);box-shadow:var(--shadow-sm); }
+  .order-thumbs { display:flex;gap:.25rem; }
+  .order-thumb { width:44px;height:44px;border-radius:var(--radius-lg);background:var(--gray-100);display:flex;align-items:center;justify-content:center;font-size:1.5rem;border:1px solid var(--border); }
+  .order-meta { flex:1;min-width:0; }
+  .order-id { font-size:.875rem;font-weight:800;color:var(--gray-800); }
+  .order-date { font-size:.78rem;color:var(--text-muted);margin-top:.1rem; }
+  .order-items-summary { font-size:.8rem;color:var(--gray-600);margin-top:.2rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  .order-price { font-size:1rem;font-weight:800;text-align:right;white-space:nowrap; }
+  .order-price-date { font-size:.75rem;color:var(--text-muted); }
+  code { font-family:monospace;font-size:.8em;background:var(--gray-100);padding:.1rem .3rem;border-radius:.25rem; }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <a href="02-home.html" class="header-logo"><span class="header-logo-icon">🌿</span><div>LeafFlow<span class="header-logo-sub">Bring plants home</span></div></a>
+    <nav class="header-nav"><a href="03-catalog.html">Shop</a></nav>
+    <div class="header-spacer"></div>
+    <div class="header-search"><span class="icon">🔍</span><input placeholder="Search plants…"/></div>
+    <div class="header-actions"><a href="05-cart.html" class="header-icon-btn">🛒<span class="cart-badge">2</span></a><div class="avatar-btn">AS</div></div>
+  </div>
+</header>
+
+<div class="page-wrapper">
+  <div class="page-content">
+    <div class="back-nav"><a href="index.html">← Back to Index</a></div>
+    <h1 class="page-title mb-1">My Orders</h1>
+    <p class="page-subtitle mb-4">Track and manage all your plant deliveries</p>
+
+    <!-- STATUS TABS -->
+    <div class="tabs mb-4">
+      <div class="tab active">All (12)</div>
+      <div class="tab">Placed (1)</div>
+      <div class="tab">Packed (2)</div>
+      <div class="tab">Shipped (1)</div>
+      <div class="tab">Delivered (7)</div>
+      <div class="tab">Cancelled (1)</div>
+    </div>
+
+    <!-- ORDER LIST -->
+    <a href="10-order-detail.html" class="order-row" style="text-decoration:none;color:inherit;display:flex">
+      <div class="order-thumbs"><div class="order-thumb">🌿</div><div class="order-thumb">🌵</div></div>
+      <div class="order-meta">
+        <div class="order-id">Order #LF-2026-00482</div>
+        <div class="order-items-summary">Monstera Deliciosa × 2, Golden Barrel Cactus × 1</div>
+        <div class="order-date">Placed 23 Jun 2026</div>
+      </div>
+      <div style="text-align:right">
+        <span class="badge badge-warning mb-1">placed</span>
+        <div class="order-price">₹2,147</div>
+        <div class="order-price-date">Est. 27–28 Jun</div>
+      </div>
+    </a>
+
+    <a href="10-order-detail.html" class="order-row" style="text-decoration:none;color:inherit;display:flex">
+      <div class="order-thumbs"><div class="order-thumb">🌺</div></div>
+      <div class="order-meta">
+        <div class="order-id">Order #LF-2026-00471</div>
+        <div class="order-items-summary">Peace Lily × 1</div>
+        <div class="order-date">Placed 18 Jun 2026</div>
+      </div>
+      <div style="text-align:right">
+        <span class="badge badge-info mb-1">shipped</span>
+        <div class="order-price">₹549</div>
+        <div class="order-price-date">Est. 24–25 Jun</div>
+      </div>
+    </a>
+
+    <a href="10-order-detail.html" class="order-row" style="text-decoration:none;color:inherit;display:flex">
+      <div class="order-thumbs"><div class="order-thumb">🌱</div><div class="order-thumb">🪻</div></div>
+      <div class="order-meta">
+        <div class="order-id">Order #LF-2026-00459</div>
+        <div class="order-items-summary">Pothos × 1, Snake Plant × 2</div>
+        <div class="order-date">Placed 12 Jun 2026</div>
+      </div>
+      <div style="text-align:right">
+        <span class="badge badge-success mb-1">delivered</span>
+        <div class="order-price">₹1,147</div>
+        <div class="order-price-date">Delivered 16 Jun</div>
+      </div>
+    </a>
+
+    <a href="10-order-detail.html" class="order-row" style="text-decoration:none;color:inherit;display:flex">
+      <div class="order-thumbs"><div class="order-thumb">🌵</div></div>
+      <div class="order-meta">
+        <div class="order-id">Order #LF-2026-00445</div>
+        <div class="order-items-summary">Golden Barrel Cactus × 3</div>
+        <div class="order-date">Placed 5 Jun 2026</div>
+      </div>
+      <div style="text-align:right">
+        <span class="badge badge-error mb-1">cancelled</span>
+        <div class="order-price">₹1,047</div>
+        <div class="order-price-date">Refund processed</div>
+      </div>
+    </a>
+
+    <a href="10-order-detail.html" class="order-row" style="text-decoration:none;color:inherit;display:flex">
+      <div class="order-thumbs"><div class="order-thumb">🌿</div></div>
+      <div class="order-meta">
+        <div class="order-id">Order #LF-2026-00438</div>
+        <div class="order-items-summary">Monstera Deliciosa × 1</div>
+        <div class="order-date">Placed 28 May 2026</div>
+      </div>
+      <div style="text-align:right">
+        <span class="badge badge-success mb-1">delivered</span>
+        <div class="order-price">₹899</div>
+        <div class="order-price-date">Delivered 1 Jun</div>
+      </div>
+    </a>
+
+    <!-- LOAD MORE -->
+    <div style="text-align:center;margin-top:1.5rem">
+      <button class="btn btn-outline">Load more orders</button>
+      <div style="font-size:.78rem;color:var(--text-muted);margin-top:.5rem">Showing 5 of 12 orders</div>
+    </div>
+
+    <div class="annotation mt-4">
+      BUY-032 — <code>app/(account)/orders/page.tsx</code>. <code>useOrders()</code> TanStack Query hook: <code>GET /api/buyer/orders?status=all&page=1&limit=10</code>. Status tabs update <code>?status=placed</code> query param. "Load more" appends next page. Guarded by <code>middleware.ts</code> — redirects to <code>/login?redirect=/orders</code> if unauthenticated.
+    </div>
+  </div>
+</div>
+</body>
+</html>

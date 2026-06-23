@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LeafFlow Admin — Inventory</title>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+  .inline-edit { display:flex;align-items:center;gap:.4rem; }
+  .qty-input { width:68px; padding:.3rem .5rem; border:1.5px solid var(--border); border-radius:var(--radius-sm); font-size:.875rem; text-align:center; }
+  .qty-btn { width:24px;height:24px;border:1.5px solid var(--border);background:#fff;border-radius:var(--radius-sm);cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center; }
+  .qty-btn:hover { background:var(--gray-100); }
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <nav class="sidebar">
+    <div class="sidebar-logo"><span class="sidebar-logo-icon">🌿</span><div><span class="sidebar-logo-text">LeafFlow</span><span class="sidebar-logo-sub">Admin Panel</span></div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">Overview</div><div class="sidebar-nav-item"><span class="icon">📊</span> Dashboard</div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">Catalog</div><div class="sidebar-nav-item"><span class="icon">🪴</span> Products</div><div class="sidebar-nav-item"><span class="icon">🏷️</span> Categories</div><div class="sidebar-nav-item active"><span class="icon">📦</span> Inventory <span class="badge-count">3</span></div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">Commerce</div><div class="sidebar-nav-item"><span class="icon">📋</span> Orders <span class="badge-count">7</span></div><div class="sidebar-nav-item"><span class="icon">👥</span> Customers</div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">System</div><div class="sidebar-nav-item"><span class="icon">⚙️</span> Settings</div></div>
+  </nav>
+
+  <div class="page-area">
+    <div class="topbar">
+      <div class="topbar-breadcrumb"><span>Admin</span><span>›</span><span class="crumb-active">Inventory</span></div>
+      <div class="topbar-spacer"></div>
+      <div class="topbar-actions"><button class="topbar-icon-btn">🔔<span class="notif-dot"></span></button><div class="admin-avatar">PK</div></div>
+    </div>
+
+    <div class="page-content">
+      <div class="back-nav"><a href="index.html">← Back to Index</a></div>
+      <div class="page-header">
+        <div><h1 class="page-title">Inventory</h1><p class="page-subtitle">Stock levels and thresholds for all 148 products</p></div>
+        <button class="btn btn-primary">📦 Bulk Adjust</button>
+      </div>
+
+      <!-- ALERT BANNER -->
+      <div class="alert alert-warning mb-4">
+        <span class="alert-icon">⚠️</span>
+        <div>
+          <strong>3 products are below their low-stock threshold</strong> and require restocking.
+          <span style="margin-left:.5rem"><a href="#" style="color:inherit;text-decoration:underline">Filter to low stock →</a></span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="filters-bar">
+          <div class="search-input-wrap"><span class="icon">🔍</span><input class="form-input search-input" placeholder="Search product…"/></div>
+          <select class="form-select" style="width:auto"><option>All Categories</option><option>Succulents</option><option>Tropical</option><option>Air Purifying</option></select>
+          <select class="form-select" style="width:auto">
+            <option>All Stock Levels</option>
+            <option selected>⚠️ Low Stock Only</option>
+            <option>Out of Stock</option>
+          </select>
+          <button class="btn btn-outline btn-sm">Clear</button>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:32px"><input type="checkbox" style="width:14px;height:14px"/></th>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Current Stock</th>
+                <th>Low-Stock Threshold</th>
+                <th>Status</th>
+                <th>Adjust</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- OUT OF STOCK -->
+              <tr style="background:#fff5f5">
+                <td><input type="checkbox" style="width:14px;height:14px"/></td>
+                <td><div style="font-weight:600">Boston Fern</div><div class="td-muted">Nephrolepis exaltata</div></td>
+                <td><span class="badge badge-neutral">Tropical</span></td>
+                <td>
+                  <div class="stock-bar-wrap stock-zero">
+                    <div class="stock-bar-bg"><div class="stock-bar-fill" style="width:1%"></div></div>
+                    <strong>0</strong>
+                  </div>
+                </td>
+                <td>
+                  <div class="inline-edit">
+                    <input class="qty-input" value="8"/>
+                    <button class="btn btn-xs btn-outline">Set</button>
+                  </div>
+                </td>
+                <td><span class="badge badge-error">Out of Stock</span></td>
+                <td>
+                  <div class="inline-edit">
+                    <button class="qty-btn">−</button>
+                    <input class="qty-input" value="0"/>
+                    <button class="qty-btn">+</button>
+                    <button class="btn btn-xs btn-primary">Save</button>
+                  </div>
+                </td>
+              </tr>
+              <!-- LOW STOCK -->
+              <tr style="background:#fffbeb">
+                <td><input type="checkbox" style="width:14px;height:14px"/></td>
+                <td><div style="font-weight:600">Golden Barrel Cactus</div><div class="td-muted">Echinocactus grusonii</div></td>
+                <td><span class="badge badge-neutral">Succulents</span></td>
+                <td>
+                  <div class="stock-bar-wrap stock-low">
+                    <div class="stock-bar-bg"><div class="stock-bar-fill" style="width:25%"></div></div>
+                    <strong>2</strong>
+                  </div>
+                </td>
+                <td>
+                  <div class="inline-edit">
+                    <input class="qty-input" value="5"/>
+                    <button class="btn btn-xs btn-outline">Set</button>
+                  </div>
+                </td>
+                <td><span class="badge badge-warning">Low Stock</span></td>
+                <td>
+                  <div class="inline-edit">
+                    <button class="qty-btn">−</button>
+                    <input class="qty-input" value="2"/>
+                    <button class="qty-btn">+</button>
+                    <button class="btn btn-xs btn-primary">Save</button>
+                  </div>
+                </td>
+              </tr>
+              <tr style="background:#fffbeb">
+                <td><input type="checkbox" style="width:14px;height:14px"/></td>
+                <td><div style="font-weight:600">Peace Lily</div><div class="td-muted">Spathiphyllum wallisii</div></td>
+                <td><span class="badge badge-neutral">Air Purifying</span></td>
+                <td>
+                  <div class="stock-bar-wrap stock-low">
+                    <div class="stock-bar-bg"><div class="stock-bar-fill" style="width:30%"></div></div>
+                    <strong>3</strong>
+                  </div>
+                </td>
+                <td>
+                  <div class="inline-edit">
+                    <input class="qty-input" value="8"/>
+                    <button class="btn btn-xs btn-outline">Set</button>
+                  </div>
+                </td>
+                <td><span class="badge badge-warning">Low Stock</span></td>
+                <td>
+                  <div class="inline-edit">
+                    <button class="qty-btn">−</button>
+                    <input class="qty-input" value="3"/>
+                    <button class="qty-btn">+</button>
+                    <button class="btn btn-xs btn-primary">Save</button>
+                  </div>
+                </td>
+              </tr>
+              <!-- NORMAL STOCK -->
+              <tr>
+                <td><input type="checkbox" style="width:14px;height:14px"/></td>
+                <td><div style="font-weight:600">Monstera Deliciosa</div><div class="td-muted">Monstera deliciosa</div></td>
+                <td><span class="badge badge-neutral">Tropical</span></td>
+                <td>
+                  <div class="stock-bar-wrap stock-ok">
+                    <div class="stock-bar-bg"><div class="stock-bar-fill" style="width:70%"></div></div>
+                    <strong>14</strong>
+                  </div>
+                </td>
+                <td>
+                  <div class="inline-edit">
+                    <input class="qty-input" value="5"/>
+                    <button class="btn btn-xs btn-outline">Set</button>
+                  </div>
+                </td>
+                <td><span class="badge badge-success">In Stock</span></td>
+                <td>
+                  <div class="inline-edit">
+                    <button class="qty-btn">−</button>
+                    <input class="qty-input" value="14"/>
+                    <button class="qty-btn">+</button>
+                    <button class="btn btn-xs btn-primary">Save</button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" style="width:14px;height:14px"/></td>
+                <td><div style="font-weight:600">Pothos (Golden)</div><div class="td-muted">Epipremnum aureum</div></td>
+                <td><span class="badge badge-neutral">Low Light</span></td>
+                <td>
+                  <div class="stock-bar-wrap stock-ok">
+                    <div class="stock-bar-bg"><div class="stock-bar-fill" style="width:90%"></div></div>
+                    <strong>32</strong>
+                  </div>
+                </td>
+                <td>
+                  <div class="inline-edit">
+                    <input class="qty-input" value="5"/>
+                    <button class="btn btn-xs btn-outline">Set</button>
+                  </div>
+                </td>
+                <td><span class="badge badge-success">In Stock</span></td>
+                <td>
+                  <div class="inline-edit">
+                    <button class="qty-btn">−</button>
+                    <input class="qty-input" value="32"/>
+                    <button class="qty-btn">+</button>
+                    <button class="btn btn-xs btn-primary">Save</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer flex items-center justify-between">
+          <span>Showing 5 of 148 · Filter: Low Stock</span>
+          <div class="pagination">
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">›</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- BULK ADJUST MODAL -->
+      <div style="margin-top:1.5rem">
+        <h3 style="font-size:.9rem;font-weight:700;margin-bottom:.75rem;color:var(--gray-700)">📦 Bulk Adjust Modal (shown on "Bulk Adjust" click)</h3>
+        <div style="border:1.5px dashed var(--border);border-radius:var(--radius-xl);overflow:hidden;max-width:480px">
+          <div class="modal-header"><span class="modal-title">Bulk Stock Adjustment</span><button class="modal-close">✕</button></div>
+          <div class="modal-body">
+            <div class="alert alert-warning mb-3"><span class="alert-icon">⚠️</span><span>You have <strong>2 products</strong> selected.</span></div>
+            <div class="form-group">
+              <label class="form-label">Adjustment Type</label>
+              <select class="form-select">
+                <option>Set exact quantity</option>
+                <option>Add to current stock</option>
+                <option>Subtract from current stock</option>
+              </select>
+            </div>
+            <div class="form-group mb-0">
+              <label class="form-label">Quantity</label>
+              <input class="form-input" type="number" value="10" />
+              <div class="form-hint">This will set stock to <strong>10</strong> for all 2 selected products.</div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-outline btn-sm">Cancel</button>
+            <button class="btn btn-primary btn-sm">Apply to 2 Products</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="annotation mt-3">
+        ADM-030 + ADM-031 — Inline stock save calls <code>inventoryApi.adjustStock({ productId, quantity })</code> which invalidates <code>Product</code> tag. Threshold field calls <code>setThreshold({ productId, threshold })</code>. Low-stock status is computed client-side from <code>stock &lt;= threshold</code>. Dashboard badge count re-derived from <code>dashboardApi</code> cache (auto-refreshes via RTK tag invalidation).
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

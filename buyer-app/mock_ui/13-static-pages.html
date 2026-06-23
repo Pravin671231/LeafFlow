@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LeafFlow — Static Pages</title>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+  .static-tabs { display:flex;gap:.375rem;margin-bottom:2rem;flex-wrap:wrap; }
+  .static-tab { padding:.5rem 1.125rem;border-radius:var(--radius-lg);border:1.5px solid var(--border);background:#fff;cursor:pointer;font-size:.875rem;font-weight:600;color:var(--gray-600);transition:all .15s; }
+  .static-tab.active { background:var(--green-700);color:#fff;border-color:var(--green-700); }
+  .static-tab:hover:not(.active) { border-color:var(--green-400);color:var(--primary); }
+  .static-section { background:#fff;border:1px solid var(--border);border-radius:var(--radius-xl);padding:2rem;max-width:760px; }
+  .static-section h2 { font-size:1.375rem;font-weight:800;color:var(--green-800);margin-bottom:.5rem; }
+  .static-section h3 { font-size:1rem;font-weight:700;color:var(--gray-800);margin:1.25rem 0 .5rem; }
+  .static-section p { font-size:.9rem;color:var(--gray-600);line-height:1.75;margin-bottom:.875rem; }
+  .static-section ul { font-size:.875rem;color:var(--gray-600);line-height:1.75;padding-left:1.25rem;margin-bottom:.875rem; }
+  .contact-grid { display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-top:1.25rem; }
+  .contact-card { background:var(--green-50);border:1px solid var(--green-200);border-radius:var(--radius-xl);padding:1.25rem;text-align:center; }
+  .contact-icon { font-size:2rem;margin-bottom:.5rem; }
+  .contact-label { font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--green-700);margin-bottom:.25rem; }
+  .contact-value { font-size:.9rem;font-weight:700;color:var(--gray-800); }
+  .contact-sub { font-size:.78rem;color:var(--text-muted);margin-top:.1rem; }
+  code { font-family:monospace;font-size:.8em;background:var(--gray-100);padding:.1rem .3rem;border-radius:.25rem; }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <a href="02-home.html" class="header-logo"><span class="header-logo-icon">🌿</span><div>LeafFlow<span class="header-logo-sub">Bring plants home</span></div></a>
+    <nav class="header-nav"><a href="03-catalog.html">Shop</a><a class="active">About</a></nav>
+    <div class="header-spacer"></div>
+    <div class="header-search"><span class="icon">🔍</span><input placeholder="Search plants…"/></div>
+    <div class="header-actions"><a href="05-cart.html" class="header-icon-btn">🛒<span class="cart-badge">2</span></a><a href="auth-01-login.html" class="btn btn-outline btn-sm">Sign in</a></div>
+  </div>
+</header>
+
+<div class="page-wrapper">
+  <div class="page-content">
+    <div class="back-nav"><a href="index.html">← Back to Index</a></div>
+    <h1 class="page-title mb-4">Information</h1>
+
+    <!-- TAB SWITCHER (wireframe: shows all 4 pages via tabs) -->
+    <div class="static-tabs">
+      <div class="static-tab active">About Us</div>
+      <div class="static-tab">Shipping Policy</div>
+      <div class="static-tab">Returns &amp; Refunds</div>
+      <div class="static-tab">Contact Us</div>
+    </div>
+
+    <!-- ABOUT US -->
+    <div class="static-section" id="about">
+      <h2>🌿 About LeafFlow</h2>
+      <p style="color:var(--text-muted);font-style:italic">Bringing the beauty of plants to every home since 2024</p>
+
+      <p>LeafFlow was born from a simple belief: every home deserves a little green. We're a Bengaluru-based plant nursery specialising in curated ornamental plants — carefully selected for health, beauty and ease of care.</p>
+
+      <p>Our botanists hand-pick each variety from trusted growers across Karnataka and Tamil Nadu. We take pride in shipping plants that arrive healthy, well-rooted and ready to thrive in your home.</p>
+
+      <h3>Our Promise</h3>
+      <ul>
+        <li>🌱 <strong>Healthy plants, guaranteed</strong> — if your plant arrives damaged, we'll replace it free</li>
+        <li>📦 <strong>Eco-friendly packaging</strong> — biodegradable pots, recycled paper, zero plastic bubble wrap</li>
+        <li>🌡️ <strong>Care card with every order</strong> — personalised care instructions for your exact plants</li>
+        <li>☎️ <strong>Plant parent support</strong> — our team is here to help if your plant needs TLC</li>
+      </ul>
+
+      <h3>Our Team</h3>
+      <p>We're a small team of plant enthusiasts, botanists and tech builders based in Bengaluru. Our nursery partners are located across Karnataka, Tamil Nadu and Andhra Pradesh — ensuring fresh, locally-grown plants delivered to your door.</p>
+    </div>
+
+    <!-- SHIPPING POLICY (hidden by default, shown when tab clicked) -->
+    <div class="static-section" id="shipping" style="display:none">
+      <h2>🚚 Shipping Policy</h2>
+
+      <h3>Delivery Timeframes</h3>
+      <ul>
+        <li>Bengaluru: 1–2 business days</li>
+        <li>Other Karnataka cities: 2–3 business days</li>
+        <li>Rest of India: 3–5 business days</li>
+      </ul>
+
+      <h3>Shipping Charges</h3>
+      <ul>
+        <li><strong>Free delivery</strong> on orders above ₹999</li>
+        <li>₹79 flat shipping on orders below ₹999</li>
+      </ul>
+
+      <h3>Serviceable Areas</h3>
+      <p>We currently deliver to Karnataka, Tamil Nadu, Maharashtra, Delhi NCR, Telangana, Andhra Pradesh, Kerala, Gujarat and Rajasthan. We are expanding to more states — check back regularly!</p>
+
+      <h3>Plant Care During Transit</h3>
+      <p>All plants are packed with breathable eco-paper and biodegradable cushioning. We ship Monday–Friday to ensure plants aren't held over the weekend at courier facilities.</p>
+    </div>
+
+    <!-- RETURNS & REFUNDS -->
+    <div class="static-section" id="returns" style="display:none">
+      <h2>🔄 Returns &amp; Refunds</h2>
+
+      <h3>7-Day Return Policy</h3>
+      <p>We want you to be happy with your plants. If your order arrives damaged, unhealthy or incorrect, we'll make it right — no questions asked.</p>
+
+      <h3>What qualifies for a return?</h3>
+      <ul>
+        <li>Plant arrived visibly damaged (broken stems, root damage)</li>
+        <li>Wrong plant delivered</li>
+        <li>Severe wilting or yellowing within 48 hours of delivery despite correct care</li>
+      </ul>
+
+      <h3>What is NOT eligible?</h3>
+      <ul>
+        <li>Natural leaf variation or minor cosmetic blemishes — these are normal for living plants</li>
+        <li>Damage caused by incorrect care after delivery</li>
+        <li>Change of mind after delivery</li>
+      </ul>
+
+      <h3>Refund Process</h3>
+      <p>Approved refunds are processed within 3–5 business days back to your original payment method. To initiate a return, contact us at support@leafflow.com with your order number and photos.</p>
+    </div>
+
+    <!-- CONTACT US -->
+    <div class="static-section" id="contact" style="display:none">
+      <h2>☎️ Contact Us</h2>
+      <p>We'd love to hear from you — whether it's a plant care question, an order issue or just to say hello!</p>
+
+      <div class="contact-grid">
+        <div class="contact-card">
+          <div class="contact-icon">📧</div>
+          <div class="contact-label">Email</div>
+          <div class="contact-value">support@leafflow.com</div>
+          <div class="contact-sub">We reply within 24 hours</div>
+        </div>
+        <div class="contact-card">
+          <div class="contact-icon">📞</div>
+          <div class="contact-label">Phone</div>
+          <div class="contact-value">+91 80 4567 8900</div>
+          <div class="contact-sub">Mon–Sat, 10AM–6PM IST</div>
+        </div>
+      </div>
+
+      <!-- CONTACT FORM -->
+      <h3 style="margin-top:1.75rem">Send us a message</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.875rem">
+        <div class="form-group"><label class="form-label">Your Name</label><input class="form-control" placeholder="Ananya Singh"/></div>
+        <div class="form-group"><label class="form-label">Email</label><input class="form-control" placeholder="ananya@gmail.com"/></div>
+      </div>
+      <div class="form-group"><label class="form-label">Subject</label><input class="form-control" placeholder="Order #LF-2026-00482 — damaged plant"/></div>
+      <div class="form-group"><label class="form-label">Message</label><textarea class="form-control" rows="4" placeholder="Tell us how we can help…"></textarea></div>
+      <button class="btn btn-primary">Send Message</button>
+    </div>
+
+    <div class="annotation mt-4">
+      BUY-040 — All 4 static pages are Next.js <code>generateStaticParams</code> / static exports: <code>app/(static)/about/page.tsx</code>, <code>/shipping/page.tsx</code>, <code>/returns/page.tsx</code>, <code>/contact/page.tsx</code>. No <code>fetch()</code> calls — pure static HTML. In the wireframe, all pages are shown in one file via JS tab toggle. Each page has its own route in production with full SEO metadata via <code>export const metadata</code>.
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div><div class="footer-brand-name">🌿 LeafFlow</div><div class="footer-brand-desc">Bringing the beauty of plants to every home.</div></div>
+    <div class="footer-col"><div class="footer-col-title">Shop</div><ul><li><a href="03-catalog.html">All Plants</a></li><li><a>Succulents</a></li><li><a>Tropical</a></li></ul></div>
+    <div class="footer-col"><div class="footer-col-title">Info</div><ul><li><a href="13-static-pages.html">About</a></li><li><a href="13-static-pages.html">Shipping</a></li><li><a href="13-static-pages.html">Returns</a></li><li><a href="13-static-pages.html">Contact</a></li></ul></div>
+    <div class="footer-col"><div class="footer-col-title">Account</div><ul><li><a href="09-orders-list.html">My Orders</a></li><li><a href="11-profile.html">Profile</a></li></ul></div>
+  </div>
+  <div class="footer-bottom">© 2026 LeafFlow · Made with 🌿 in Bengaluru, India</div>
+</footer>
+
+<script>
+  document.querySelectorAll('.static-tab').forEach((tab, i) => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.static-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.static-section').forEach(s => s.style.display = 'none');
+      tab.classList.add('active');
+      const ids = ['about','shipping','returns','contact'];
+      const el = document.getElementById(ids[i]);
+      if (el) el.style.display = 'block';
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LeafFlow Admin — Settings</title>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+  .settings-layout { display:grid;grid-template-columns:220px 1fr;gap:1.25rem;align-items:start; }
+  .settings-nav { background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;position:sticky;top:80px; }
+  .settings-nav-item { display:flex;align-items:center;gap:.625rem;padding:.6rem 1rem;font-size:.875rem;color:var(--text-muted);cursor:pointer;border-left:3px solid transparent; }
+  .settings-nav-item:hover { background:var(--gray-50);color:var(--gray-700); }
+  .settings-nav-item.active { background:var(--green-50);color:var(--green-700);border-left-color:var(--green-600);font-weight:600; }
+  .section-card { background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:1.25rem; }
+  .section-card-header { padding:1rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.5rem; }
+  .section-card-title { font-size:.95rem;font-weight:700; }
+  .section-card-body { padding:1.25rem; }
+  .section-card-footer { padding:.875rem 1.25rem;background:var(--gray-50);border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:.5rem; }
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <nav class="sidebar">
+    <div class="sidebar-logo"><span class="sidebar-logo-icon">🌿</span><div><span class="sidebar-logo-text">LeafFlow</span><span class="sidebar-logo-sub">Admin Panel</span></div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">Overview</div><div class="sidebar-nav-item"><span class="icon">📊</span> Dashboard</div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">Catalog</div><div class="sidebar-nav-item"><span class="icon">🪴</span> Products</div><div class="sidebar-nav-item"><span class="icon">🏷️</span> Categories</div><div class="sidebar-nav-item"><span class="icon">📦</span> Inventory</div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">Commerce</div><div class="sidebar-nav-item"><span class="icon">📋</span> Orders</div><div class="sidebar-nav-item"><span class="icon">👥</span> Customers</div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">System</div><div class="sidebar-nav-item active"><span class="icon">⚙️</span> Settings</div></div>
+  </nav>
+
+  <div class="page-area">
+    <div class="topbar">
+      <div class="topbar-breadcrumb"><span>Admin</span><span>›</span><span class="crumb-active">Settings</span></div>
+      <div class="topbar-spacer"></div>
+      <div class="topbar-actions"><button class="topbar-icon-btn">🔔</button><div class="admin-avatar">PK</div></div>
+    </div>
+
+    <div class="page-content">
+      <div class="back-nav"><a href="index.html">← Back to Index</a></div>
+      <div class="page-header">
+        <div><h1 class="page-title">Settings</h1><p class="page-subtitle">Store configuration, security, and admin account settings.</p></div>
+      </div>
+
+      <div class="settings-layout">
+        <!-- SETTINGS NAV -->
+        <div class="settings-nav">
+          <div class="settings-nav-item active">🏪 Store Info</div>
+          <div class="settings-nav-item">📦 Delivery Rules</div>
+          <div class="settings-nav-item">📧 Email Config</div>
+          <div class="settings-nav-item">🔐 Security</div>
+        </div>
+
+        <!-- SETTINGS PANELS -->
+        <div>
+
+          <!-- STORE INFO -->
+          <div class="section-card">
+            <div class="section-card-header">
+              <span style="font-size:1.25rem">🏪</span>
+              <div>
+                <div class="section-card-title">Store Information</div>
+                <div class="text-xs text-muted">Shown to buyers on storefront and email communications.</div>
+              </div>
+            </div>
+            <div class="section-card-body">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Store Name <span class="required">*</span></label>
+                  <input class="form-input" value="LeafFlow" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Tagline</label>
+                  <input class="form-input" value="Bringing plants home." />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Contact Email</label>
+                  <input class="form-input" value="hello@leafflow.in" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Contact Phone</label>
+                  <input class="form-input" value="+91 80 1234 5678" />
+                </div>
+              </div>
+              <div class="form-group mb-0">
+                <label class="form-label">Store Address</label>
+                <textarea class="form-textarea" rows="2">12, Green Valley Road, Indiranagar, Bengaluru 560038, Karnataka, India</textarea>
+              </div>
+            </div>
+            <div class="section-card-footer">
+              <button class="btn btn-outline btn-sm">Discard</button>
+              <button class="btn btn-primary btn-sm">Save Store Info</button>
+            </div>
+          </div>
+
+          <!-- DELIVERY RULES -->
+          <div class="section-card">
+            <div class="section-card-header">
+              <span style="font-size:1.25rem">📦</span>
+              <div>
+                <div class="section-card-title">Delivery Rules</div>
+                <div class="text-xs text-muted">Shipping fee and free-shipping threshold applied at checkout.</div>
+              </div>
+            </div>
+            <div class="section-card-body">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Base Shipping Fee (₹)</label>
+                  <input class="form-input" type="number" value="60" />
+                  <div class="form-hint">Flat fee applied to all orders.</div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Free Shipping Above (₹)</label>
+                  <input class="form-input" type="number" value="999" />
+                  <div class="form-hint">Set 0 to always charge shipping.</div>
+                </div>
+              </div>
+              <div class="form-group mb-0">
+                <label class="form-label">Serviceable States (comma-separated)</label>
+                <input class="form-input" value="Karnataka, Tamil Nadu, Maharashtra, Delhi, Telangana" />
+                <div class="form-hint">Buyers outside these states cannot checkout. Leave blank for all India.</div>
+              </div>
+            </div>
+            <div class="section-card-footer">
+              <button class="btn btn-outline btn-sm">Discard</button>
+              <button class="btn btn-primary btn-sm">Save Delivery Rules</button>
+            </div>
+          </div>
+
+          <!-- EMAIL CONFIG -->
+          <div class="section-card">
+            <div class="section-card-header">
+              <span style="font-size:1.25rem">📧</span>
+              <div>
+                <div class="section-card-title">Email Configuration</div>
+                <div class="text-xs text-muted">SMTP settings for outgoing buyer and admin emails. Values are read from <code>.env</code> — shown here for reference only.</div>
+              </div>
+            </div>
+            <div class="section-card-body">
+              <div class="alert alert-warning mb-3">
+                <span class="alert-icon">⚠️</span>
+                <span>SMTP credentials are loaded from server environment variables and cannot be changed from this UI. Contact your server administrator to update them.</span>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">SMTP Host (read-only)</label>
+                  <input class="form-input" value="smtp.gmail.com" disabled style="opacity:.6" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">SMTP Port (read-only)</label>
+                  <input class="form-input" value="587" disabled style="opacity:.6" />
+                </div>
+              </div>
+              <div class="form-group mb-0">
+                <label class="form-label">From Address (read-only)</label>
+                <input class="form-input" value="LeafFlow &lt;no-reply@leafflow.in&gt;" disabled style="opacity:.6" />
+              </div>
+            </div>
+            <div class="section-card-footer">
+              <button class="btn btn-outline btn-sm">🧪 Send Test Email</button>
+            </div>
+          </div>
+
+          <!-- SECURITY -->
+          <div class="section-card">
+            <div class="section-card-header">
+              <span style="font-size:1.25rem">🔐</span>
+              <div>
+                <div class="section-card-title">Security</div>
+                <div class="text-xs text-muted">Change your admin password. Requires OTP sent to your registered delivery email.</div>
+              </div>
+            </div>
+            <div class="section-card-body">
+              <div class="grid-2">
+                <div>
+                  <div class="form-group">
+                    <label class="form-label">Login Email</label>
+                    <input class="form-input" value="admin@leafflow.com" disabled style="opacity:.6" />
+                    <div class="form-hint">Login email cannot be changed.</div>
+                  </div>
+                  <div class="form-group mb-0">
+                    <label class="form-label">OTP Delivery Email</label>
+                    <input class="form-input" value="pravin@gmail.com" disabled style="opacity:.6" />
+                    <div class="form-hint">OTP verification codes are sent here.</div>
+                  </div>
+                </div>
+                <div style="display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:.75rem;padding:1rem;background:var(--green-50);border-radius:var(--radius-lg);border:1px solid var(--green-200)">
+                  <div style="font-size:.875rem;color:var(--green-800)">
+                    <strong>Change Password</strong><br/>
+                    <span style="font-size:.8rem;opacity:.75">An OTP will be sent to <code>pravin@gmail.com</code>. You'll then set a new password.</span>
+                  </div>
+                  <button class="btn btn-primary btn-sm">Send OTP to Change Password</button>
+                </div>
+              </div>
+              <hr class="divider"/>
+              <div>
+                <div style="font-size:.875rem;font-weight:600;margin-bottom:.5rem;color:var(--gray-700)">Account Status</div>
+                <div class="flex items-center gap-3">
+                  <span class="badge badge-success" style="font-size:.8rem">Active</span>
+                  <span class="text-sm text-muted">Last login: Jun 23, 2026 at 09:14 IST</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="annotation mt-3">
+        ADM-050 — <code>settingsApi.getSettings()</code> on mount; individual section saves call <code>updateSettings(section, data)</code>. Security section uses the same reset-password OTP flow as <code>/settings/security</code> route — redirect to <code>ResetPassword</code> page after OTP request to keep auth logic in one place.
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

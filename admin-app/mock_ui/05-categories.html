@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LeafFlow Admin — Categories</title>
+<link rel="stylesheet" href="_shared.css"/>
+</head>
+<body>
+<div class="app-shell">
+  <nav class="sidebar">
+    <div class="sidebar-logo"><span class="sidebar-logo-icon">🌿</span><div><span class="sidebar-logo-text">LeafFlow</span><span class="sidebar-logo-sub">Admin Panel</span></div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">Overview</div><div class="sidebar-nav-item"><span class="icon">📊</span> Dashboard</div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">Catalog</div><div class="sidebar-nav-item"><span class="icon">🪴</span> Products</div><div class="sidebar-nav-item active"><span class="icon">🏷️</span> Categories</div><div class="sidebar-nav-item"><span class="icon">📦</span> Inventory <span class="badge-count">3</span></div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">Commerce</div><div class="sidebar-nav-item"><span class="icon">📋</span> Orders <span class="badge-count">7</span></div><div class="sidebar-nav-item"><span class="icon">👥</span> Customers</div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">System</div><div class="sidebar-nav-item"><span class="icon">⚙️</span> Settings</div></div>
+  </nav>
+
+  <div class="page-area">
+    <div class="topbar">
+      <div class="topbar-breadcrumb"><span>Admin</span><span>›</span><span class="crumb-active">Categories</span></div>
+      <div class="topbar-spacer"></div>
+      <div class="topbar-actions"><button class="topbar-icon-btn">🔔</button><div class="admin-avatar">PK</div></div>
+    </div>
+
+    <div class="page-content" style="max-width:820px">
+      <div class="back-nav"><a href="index.html">← Back to Index</a></div>
+      <div class="page-header">
+        <div><h1 class="page-title">Categories</h1><p class="page-subtitle">8 categories · 7 active</p></div>
+        <button class="btn btn-primary">➕ Add Category</button>
+      </div>
+
+      <div class="grid-2" style="align-items:start;gap:1.25rem">
+
+        <!-- CATEGORY TABLE -->
+        <div class="card">
+          <div class="card-header"><span class="card-title">All Categories</span><div class="search-input-wrap"><span class="icon">🔍</span><input class="form-input search-input" placeholder="Search…" style="width:160px"/></div></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Name / Slug</th><th>Products</th><th>Active</th><th>Actions</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><div style="font-weight:600;font-size:.875rem">Tropical</div><div class="td-muted" style="font-family:monospace;font-size:.75rem">tropical</div></td>
+                  <td>34</td>
+                  <td><label class="toggle-wrap"><div class="toggle on"></div></label></td>
+                  <td><div class="flex gap-1"><button class="btn btn-xs btn-outline">Edit</button><button class="btn btn-xs btn-danger">Del</button></div></td>
+                </tr>
+                <tr>
+                  <td><div style="font-weight:600;font-size:.875rem">Succulents</div><div class="td-muted" style="font-family:monospace;font-size:.75rem">succulents</div></td>
+                  <td>28</td>
+                  <td><label class="toggle-wrap"><div class="toggle on"></div></label></td>
+                  <td><div class="flex gap-1"><button class="btn btn-xs btn-outline">Edit</button><button class="btn btn-xs btn-danger">Del</button></div></td>
+                </tr>
+                <tr>
+                  <td><div style="font-weight:600;font-size:.875rem">Air Purifying</div><div class="td-muted" style="font-family:monospace;font-size:.75rem">air-purifying</div></td>
+                  <td>22</td>
+                  <td><label class="toggle-wrap"><div class="toggle on"></div></label></td>
+                  <td><div class="flex gap-1"><button class="btn btn-xs btn-outline">Edit</button><button class="btn btn-xs btn-danger">Del</button></div></td>
+                </tr>
+                <tr>
+                  <td><div style="font-weight:600;font-size:.875rem">Pet Friendly</div><div class="td-muted" style="font-family:monospace;font-size:.75rem">pet-friendly</div></td>
+                  <td>19</td>
+                  <td><label class="toggle-wrap"><div class="toggle on"></div></label></td>
+                  <td><div class="flex gap-1"><button class="btn btn-xs btn-outline">Edit</button><button class="btn btn-xs btn-danger">Del</button></div></td>
+                </tr>
+                <tr>
+                  <td><div style="font-weight:600;font-size:.875rem">Low Light</div><div class="td-muted" style="font-family:monospace;font-size:.75rem">low-light</div></td>
+                  <td>15</td>
+                  <td><label class="toggle-wrap"><div class="toggle on"></div></label></td>
+                  <td><div class="flex gap-1"><button class="btn btn-xs btn-outline">Edit</button><button class="btn btn-xs btn-danger">Del</button></div></td>
+                </tr>
+                <tr>
+                  <td><div style="font-weight:600;font-size:.875rem">Hanging Plants</div><div class="td-muted" style="font-family:monospace;font-size:.75rem">hanging-plants</div></td>
+                  <td>12</td>
+                  <td><label class="toggle-wrap"><div class="toggle on"></div></label></td>
+                  <td><div class="flex gap-1"><button class="btn btn-xs btn-outline">Edit</button><button class="btn btn-xs btn-danger">Del</button></div></td>
+                </tr>
+                <tr>
+                  <td><div style="font-weight:600;font-size:.875rem">Cacti</div><div class="td-muted" style="font-family:monospace;font-size:.75rem">cacti</div></td>
+                  <td>9</td>
+                  <td><label class="toggle-wrap"><div class="toggle on"></div></label></td>
+                  <td><div class="flex gap-1"><button class="btn btn-xs btn-outline">Edit</button><button class="btn btn-xs btn-danger">Del</button></div></td>
+                </tr>
+                <tr>
+                  <td><div style="font-weight:600;font-size:.875rem">Flowering Plants</div><div class="td-muted" style="font-family:monospace;font-size:.75rem">flowering-plants</div></td>
+                  <td>9</td>
+                  <td><label class="toggle-wrap"><div class="toggle"></div></label></td>
+                  <td><div class="flex gap-1"><button class="btn btn-xs btn-outline">Edit</button><button class="btn btn-xs btn-danger">Del</button></div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card-footer">8 categories total · Click Edit to modify inline</div>
+        </div>
+
+        <!-- ADD / EDIT MODAL (inline for wireframe) -->
+        <div style="display:flex;flex-direction:column;gap:1.25rem">
+          <div class="card">
+            <div class="card-header"><span class="card-title">✏️ Edit Category</span><button class="modal-close">✕</button></div>
+            <div class="card-body">
+              <div class="form-group">
+                <label class="form-label">Name <span class="required">*</span></label>
+                <input class="form-input" value="Tropical" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Slug <span class="required">*</span></label>
+                <input class="form-input" value="tropical" />
+                <div class="form-hint">Buyer URL: <code>/categories/tropical</code></div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Description</label>
+                <textarea class="form-textarea" rows="3">Plants native to tropical climates. Thrive in warmth and humidity.</textarea>
+              </div>
+              <div class="form-group mb-0">
+                <label class="toggle-wrap"><div class="toggle on"></div><span class="toggle-label">Active</span></label>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-outline btn-sm">Cancel</button>
+              <button class="btn btn-primary btn-sm">Save Changes</button>
+            </div>
+          </div>
+
+          <!-- DELETE GUARD -->
+          <div class="card" style="border-color:var(--amber-400)">
+            <div class="card-header" style="background:var(--amber-100)"><span class="card-title">⚠️ Delete Guard</span></div>
+            <div class="card-body">
+              <p class="text-sm">Cannot delete a category with active products. The delete button is disabled when <code>product_count &gt; 0</code>.</p>
+              <div class="alert alert-warning mt-3">
+                <span class="alert-icon">⚠️</span>
+                <span>Reassign or delete all <strong>34 products</strong> in <em>Tropical</em> before deleting this category.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="annotation">
+            ADM-021 — <code>categoriesApi.createCategory</code> / <code>updateCategory</code> / <code>deleteCategory</code>. Slug auto-generated via <code>slugify(name)</code>. Active toggle uses optimistic update. Delete blocked if <code>productCount &gt; 0</code> — guard enforced server-side with 409 and shown client-side by disabling the button + tooltip.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

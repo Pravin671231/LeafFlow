@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LeafFlow — Monstera Deliciosa</title>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+  .detail-layout { display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start; }
+  .price-row { display:flex;align-items:baseline;gap:.75rem;margin:.75rem 0; }
+  .price-main { font-size:2rem;font-weight:900;color:var(--gray-800); }
+  .price-compare { font-size:1.1rem;color:var(--text-muted);text-decoration:line-through; }
+  .price-save { font-size:.825rem;font-weight:700;color:var(--red-500);background:var(--red-100);padding:.2rem .5rem;border-radius:9999px; }
+  .care-badge { display:inline-flex;align-items:center;gap:.35rem;padding:.3rem .75rem;border-radius:9999px;border:1.5px solid var(--green-200);background:var(--green-50);font-size:.8rem;color:var(--green-700);font-weight:600;margin:.2rem; }
+  .tab-content { padding:1.25rem 0;font-size:.9rem;color:var(--gray-700);line-height:1.8; }
+  .breadcrumb { display:flex;align-items:center;gap:.4rem;font-size:.825rem;color:var(--text-muted);margin-bottom:1.5rem; }
+  .breadcrumb a { color:var(--text-muted); }
+  .breadcrumb a:hover { color:var(--primary); }
+  .qty-large { display:flex;align-items:center;gap:.875rem; }
+  .qty-btn-lg { width:36px;height:36px;border-radius:50%;border:2px solid var(--border);background:#fff;font-size:1.2rem;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--gray-700);font-weight:700; }
+  .qty-btn-lg:hover { border-color:var(--primary);color:var(--primary); }
+  .qty-val-lg { font-size:1.25rem;font-weight:800;min-width:2rem;text-align:center; }
+  code { font-family:monospace;font-size:.8em;background:var(--gray-100);padding:.1rem .3rem;border-radius:.25rem; }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <a href="02-home.html" class="header-logo"><span class="header-logo-icon">🌿</span><div>LeafFlow<span class="header-logo-sub">Bring plants home</span></div></a>
+    <nav class="header-nav"><a href="03-catalog.html">Shop</a><a>Succulents</a><a>Tropical</a><a>About</a></nav>
+    <div class="header-spacer"></div>
+    <div class="header-search"><span class="icon">🔍</span><input placeholder="Search plants…"/></div>
+    <div class="header-actions"><a href="05-cart.html" class="header-icon-btn">🛒<span class="cart-badge">2</span></a><div class="avatar-btn">AS</div></div>
+  </div>
+</header>
+
+<div class="page-wrapper">
+  <div class="page-content">
+    <div class="back-nav"><a href="index.html">← Back to Index</a></div>
+
+    <div class="breadcrumb">
+      <a href="02-home.html">Home</a><span>›</span>
+      <a href="03-catalog.html">Shop</a><span>›</span>
+      <a href="03-catalog.html?cat=tropical">Tropical</a><span>›</span>
+      <span style="color:var(--gray-700)">Monstera Deliciosa</span>
+    </div>
+
+    <div class="detail-layout">
+      <!-- IMAGE GALLERY -->
+      <div>
+        <div class="gallery">
+          <div class="gallery-thumbs">
+            <div class="gallery-thumb active">🌿</div>
+            <div class="gallery-thumb">🌿</div>
+            <div class="gallery-thumb">🌿</div>
+            <div class="gallery-thumb">🌿</div>
+          </div>
+          <div class="gallery-main">🌿</div>
+        </div>
+        <div style="margin-top:.75rem;font-size:.78rem;color:var(--text-muted);text-align:center">Click thumbnail to change image · Served from Cloudinary CDN</div>
+      </div>
+
+      <!-- PRODUCT INFO -->
+      <div>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.5rem">
+          <span class="badge badge-success" style="font-size:.8rem">✓ In Stock · 14 left</span>
+          <span class="care-badge">🐾 Pet Friendly</span>
+        </div>
+
+        <h1 style="font-size:1.875rem;font-weight:900;color:var(--gray-800);line-height:1.2">Monstera Deliciosa</h1>
+        <p style="font-size:.9rem;font-style:italic;color:var(--text-muted);margin:.3rem 0">Monstera deliciosa · Swiss Cheese Plant</p>
+        <p style="font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--primary)">Tropical</p>
+
+        <div class="price-row">
+          <span class="price-main">₹899</span>
+          <span class="price-compare">₹1,199</span>
+          <span class="price-save">Save 25%</span>
+        </div>
+
+        <p style="font-size:.9rem;color:var(--gray-600);line-height:1.7;margin-bottom:1.25rem">
+          Monstera Deliciosa, loved for its dramatic split leaves, is a low-maintenance tropical that thrives in bright indirect light. Perfect for living rooms and offices.
+        </p>
+
+        <!-- PLANT ATTRIBUTE GRID -->
+        <div class="attr-grid mb-4">
+          <div class="attr-item"><div class="attr-item-icon">☀️</div><div class="attr-item-label">Light</div><div class="attr-item-value">Bright Indirect</div></div>
+          <div class="attr-item"><div class="attr-item-icon">💧</div><div class="attr-item-label">Water</div><div class="attr-item-value">Twice weekly</div></div>
+          <div class="attr-item"><div class="attr-item-icon">💨</div><div class="attr-item-label">Humidity</div><div class="attr-item-value">High</div></div>
+          <div class="attr-item"><div class="attr-item-icon">🐾</div><div class="attr-item-label">Pet Safe</div><div class="attr-item-value">Yes</div></div>
+          <div class="attr-item"><div class="attr-item-icon">📏</div><div class="attr-item-label">Height</div><div class="attr-item-value">40–60 cm</div></div>
+          <div class="attr-item"><div class="attr-item-icon">🪣</div><div class="attr-item-label">Pot Size</div><div class="attr-item-value">6 inch</div></div>
+        </div>
+
+        <!-- STOCK WARNING -->
+        <div class="alert alert-warning mb-3">
+          <span class="alert-icon">⚠️</span>
+          <span><strong>Only 14 left!</strong> Add to cart to secure yours.</span>
+        </div>
+
+        <!-- QTY + ADD TO CART -->
+        <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.25rem">
+          <div class="qty-large">
+            <button class="qty-btn-lg">−</button>
+            <span class="qty-val-lg">1</span>
+            <button class="qty-btn-lg">+</button>
+          </div>
+          <a href="05-cart.html" class="btn btn-primary btn-lg" style="flex:1;justify-content:center">🛒 Add to Cart</a>
+        </div>
+
+        <div style="font-size:.78rem;color:var(--text-muted);margin-bottom:1.5rem">
+          🚚 <strong>Free delivery</strong> on this order (above ₹999 threshold) · Usually ships in 2–3 days
+        </div>
+
+        <!-- TABS: Description / Care / Shipping -->
+        <div class="tabs mb-0">
+          <div class="tab active">Description</div>
+          <div class="tab">Care Guide</div>
+          <div class="tab">Shipping Info</div>
+        </div>
+        <div class="tab-content">
+          <p>Monstera Deliciosa is native to the tropical rainforests of Southern Mexico and Panama. The plant is famous for its large, glossy leaves with natural holes and splits (called fenestrations). It grows as a climbing vine in the wild, but thrives beautifully as a houseplant.</p>
+          <br/>
+          <p>This plant is a conversation starter — its bold silhouette adds drama to any space. It's also one of the easier tropicals to care for, tolerating occasional neglect and low light conditions better than most.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- RELATED PRODUCTS -->
+    <div class="section mt-6">
+      <div class="section-header"><h2 class="section-title-lg">🌿 You Might Also Like</h2><a href="03-catalog.html" class="section-link">View all →</a></div>
+      <div class="products-grid" style="grid-template-columns:repeat(4,1fr)">
+        <a href="04-product-detail.html" class="product-card"><div class="product-card-img">🌺</div><div class="product-card-body"><div class="product-card-category">Air Purifying</div><div class="product-card-name">Peace Lily</div><div class="product-card-footer"><span class="product-price">₹549</span><button class="product-card-add" onclick="event.preventDefault()">+</button></div></div></a>
+        <a href="04-product-detail.html" class="product-card"><div class="product-card-img">🌱</div><div class="product-card-body"><div class="product-card-category">Low Light</div><div class="product-card-name">Pothos (Golden)</div><div class="product-card-footer"><span class="product-price">₹249</span><button class="product-card-add" onclick="event.preventDefault()">+</button></div></div></a>
+        <a href="04-product-detail.html" class="product-card"><div class="product-card-img">🪻</div><div class="product-card-body"><div class="product-card-category">Air Purifying</div><div class="product-card-name">Snake Plant</div><div class="product-card-footer"><span class="product-price">₹449</span><button class="product-card-add" onclick="event.preventDefault()">+</button></div></div></a>
+        <a href="04-product-detail.html" class="product-card"><div class="product-card-img">🌵</div><div class="product-card-body"><div class="product-card-category">Succulents</div><div class="product-card-name">Golden Cactus</div><div class="product-card-footer"><span class="product-price">₹349</span><button class="product-card-add" onclick="event.preventDefault()">+</button></div></div></a>
+      </div>
+    </div>
+
+    <div class="annotation mt-3">
+      BUY-013 + BUY-020 — Next.js page: <code>app/(shop)/shop/[slug]/page.tsx</code>. <code>generateStaticParams()</code> pre-renders all product slugs. <code>generateMetadata()</code> for SEO title/description/OG. Add to cart: <code>cartStore.addItem(product, qty)</code> — capped at <code>product.stock</code> (BUY-021). Qty stepper max-capped at stock. Out of stock: show "Notify me" placeholder (Phase 2).
+    </div>
+  </div>
+</div>
+</body>
+</html>

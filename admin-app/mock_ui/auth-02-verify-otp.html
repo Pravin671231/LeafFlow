@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LeafFlow Admin — Verify OTP</title>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+  body { background:var(--green-50); display:flex; align-items:center; justify-content:center; min-height:100vh; padding:1.5rem; }
+  .auth-wrap { width:100%; max-width:420px; }
+  .auth-logo { text-align:center; margin-bottom:2rem; }
+  .auth-logo-icon { font-size:2.5rem; }
+  .auth-logo-name { font-size:1.5rem; font-weight:800; color:var(--green-800); margin:.25rem 0 .1rem; }
+  .auth-logo-sub { font-size:.825rem; color:var(--text-muted); }
+  .auth-card { background:#fff; border-radius:var(--radius-xl); border:1px solid var(--border); box-shadow:var(--shadow-lg); overflow:hidden; }
+  .auth-card-header { background:var(--green-800); color:#fff; padding:1.25rem 1.5rem; }
+  .auth-card-title { font-size:1rem; font-weight:700; }
+  .auth-card-sub { font-size:.8rem; opacity:.7; margin-top:.2rem; }
+  .auth-card-body { padding:1.5rem; }
+
+  /* OTP boxes */
+  .otp-boxes { display:flex; gap:.625rem; justify-content:center; margin:1.25rem 0; }
+  .otp-box {
+    width:52px; height:60px;
+    border:2px solid var(--border);
+    border-radius:var(--radius-md);
+    text-align:center;
+    font-size:1.5rem; font-weight:700;
+    color:var(--gray-800);
+    outline:none;
+    transition:border-color .12s, box-shadow .12s;
+  }
+  .otp-box:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(22,163,74,.15); }
+  .otp-box.filled { border-color:var(--green-400); background:var(--green-50); }
+  .otp-box.error { border-color:var(--red-500); background:var(--red-100); }
+
+  .timer { text-align:center; font-size:.875rem; color:var(--text-muted); }
+  .timer strong { color:var(--green-700); font-variant-numeric:tabular-nums; }
+  .attempts-bar { display:flex; gap:.3rem; justify-content:center; margin-top:.75rem; }
+  .attempt-dot { width:8px; height:8px; border-radius:50%; background:var(--green-300); }
+  .attempt-dot.used { background:var(--red-400); }
+</style>
+</head>
+<body>
+<div style="position:fixed;top:1rem;right:1rem"><a href="index.html" class="btn btn-outline btn-sm">← Index</a></div>
+
+<div class="auth-wrap">
+  <div class="auth-logo">
+    <div class="auth-logo-icon">🌿</div>
+    <div class="auth-logo-name">LeafFlow</div>
+    <div class="auth-logo-sub">Admin Panel</div>
+  </div>
+
+  <div class="auth-card">
+    <div class="auth-card-header">
+      <div class="auth-card-title">📨 Enter OTP</div>
+      <div class="auth-card-sub">A 6-digit code was sent to <strong>p****n@gmail.com</strong></div>
+    </div>
+    <div class="auth-card-body">
+
+      <div class="alert alert-success mb-3">
+        <span class="alert-icon">✅</span>
+        <span>OTP sent! Check your inbox at <strong>p****n@gmail.com</strong>. This code expires in 5 minutes.</span>
+      </div>
+
+      <!-- OTP INPUT BOXES -->
+      <div class="otp-boxes">
+        <input class="otp-box filled" maxlength="1" value="1" />
+        <input class="otp-box filled" maxlength="1" value="2" />
+        <input class="otp-box filled" maxlength="1" value="3" />
+        <input class="otp-box" maxlength="1" placeholder="·" style="border-color:var(--primary);box-shadow:0 0 0 3px rgba(22,163,74,.15)" />
+        <input class="otp-box" maxlength="1" placeholder="·" />
+        <input class="otp-box" maxlength="1" placeholder="·" />
+      </div>
+
+      <!-- TIMER -->
+      <div class="timer">
+        Code expires in <strong>3:42</strong>
+      </div>
+
+      <!-- ATTEMPTS -->
+      <div class="attempts-bar" title="Remaining attempts">
+        <div class="attempt-dot used"></div>
+        <div class="attempt-dot"></div>
+        <div class="attempt-dot"></div>
+        <div class="attempt-dot"></div>
+        <div class="attempt-dot"></div>
+      </div>
+      <div style="text-align:center;font-size:.72rem;color:var(--text-muted);margin-top:.25rem">4 attempts remaining (max 5)</div>
+
+      <!-- INVALID STATE (shown on wrong OTP) -->
+      <div class="alert alert-error mt-3" style="display:none">
+        <span class="alert-icon">❌</span>
+        <span>Incorrect OTP. 3 attempts remaining.</span>
+      </div>
+
+      <button class="btn btn-primary mt-4" style="width:100%;justify-content:center;padding:.65rem">
+        Verify & Sign In
+      </button>
+
+      <div style="text-align:center;margin-top:1rem;font-size:.825rem;color:var(--text-muted)">
+        Didn't receive it?
+        <button style="background:none;border:none;color:var(--primary);cursor:pointer;font-size:.825rem;font-weight:600" disabled>
+          Resend OTP (2:30)
+        </button>
+      </div>
+
+      <div style="text-align:center;margin-top:.5rem;font-size:.78rem">
+        <a href="auth-01-login.html" style="color:var(--text-muted)">← Back to Login</a>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:1.5rem;display:flex;flex-direction:column;gap:.75rem">
+    <div class="annotation">
+      ADM-001 — <code>POST /api/admin/auth/login/verify-otp</code> with <code>{ loginEmail, otpSessionId, otp }</code>. On success: store JWT in memory + set httpOnly refresh token cookie. Navigate to <code>/dashboard</code>. On OTP_MAX_ATTEMPTS (5): disable form, show lockout message. Resend enabled after OTP expires or via resend timer.
+    </div>
+    <div class="wireframe-note">
+      Auto-advance between boxes on single digit input. Paste support: spread 6 chars across boxes. Backspace: clear current then focus previous. All via <code>useOtpInput()</code> custom hook.
+    </div>
+  </div>
+</div>
+</body>
+</html>

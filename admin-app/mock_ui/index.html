@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LeafFlow Admin — UI Proposal Index</title>
+<style>
+  :root {
+    --green-50:#f0fdf4;--green-100:#dcfce7;--green-200:#bbf7d0;
+    --green-600:#16a34a;--green-700:#15803d;--green-800:#166534;
+    --gray-50:#f9fafb;--gray-100:#f3f4f6;--gray-200:#e5e7eb;
+    --gray-400:#9ca3af;--gray-600:#4b5563;--gray-800:#1f2937;
+    --lime-400:#a3e635;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--green-50);color:var(--gray-800);min-height:100vh}
+  header{background:var(--green-800);color:#fff;padding:2rem 3rem}
+  header h1{font-size:2rem;font-weight:700;margin-bottom:.25rem}
+  header p{opacity:.75;font-size:.9rem}
+  .badge{display:inline-block;padding:.2rem .6rem;border-radius:9999px;font-size:.7rem;font-weight:600;background:var(--lime-400);color:var(--green-800)}
+  main{max-width:1100px;margin:2.5rem auto;padding:0 1.5rem}
+  .section-title{font-size:1.1rem;font-weight:700;color:var(--green-700);margin:2rem 0 1rem;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--green-200);padding-bottom:.4rem}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
+  .card{background:#fff;border-radius:.75rem;border:1px solid var(--gray-200);padding:1.25rem 1.5rem;display:block;text-decoration:none;color:inherit;transition:box-shadow .15s,border-color .15s}
+  .card:hover{box-shadow:0 4px 16px rgba(22,101,52,.1);border-color:var(--green-600)}
+  .card-icon{font-size:1.75rem;margin-bottom:.5rem}
+  .card h3{font-size:1rem;font-weight:700;color:var(--gray-800);margin-bottom:.25rem}
+  .card p{font-size:.82rem;color:var(--gray-600);line-height:1.4}
+  .card .tags{margin-top:.6rem;display:flex;gap:.4rem;flex-wrap:wrap}
+  .tag{font-size:.7rem;padding:.15rem .5rem;border-radius:.25rem;background:var(--green-100);color:var(--green-800);font-weight:500}
+  footer{text-align:center;padding:2.5rem;color:var(--gray-400);font-size:.8rem}
+  .intro-box{background:#fff;border-radius:.75rem;border:1px solid var(--green-200);padding:1.5rem 2rem;margin-bottom:1.5rem}
+  .intro-box h2{font-size:1.1rem;font-weight:700;margin-bottom:.5rem;color:var(--green-700)}
+  .intro-box ul{margin-left:1.2rem;color:var(--gray-600);font-size:.88rem;line-height:1.8}
+</style>
+</head>
+<body>
+<header>
+  <div style="display:flex;align-items:center;gap:1rem;margin-bottom:.5rem">
+    <span style="font-size:2.5rem">🌿</span>
+    <div>
+      <h1>LeafFlow Admin — UI Proposal</h1>
+      <p>Complete wireframe suite · Stack: React 19 + Vite 8 + RTK Query + Tailwind v4 + DaisyUI 5</p>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="intro-box">
+    <h2>How to use this proposal</h2>
+    <ul>
+      <li>Click any card below to open the full-page wireframe for that screen.</li>
+      <li>Every screen ships with annotated layout zones, component list, RTK Query slice notes, and implementation hints.</li>
+      <li>The <strong>Design System</strong> file defines tokens, typography, colour palette and reusable components that all screens inherit.</li>
+      <li>The <strong>Navigation Flow</strong> file shows the complete routing graph including auth guards.</li>
+    </ul>
+  </div>
+
+  <div class="section-title">Foundation</div>
+  <div class="grid">
+    <a class="card" href="00-design-system.html">
+      <div class="card-icon">🎨</div>
+      <h3>Design System</h3>
+      <p>Color tokens, typography scale, spacing, DaisyUI component map and brand guidelines.</p>
+      <div class="tags"><span class="tag">Colors</span><span class="tag">Typography</span><span class="tag">Spacing</span><span class="tag">Components</span></div>
+    </a>
+    <a class="card" href="01-layout-shell.html">
+      <div class="card-icon">🏗️</div>
+      <h3>Layout Shell</h3>
+      <p>Sidebar + Topbar + main content area. Collapsible sidebar, breadcrumb, notification bell, admin avatar.</p>
+      <div class="tags"><span class="tag">Sidebar</span><span class="tag">Navbar</span><span class="tag">Breadcrumb</span></div>
+    </a>
+    <a class="card" href="12-navigation-flow.html">
+      <div class="card-icon">🗺️</div>
+      <h3>Navigation Flow</h3>
+      <p>Full routing graph: auth guard logic, page transitions, redirect rules, and deep-link map.</p>
+      <div class="tags"><span class="tag">Routes</span><span class="tag">Guards</span><span class="tag">Flow</span></div>
+    </a>
+  </div>
+
+  <div class="section-title">Authentication Screens</div>
+  <div class="grid">
+    <a class="card" href="auth-01-login.html">
+      <div class="card-icon">🔐</div>
+      <h3>Login — Password Step</h3>
+      <p>loginEmail + password form with rate-limit feedback and "Forgot password?" link.</p>
+      <div class="tags"><span class="tag">ADM-001</span><span class="tag">SEC-06</span></div>
+    </a>
+    <a class="card" href="auth-02-verify-otp.html">
+      <div class="card-icon">📨</div>
+      <h3>Login — OTP Verification</h3>
+      <p>6-digit OTP entry with countdown timer, attempt counter and resend flow.</p>
+      <div class="tags"><span class="tag">ADM-001</span><span class="tag">OTP</span></div>
+    </a>
+    <a class="card" href="auth-03-forgot-password.html">
+      <div class="card-icon">🔑</div>
+      <h3>Forgot Password</h3>
+      <p>3-step flow: enter loginEmail → enter OTP → set new password + confirm.</p>
+      <div class="tags"><span class="tag">ADM-002</span></div>
+    </a>
+  </div>
+
+  <div class="section-title">Core Dashboard</div>
+  <div class="grid">
+    <a class="card" href="02-dashboard.html">
+      <div class="card-icon">📊</div>
+      <h3>Dashboard — Overview</h3>
+      <p>KPI stat cards (revenue, orders, pending, low-stock), recent orders table, low-stock alert list.</p>
+      <div class="tags"><span class="tag">ADM-010</span><span class="tag">RTK Query</span></div>
+    </a>
+  </div>
+
+  <div class="section-title">Product & Category Management</div>
+  <div class="grid">
+    <a class="card" href="03-products-list.html">
+      <div class="card-icon">🪴</div>
+      <h3>Products — List</h3>
+      <p>Paginated table with image thumbnail, category badge, stock indicator, status toggle and bulk actions.</p>
+      <div class="tags"><span class="tag">ADM-020</span><span class="tag">Search</span><span class="tag">Filter</span></div>
+    </a>
+    <a class="card" href="04-product-form.html">
+      <div class="card-icon">✏️</div>
+      <h3>Product — Add / Edit Form</h3>
+      <p>Multi-section form: basic info, pricing, plant attributes (light, water, humidity), image upload, publish toggle.</p>
+      <div class="tags"><span class="tag">ADM-020</span><span class="tag">ADM-022</span><span class="tag">Cloudinary</span></div>
+    </a>
+    <a class="card" href="05-categories.html">
+      <div class="card-icon">🏷️</div>
+      <h3>Categories</h3>
+      <p>Category list with slug, active toggle, inline add/edit via modal, delete guard.</p>
+      <div class="tags"><span class="tag">ADM-021</span></div>
+    </a>
+  </div>
+
+  <div class="section-title">Inventory Management</div>
+  <div class="grid">
+    <a class="card" href="06-inventory.html">
+      <div class="card-icon">📦</div>
+      <h3>Inventory</h3>
+      <p>Stock table with inline quantity editor, threshold column, low-stock badge filter and bulk adjust modal.</p>
+      <div class="tags"><span class="tag">ADM-030</span><span class="tag">ADM-031</span></div>
+    </a>
+  </div>
+
+  <div class="section-title">Order Management</div>
+  <div class="grid">
+    <a class="card" href="07-orders-list.html">
+      <div class="card-icon">📋</div>
+      <h3>Orders — List</h3>
+      <p>Filterable order table: status tabs (placed / packed / shipped / delivered / cancelled), date range, search by order number.</p>
+      <div class="tags"><span class="tag">ADM-040</span><span class="tag">ADM-041</span></div>
+    </a>
+    <a class="card" href="08-order-detail.html">
+      <div class="card-icon">🧾</div>
+      <h3>Order — Detail</h3>
+      <p>Order summary, line items, shipping address, payment status, status progression stepper, refund button.</p>
+      <div class="tags"><span class="tag">ADM-040</span><span class="tag">ADM-041</span><span class="tag">Razorpay</span></div>
+    </a>
+  </div>
+
+  <div class="section-title">Customer Management</div>
+  <div class="grid">
+    <a class="card" href="09-customers-list.html">
+      <div class="card-icon">👥</div>
+      <h3>Customers — List</h3>
+      <p>Buyer table: name, email, order count, total spend, join date. Search and sort columns.</p>
+      <div class="tags"><span class="tag">ADM-042</span></div>
+    </a>
+    <a class="card" href="10-customer-detail.html">
+      <div class="card-icon">👤</div>
+      <h3>Customer — Detail</h3>
+      <p>Buyer profile card + full order history tab with status badges and order totals.</p>
+      <div class="tags"><span class="tag">ADM-042</span></div>
+    </a>
+  </div>
+
+  <div class="section-title">Settings</div>
+  <div class="grid">
+    <a class="card" href="11-settings.html">
+      <div class="card-icon">⚙️</div>
+      <h3>Settings</h3>
+      <p>Store info, contact details, delivery zone rules, admin email config and security (reset password shortcut).</p>
+      <div class="tags"><span class="tag">ADM-050</span><span class="tag">ADM-003</span></div>
+    </a>
+  </div>
+</main>
+
+<footer>LeafFlow Admin UI Proposal · June 2026 · 13 screens + design system + navigation flow</footer>
+</body>
+</html>

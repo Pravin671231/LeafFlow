@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LeafFlow Admin — Order Detail</title>
+<link rel="stylesheet" href="_shared.css"/>
+<style>
+  .order-layout { display:grid;grid-template-columns:1fr 320px;gap:1.25rem;align-items:start; }
+  .line-item { display:flex;align-items:center;gap:.875rem;padding:.75rem 0;border-bottom:1px solid var(--gray-100); }
+  .line-item:last-child { border-bottom:none; }
+  .item-thumb { width:48px;height:48px;border-radius:var(--radius-md);background:var(--green-100);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0; }
+  .totals-row { display:flex;justify-content:space-between;padding:.4rem 0;font-size:.875rem; }
+  .totals-row.total { border-top:2px solid var(--border);margin-top:.4rem;padding-top:.75rem;font-weight:700;font-size:.95rem; }
+  .info-row { display:flex;justify-content:space-between;padding:.4rem 0;border-bottom:1px solid var(--gray-100);font-size:.85rem; }
+  .info-row:last-child { border-bottom:none; }
+  .info-label { color:var(--text-muted); }
+  .sticky-panel { position:sticky;top:80px;display:flex;flex-direction:column;gap:1.25rem; }
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <nav class="sidebar">
+    <div class="sidebar-logo"><span class="sidebar-logo-icon">🌿</span><div><span class="sidebar-logo-text">LeafFlow</span><span class="sidebar-logo-sub">Admin Panel</span></div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">Overview</div><div class="sidebar-nav-item"><span class="icon">📊</span> Dashboard</div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">Catalog</div><div class="sidebar-nav-item"><span class="icon">🪴</span> Products</div><div class="sidebar-nav-item"><span class="icon">🏷️</span> Categories</div><div class="sidebar-nav-item"><span class="icon">📦</span> Inventory</div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">Commerce</div><div class="sidebar-nav-item active"><span class="icon">📋</span> Orders</div><div class="sidebar-nav-item"><span class="icon">👥</span> Customers</div></div>
+    <div class="sidebar-section"><div class="sidebar-section-label">System</div><div class="sidebar-nav-item"><span class="icon">⚙️</span> Settings</div></div>
+  </nav>
+
+  <div class="page-area">
+    <div class="topbar">
+      <div class="topbar-breadcrumb"><span>Admin</span><span>›</span><a href="07-orders-list.html">Orders</a><span>›</span><span class="crumb-active">LF-0248</span></div>
+      <div class="topbar-spacer"></div>
+      <div class="topbar-actions"><button class="topbar-icon-btn">🔔</button><div class="admin-avatar">PK</div></div>
+    </div>
+
+    <div class="page-content">
+      <div class="back-nav"><a href="index.html">← Back to Index</a></div>
+      <div class="page-header">
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="page-title">Order LF-0248</h1>
+            <span class="badge badge-warning" style="font-size:.8rem">Placed</span>
+            <span class="badge badge-success" style="font-size:.8rem">Paid</span>
+          </div>
+          <p class="page-subtitle">Placed on Jun 23, 2026 at 14:32 IST · Razorpay: pay_OBQ2WjCQPi3Kel</p>
+        </div>
+        <a href="07-orders-list.html" class="btn btn-outline btn-sm">← Back to Orders</a>
+      </div>
+
+      <!-- STATUS STEPPER -->
+      <div class="card mb-4">
+        <div class="card-body">
+          <div class="stepper">
+            <div class="step done"><div class="step-dot">✓</div><div class="step-label">Placed</div></div>
+            <div class="step"><div class="step-dot">2</div><div class="step-label">Packed</div></div>
+            <div class="step"><div class="step-dot">3</div><div class="step-label">Shipped</div></div>
+            <div class="step"><div class="step-dot">4</div><div class="step-label">Delivered</div></div>
+          </div>
+          <div class="flex items-center justify-between mt-4">
+            <div class="text-sm text-muted">Next step: <strong>Pack and prepare for dispatch</strong></div>
+            <div class="flex gap-2">
+              <button class="btn btn-outline btn-sm btn-danger">Cancel Order</button>
+              <button class="btn btn-primary btn-sm">→ Mark as Packed</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="order-layout">
+        <!-- LEFT -->
+        <div style="display:flex;flex-direction:column;gap:1.25rem">
+
+          <!-- LINE ITEMS -->
+          <div class="card">
+            <div class="card-header"><span class="card-title">🛒 Order Items (2)</span></div>
+            <div class="card-body" style="padding:.5rem 1.25rem">
+              <div class="line-item">
+                <div class="item-thumb">🌿</div>
+                <div style="flex:1">
+                  <div style="font-weight:600;font-size:.9rem">Monstera Deliciosa</div>
+                  <div class="td-muted">Tropical · 6 inch pot</div>
+                  <div class="text-xs text-muted mt-1">Qty: 1 × ₹899</div>
+                </div>
+                <div style="font-weight:700">₹899</div>
+              </div>
+              <div class="line-item">
+                <div class="item-thumb">🌵</div>
+                <div style="flex:1">
+                  <div style="font-weight:600;font-size:.9rem">Golden Barrel Cactus</div>
+                  <div class="td-muted">Succulents · 4 inch pot</div>
+                  <div class="text-xs text-muted mt-1">Qty: 1 × ₹349</div>
+                </div>
+                <div style="font-weight:700">₹349</div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <div class="totals-row"><span>Subtotal</span><span>₹1,248</span></div>
+              <div class="totals-row"><span>Shipping Fee</span><span>₹0 (free)</span></div>
+              <div class="totals-row total"><span>Total</span><span>₹1,248</span></div>
+            </div>
+          </div>
+
+          <!-- SHIPPING ADDRESS -->
+          <div class="card">
+            <div class="card-header"><span class="card-title">📍 Shipping Address</span></div>
+            <div class="card-body">
+              <p style="font-size:.875rem;line-height:1.8">
+                <strong>Ananya Singh</strong><br/>
+                Flat 4B, Lotus Apartment, MG Road<br/>
+                Bengaluru, Karnataka 560001<br/>
+                India<br/>
+                📞 +91 98765 43210
+              </p>
+            </div>
+          </div>
+
+          <!-- ORDER TIMELINE -->
+          <div class="card">
+            <div class="card-header"><span class="card-title">📅 Order Timeline</span></div>
+            <div class="card-body" style="padding:.75rem 1.25rem">
+              <div style="position:relative;padding-left:1.25rem;border-left:2px solid var(--green-200)">
+                <div style="margin-bottom:1rem;position:relative">
+                  <div style="position:absolute;left:-1.55rem;top:.15rem;width:.625rem;height:.625rem;border-radius:50%;background:var(--green-500);border:2px solid #fff;box-shadow:0 0 0 2px var(--green-300)"></div>
+                  <div style="font-size:.8rem;font-weight:600">Order Placed</div>
+                  <div class="td-muted">Jun 23, 2026 · 14:32 IST</div>
+                </div>
+                <div style="margin-bottom:1rem;position:relative">
+                  <div style="position:absolute;left:-1.55rem;top:.15rem;width:.625rem;height:.625rem;border-radius:50%;background:var(--green-500);border:2px solid #fff;box-shadow:0 0 0 2px var(--green-300)"></div>
+                  <div style="font-size:.8rem;font-weight:600">Payment Captured</div>
+                  <div class="td-muted">Jun 23, 2026 · 14:33 IST · Razorpay webhook</div>
+                </div>
+                <div style="position:relative;opacity:.4">
+                  <div style="position:absolute;left:-1.55rem;top:.15rem;width:.625rem;height:.625rem;border-radius:50%;background:var(--gray-300);border:2px solid #fff"></div>
+                  <div style="font-size:.8rem;font-weight:600">Waiting for packing…</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT PANEL -->
+        <div class="sticky-panel">
+
+          <!-- PAYMENT INFO -->
+          <div class="card">
+            <div class="card-header"><span class="card-title">💳 Payment</span><span class="badge badge-success">Paid</span></div>
+            <div class="card-body" style="padding:.75rem 1.25rem">
+              <div class="info-row"><span class="info-label">Razorpay Order ID</span><code style="font-size:.75rem">order_OBQ2Wj</code></div>
+              <div class="info-row"><span class="info-label">Payment ID</span><code style="font-size:.75rem">pay_OBQ2Wj…</code></div>
+              <div class="info-row"><span class="info-label">Method</span><span>UPI</span></div>
+              <div class="info-row"><span class="info-label">Amount</span><strong>₹1,248</strong></div>
+              <div class="info-row"><span class="info-label">Status</span><span class="badge badge-success">Captured</span></div>
+            </div>
+            <div style="padding:.875rem 1.25rem;border-top:1px solid var(--border)">
+              <button class="btn btn-danger btn-sm" style="width:100%;justify-content:center">💸 Initiate Refund</button>
+              <p class="form-hint mt-2" style="text-align:center">This triggers Razorpay full refund and sets paymentStatus to <em>refunded</em>.</p>
+            </div>
+          </div>
+
+          <!-- CUSTOMER -->
+          <div class="card">
+            <div class="card-header"><span class="card-title">👤 Customer</span></div>
+            <div class="card-body" style="padding:.75rem 1.25rem">
+              <div class="info-row"><span class="info-label">Name</span><strong>Ananya Singh</strong></div>
+              <div class="info-row"><span class="info-label">Email</span><a href="#">ananya@gmail.com</a></div>
+              <div class="info-row"><span class="info-label">Total Orders</span><span>12</span></div>
+              <div class="info-row"><span class="info-label">Total Spend</span><span>₹9,820</span></div>
+            </div>
+            <div style="padding:.875rem 1.25rem;border-top:1px solid var(--border)">
+              <a href="10-customer-detail.html" class="btn btn-outline btn-sm" style="width:100%;justify-content:center">View Customer Profile →</a>
+            </div>
+          </div>
+
+          <!-- STATUS UPDATER -->
+          <div class="card">
+            <div class="card-header"><span class="card-title">📋 Update Status</span></div>
+            <div class="card-body">
+              <div class="form-group mb-2">
+                <label class="form-label">Order Status</label>
+                <select class="form-select">
+                  <option selected>Placed</option>
+                  <option>Packed</option>
+                  <option>Shipped</option>
+                  <option>Delivered</option>
+                  <option>Cancelled</option>
+                </select>
+              </div>
+              <button class="btn btn-primary btn-sm" style="width:100%;justify-content:center">Save Status</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="annotation mt-3">
+        ADM-040 + ADM-041 — <code>ordersApi.getOrder(id)</code>. Status change calls <code>updateStatus</code> mutation, invalidates <code>Order</code> + <code>Orders</code> + <code>Dashboard</code>. Refund: confirm modal → <code>initiateRefund(orderId)</code> → backend calls Razorpay refund API → updates paymentStatus. Cancel: confirm modal (warn about irreversibility for shipped orders).
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
