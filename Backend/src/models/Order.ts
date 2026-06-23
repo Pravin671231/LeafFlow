@@ -80,6 +80,5 @@ const OrderSchema = new Schema<IOrder>(
 
 OrderSchema.index({ userId: 1 });
 OrderSchema.index({ status: 1 });
-OrderSchema.index({ razorpayOrderId: 1 });
 
 export const Order = model<IOrder>("Order", OrderSchema);
