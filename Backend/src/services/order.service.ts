@@ -4,6 +4,7 @@ import { Order, IShippingAddress } from "../models/Order";
 import { razorpay } from "./integrations/razorpay.service";
 import { AppError } from "../utils/AppError";
 import { IProduct } from "../models/Product";
+import { parsePagination } from "../utils/pagination";
 
 export async function createOrder(userId: string, shippingAddress: IShippingAddress) {
   const cart = await Cart.findOne({ userId }).populate("items.productId", "name price stock");
@@ -60,4 +61,24 @@ export async function createOrder(userId: string, shippingAddress: IShippingAddr
     amount: rzpOrder.amount,
     currency: rzpOrder.currency,
   };
+}
+
+export async function listOrders(userId: string, query: { page?: unknown; limit?: unknown }) {
+  const { page, limit, skip } = parsePagination(query);
+  const filter = { userId };
+
+  const [orders, total] = await Promise.all([
+    Order.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit),
+    Order.countDocuments(filter),
+  ]);
+
+  return { orders, total, page, limit };
+}
+
+export async function getOrderById(userId: string, orderId: string) {
+  const order = await Order.findOne({ _id: orderId, userId });
+  if (!order) {
+    throw new AppError(404, "ORDER_NOT_FOUND", "Order not found");
+  }
+  return order;
 }

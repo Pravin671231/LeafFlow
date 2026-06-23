@@ -32,7 +32,7 @@ const AddressSchema = new Schema<IAddress>(
 const UserSchema = new Schema<IUser>(
   {
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
-    googleId: { type: String, unique: true, sparse: true, default: null },
+    googleId: { type: String, unique: true, sparse: true },
     name: { type: String, trim: true, default: null },
     phone: { type: String, trim: true, default: null },
     addresses: { type: [AddressSchema], default: [] },
