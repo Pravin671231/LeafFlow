@@ -1,9 +1,6 @@
 # Postman Manual — LeafFlow Buyer Orders API
 
-A step-by-step guide to testing the order creation endpoint using Postman. All routes require a valid buyer access token.
-
-> **Scope:** This guide covers `POST /api/buyer/orders` (Issue #46, Task 3).
-> `GET /api/buyer/orders` and `GET /api/buyer/orders/:id` will be added in Task 4.
+A step-by-step guide to testing the buyer orders endpoints using Postman. All routes require a valid buyer access token.
 
 ---
 
@@ -212,7 +209,139 @@ No auth required. **Click Send.** Check that `data.stock` has decreased by the q
 
 ---
 
-## Section C — What Happens Next (Razorpay Payment)
+## Section C — Viewing Orders
+
+---
+
+### Step 4 — GET /api/buyer/orders (order history)
+
+**Create a new request:**
+
+| Field | Value |
+|-------|-------|
+| Method | `GET` |
+| URL | `{{base_url}}/api/buyer/orders` |
+| Name | `4. List Orders` |
+
+No body. Auth is inherited from the collection.
+
+**Optional query parameters:**
+
+| Param | Default | Description |
+|-------|---------|-------------|
+| `page` | `1` | Page number |
+| `limit` | `20` | Results per page |
+
+Example with pagination: `{{base_url}}/api/buyer/orders?page=1&limit=10`
+
+**Click Send. Expected response — `200 OK`:**
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "_id": "6849f3cfdae5ce6307946ccc",
+      "userId": "6849f3cfdae5ce6307946bbb",
+      "items": [
+        {
+          "productId": "6849f3cfdae5ce6307946fff",
+          "name": "Monstera Deliciosa",
+          "quantity": 2,
+          "priceAtOrder": 599
+        }
+      ],
+      "subtotal": 1198,
+      "shippingFee": 0,
+      "total": 1198,
+      "razorpayOrderId": "order_PqR8sTuVwXyZ12",
+      "paymentStatus": "pending",
+      "status": "pending",
+      "createdAt": "2026-06-23T08:00:00.000Z",
+      "updatedAt": "2026-06-23T08:00:00.000Z"
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 20,
+    "total": 1
+  }
+}
+```
+
+> Results are sorted **newest first**. Only orders belonging to the authenticated buyer are returned — other buyers' orders are never visible.
+
+**After success:** Copy `data[0]._id` → paste into the `order_id` collection variable for use in Step 5.
+
+**If you get an error:**
+
+| Code | Status | What went wrong | Fix |
+|------|--------|----------------|-----|
+| `UNAUTHORIZED` | 401 | No or missing token | Set `access_token` variable and check collection Authorization |
+| `TOKEN_EXPIRED` | 401 | Access token has expired | Re-login and update `access_token` |
+
+---
+
+### Step 5 — GET /api/buyer/orders/:id (order detail)
+
+**Create a new request:**
+
+| Field | Value |
+|-------|-------|
+| Method | `GET` |
+| URL | `{{base_url}}/api/buyer/orders/{{order_id}}` |
+| Name | `5. Get Order` |
+
+No body. Auth is inherited from the collection. **Click Send. Expected response — `200 OK`:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "_id": "6849f3cfdae5ce6307946ccc",
+    "userId": "6849f3cfdae5ce6307946bbb",
+    "items": [
+      {
+        "productId": "6849f3cfdae5ce6307946fff",
+        "name": "Monstera Deliciosa",
+        "quantity": 2,
+        "priceAtOrder": 599
+      }
+    ],
+    "shippingAddress": {
+      "fullName": "Ravi Kumar",
+      "phone": "9876543210",
+      "line1": "42 MG Road",
+      "line2": "Near City Mall",
+      "city": "Bengaluru",
+      "state": "Karnataka",
+      "pincode": "560001"
+    },
+    "subtotal": 1198,
+    "shippingFee": 0,
+    "total": 1198,
+    "razorpayOrderId": "order_PqR8sTuVwXyZ12",
+    "paymentStatus": "pending",
+    "status": "pending",
+    "createdAt": "2026-06-23T08:00:00.000Z",
+    "updatedAt": "2026-06-23T08:00:00.000Z"
+  }
+}
+```
+
+> `priceAtOrder` is the price snapshotted at the time of purchase — it does not change if the product price is updated later.
+
+**If you get an error:**
+
+| Code | Status | What went wrong | Fix |
+|------|--------|----------------|-----|
+| `UNAUTHORIZED` | 401 | No or missing token | Set `access_token` variable and check collection Authorization |
+| `TOKEN_EXPIRED` | 401 | Access token has expired | Re-login and update `access_token` |
+| `ORDER_NOT_FOUND` | 404 | Order does not exist or belongs to another buyer | Use a valid `order_id` from Step 4 |
+
+---
+
+## Section D — What Happens Next (Razorpay Payment)
 
 Placing an order does **not** complete payment. The order is created with `paymentStatus: "pending"`. Payment is a separate step handled by the Razorpay SDK on the frontend:
 
@@ -238,6 +367,7 @@ Placing an order does **not** complete payment. The order is created with `payme
 | `VALIDATION_ERROR` | 400 | Request body is malformed | Verify `shippingAddress` is present with all required fields; `pincode` is exactly 6 digits |
 | `CART_EMPTY` | 422 | Cart has no items | Add items to the cart first using `PUT /api/buyer/cart` |
 | `OUT_OF_STOCK` | 422 | A cart item's quantity exceeds available stock | Check stock via `GET /api/products/:slug` and reduce quantity in the cart |
+| `ORDER_NOT_FOUND` | 404 | Order does not exist or belongs to another buyer | Use a valid `order_id` from `GET /api/buyer/orders` |
 
 ---
 
@@ -253,3 +383,5 @@ The expected sequence for a buyer placing their first order:
 6. `POST /api/buyer/orders` — place order, save `orderId` and `razorpayOrderId`
 7. *(Frontend)* Open Razorpay checkout modal with `razorpayOrderId`
 8. *(Webhook)* Payment captured → order `status` becomes `"placed"`
+9. `GET /api/buyer/orders` — view full order history with pagination
+10. `GET /api/buyer/orders/{{order_id}}` — view a specific order's detail
